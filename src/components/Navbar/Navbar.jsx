@@ -53,7 +53,7 @@ export default function Navbar() {
                   <span className="relative z-10">خدمات<RiArrowDropDownFill className="inline-block text-xl"/></span>
                 </p>
                 {isDropdownOpen && (
-                  <div className="absolute mt-2 w-80 p-4 bg-white border border-gray-200 rounded-lg shadow-lg grid grid-cols-2 gap-4  dark:border-gray-700">
+                  <div className="absolute z-50 mt-2 w-80 p-4 bg-white border border-gray-200 rounded-lg shadow-lg grid grid-cols-2 gap-4  dark:border-gray-700">
                     <Link to={"/login"} className="block px-4 py-2 hover:text-orange-500 duration-300 ">تسجيل الدخول</Link>
                     <Link to={""} className="block px-4 py-2 hover:text-orange-500 duration-300 ">Service 2</Link>
                     <Link to={""} className="block px-4 py-2 hover:text-orange-500 duration-300 ">Service 3</Link>

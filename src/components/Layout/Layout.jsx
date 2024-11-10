@@ -12,9 +12,9 @@ export default function Layout() {
         <Navbar/>
         <SecondMenu/>
         <div className="container mx-auto px-8 ">
-      <Outlet>
-      </Outlet>
-    </div>
+          <Outlet>
+          </Outlet>
+       </div>
     <Footer/>
       </div>
     </div>
