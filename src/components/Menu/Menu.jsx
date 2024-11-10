@@ -17,7 +17,7 @@ function Menu() {
                 {isOpen ? <FontAwesomeIcon icon={faArrowLeft} size='lg' className={`text-${blackColor} group-hover:text-${whiteColor}`} /> : <FontAwesomeIcon icon={faArrowRight} size='lg' className={`text-${blackColor} group-hover:text-${whiteColor}`} />}
             </button>
             {/*Main div*/}
-            <div className={`bg-${grayColor} h-3/4 my-24 mx-2 fixed left-0 top-0 rounded-md w-24 ${isOpen ? "block" : "hidden"}`}>
+            <div className={`bg-${grayColor} h-3/4 my-24 mx-2 fixed left-0 top-0 rounded-md w-24 z-50 ${isOpen ? "block" : "hidden"}`}>
                 {/*cart div*/}
                 <div className={`bg-${orangeColor} flex items-center justify-center rounded-md h-20 hover:cursor-pointer`}>
                     <FontAwesomeIcon icon={faCartShopping} className={`text-${whiteColor} py-2`} size='xl' />
