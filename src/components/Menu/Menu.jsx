@@ -13,13 +13,13 @@ function Menu() {
     return (
         <>
             {/*arrow menu*/}
-            <button className={`rounded-full bg-${orangeColor} group hover:bg-orange hover:cursor-pointer w-6 h-6 flex items-center justify-center fixed left-0 top-0 my-80 z-50 ${isOpen ? "mx-28" : "mx-0"}`} onClick={handleOpenMenu}>
+            {/* <button className={`rounded-full bg-${orangeColor} group hover:bg-orange hover:cursor-pointer w-6 h-6 flex items-center justify-center fixed left-0 top-0 my-80 z-50 ${isOpen ? "mx-28" : "mx-0"}`} onClick={handleOpenMenu}>
                 {isOpen ? <FontAwesomeIcon icon={faArrowLeft} size='lg' className={`text-${blackColor} group-hover:text-${whiteColor}`} /> : <FontAwesomeIcon icon={faArrowRight} size='lg' className={`text-${blackColor} group-hover:text-${whiteColor}`} />}
-            </button>
+            </button> */}
             {/*Main div*/}
-            <div className={`${isOpen ? "block" : "hidden"} bg-Neutral h-3/4 my-24 mx-2 fixed left-0 top-0 rounded-md w-24 z-50`}>
+            <div className={`bg-Neutral h-3/4 my-24 mx-2 fixed left-0 top-0 rounded-md w-12 z-50 flex flex-col items-center justify-center`}>
                 {/*cart div*/}
-                <div className={`bg-${orangeColor} flex items-center justify-center rounded-md h-20 hover:cursor-pointer`}>
+                <div className={`bg-${orangeColor} flex items-center justify-center rounded-md h-10 hover:cursor-pointer w-10 `}>
                     <FontAwesomeIcon icon={faCartShopping} className={`text-${whiteColor} py-2`} size='xl' />
                 </div>
                 {/*logout div*/}
@@ -27,14 +27,14 @@ function Menu() {
                     <div className="flex items-center justify-center">
                         <FontAwesomeIcon icon={faRightFromBracket} size='xl' className={`text-${blackColor} group-hover:text-${whiteColor}`} />
                     </div>
-                    <p className={`text-${blackColor} text-center group-hover:text-${whiteColor}`}>تسجيل الخروج</p>
+                    <p className={`text-${blackColor} text-center group-hover:text-${whiteColor} text-xs`}>تسجيل الخروج</p>
                 </div>
                 {/*Togary div*/}
                 <div className={`rounded-md group hover:cursor-pointer hover:bg-${orangeColor}`}>
                     <div className="flex items-center justify-center">
                         <FontAwesomeIcon icon={faBuilding} size='xl' className={`text-${blackColor} group-hover:text-${whiteColor}`} />
                     </div>
-                    <p className={`text-${blackColor} text-center group-hover:text-${whiteColor}`}>تجارى</p>
+                    <p className={`text-${blackColor} text-center group-hover:text-${whiteColor} text-xs`}>تجارى</p>
                 </div>
                 <hr />
                 {/*Language div*/}
@@ -42,7 +42,7 @@ function Menu() {
                     <div className="flex items-center justify-center">
                         <FontAwesomeIcon icon={faEarthAmericas} size='xl' className={`text-${blackColor} group-hover:text-${whiteColor}`} />
                     </div>
-                    <p className={`text-${blackColor} text-center group-hover:text-${whiteColor}`}>EN</p>
+                    <p className={`text-${blackColor} text-center group-hover:text-${whiteColor} text-xs`}>EN</p>
                 </div>
                 <hr />
                 {/*Contact-Us div*/}
@@ -50,7 +50,7 @@ function Menu() {
                     <div className="flex items-center justify-center">
                         <FontAwesomeIcon icon={faPhone} size='xl' className={`text-${blackColor} group-hover:text-${whiteColor}`} />
                     </div>
-                    <p className={`text-${blackColor} text-center group-hover:text-${whiteColor}`}>تواصل معنا</p>
+                    <p className={`text-${blackColor} text-center group-hover:text-${whiteColor} text-xs mb-2`}>تواصل معنا</p>
                 </div>
             </div>
         </>
