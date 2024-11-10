@@ -10,6 +10,7 @@ import PageBrands from "./components/Brands/pageBrands";
 import CategoryDetails from "./components/CategoryDetails/CategoryDetails";
 import ProductDetails from "./components/ProductDetails/ProductDetails";
 
+
 function App() {
   let router = createBrowserRouter([
     {
