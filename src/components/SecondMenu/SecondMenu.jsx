@@ -6,6 +6,7 @@ function SecondMenu() {
     const [isOpen, setIsOpen] = useState(false);
     const [categories, setCategories] = useState([]);
     const [childrenCat, setChildrenCat] = useState([]);
+    const [image, setImage] = useState();
 
     // Toggle Menu State
     const handleOpenMenu = () => setIsOpen(prevState => !prevState);
@@ -28,6 +29,7 @@ function SecondMenu() {
     const handleClick = (categoryName) => {
         const selectedCategory = categories.find(cat => cat.name === categoryName);
         setChildrenCat(selectedCategory ? selectedCategory.childrenCategories : []);
+        setImage(selectedCategory.photo);
     };
 
     return (
@@ -54,6 +56,9 @@ function SecondMenu() {
                                     <p className="text-black group-hover:text-primary my-2">{child.name}</p>
                                 </div>
                             ))}
+                        </div>
+                        <div className='w-60 h-60 absolute left-0 ml-48'>
+                            <img src={image} />
                         </div>
                     </div>
                 </div>
