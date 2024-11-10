@@ -1,7 +1,12 @@
+import Menu from "./components/Menu/Menu"
+import SecondMenu from "./components/SecondMenu/SecondMenu"
 
 function App() {
   return (
-    <div></div>
+    <>
+      <SecondMenu></SecondMenu>
+      <Menu></Menu>
+    </>
   )
 }
 
