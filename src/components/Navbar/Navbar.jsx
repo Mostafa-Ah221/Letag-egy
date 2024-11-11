@@ -1,16 +1,14 @@
 import { useState } from "react";
 import logo from '../../assets/images/logo.png';
-import { RiArrowDropDownFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
 
   return (
     <>
-      <nav className="border-gray-200 shadow-lg">
-        <div className="max-w-screen-xl flex-row-reverse flex flex-wrap items-center lg:justify-between mx-auto p-4">
+      <nav className="border-gray-200">
+        <div className=" flex-row-reverse justify-start flex flex-wrap items-center lg:justify-around mx-auto p-4">
           <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
             <img src={logo} className="h-10" alt="Logo" />
           </a>
@@ -43,34 +41,8 @@ export default function Navbar() {
                   <span className="relative z-10">نبذة عنا</span>
                 </Link>
               </li>
-              <li
-                className="relative"
-                onMouseEnter={() => setDropdownOpen(true)}
-                onMouseLeave={() => setDropdownOpen(false)}
-              >
-                <p  className="relative block py-2 px-3 rounded md:p-0 group cursor-pointer">
-                  <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-orange-500 transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
-                  <span className="relative z-10">خدمات<RiArrowDropDownFill className="inline-block text-xl"/></span>
-                </p>
-                {isDropdownOpen && (
-                  <div className="absolute z-50 mt-2 w-80 p-4 bg-white border border-gray-200 rounded-lg shadow-lg grid grid-cols-2 gap-4  dark:border-gray-700">
-                    <Link to={"/login"} className="block px-4 py-2 hover:text-orange-500 duration-300 ">تسجيل الدخول</Link>
-                    <Link to={""} className="block px-4 py-2 hover:text-orange-500 duration-300 ">Service 2</Link>
-                    <Link to={""} className="block px-4 py-2 hover:text-orange-500 duration-300 ">Service 3</Link>
-                    <Link to={""} className="block px-4 py-2 hover:text-orange-500 duration-300 ">Service 4</Link>
-                    <Link className="block px-4 py-2 hover:text-orange-500 duration-300 ">Service 1</Link>
-                    <Link to={""} className="block px-4 py-2 hover:text-orange-500 duration-300 ">Service 2</Link>
-                    <Link to={""} className="block px-4 py-2 hover:text-orange-500 duration-300 ">Service 3</Link>
-                    <Link to={""} className="block px-4 py-2 hover:text-orange-500 duration-300 ">Service 4</Link>
-                  </div>
-                )}
-              </li>
-              <li>
-                <Link to={"/contactUs"} href="#" className="relative block py-2 px-3 rounded md:p-0 group">
-                  <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-orange-500 transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
-                  <span className="relative z-10">تواصل معنا</span>
-                </Link>
-              </li>
+            
+              
               <li>
                 <Link to={"/pageBrand"} href="#" className="relative block py-2 px-3 rounded md:p-0 group">
                   <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-orange-500 transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>

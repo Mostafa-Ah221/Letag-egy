@@ -35,12 +35,12 @@ function SecondMenu() {
     return (
         <>
             <div className='flex'>
-                <button className="block bg-primary w-24 rounded-md h-14 ml-auto relative z-50" onClick={handleOpenMenu}>
-                    <FontAwesomeIcon icon={isOpen ? faCircleXmark : faBars} className="text-white" size="xl" />
+                <button className="block bg-primary w-16 outline-none h-14 right-1  fixed z-30" onClick={handleOpenMenu}>
+                    <FontAwesomeIcon icon={isOpen ? faCircleXmark : faBars} className="text-white text-[1.5rem]"  />
                 </button>
 
-                <div className={`${isOpen ? "block" : "hidden"} bg-black bg-opacity-50 w-full h-full fixed z-40`}>
-                    <div className="bg-white flex flex-row-reverse w-5/6 rounded-md relative z-50 m-auto mt-5 border-2 border-primary">
+                <div className={`${isOpen ? "block" : "hidden"}  bg-black bg-opacity-50 w-full h-full fixed z-20`}>
+                    <div className="bg-white flex flex-row-reverse w-5/6 rounded-md relative z-10 m-auto mt-5 border-2 border-primary">
                         <div className="flex flex-col bg-white">
                             {categories.map((category) => (
                                 <div key={category.id} className="flex bg-white group hover:cursor-pointer w-60 relative z-50" onClick={() => handleClick(category.name)}>
