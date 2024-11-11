@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars, faCircleXmark } from '@fortawesome/free-solid-svg-icons'
 
 function SecondMenu() {
     const [isOpen, setIsOpen] = useState(false);
     const [categories, setCategories] = useState([]);
     const [childrenCat, setChildrenCat] = useState([]);
+    const [image, setImage] = useState();
 
     // Toggle Menu State
     const handleOpenMenu = () => setIsOpen(prevState => !prevState);
@@ -28,16 +29,18 @@ function SecondMenu() {
     const handleClick = (categoryName) => {
         const selectedCategory = categories.find(cat => cat.name === categoryName);
         setChildrenCat(selectedCategory ? selectedCategory.childrenCategories : []);
+        setImage(selectedCategory.photo);
     };
 
     return (
         <>
             <div className='flex'>
-                <button className="block bg-primary w-24 rounded-md h-14 right-0 outline-none mr-3 fixed z-50" onClick={handleOpenMenu}>
+                <button className="block bg-primary w-24 rounded-md h-14 ml-auto relative z-50" onClick={handleOpenMenu}>
                     <FontAwesomeIcon icon={isOpen ? faCircleXmark : faBars} className="text-white" size="xl" />
                 </button>
-                <div className={`${isOpen ? "block" : "hidden"} bg-black bg-opacity-50 w-full fixed z-40`}>
-                    <div className="bg-white flex flex-row-reverse w-5/6 rounded-md relative z-50 m-auto mt-5">
+
+                <div className={`${isOpen ? "block" : "hidden"} bg-black bg-opacity-50 w-full h-full fixed z-40`}>
+                    <div className="bg-white flex flex-row-reverse w-5/6 rounded-md relative z-50 m-auto mt-5 border-2 border-primary">
                         <div className="flex flex-col bg-white">
                             {categories.map((category) => (
                                 <div key={category.id} className="flex bg-white group hover:cursor-pointer w-60 relative z-50" onClick={() => handleClick(category.name)}>
@@ -53,6 +56,9 @@ function SecondMenu() {
                                     <p className="text-black group-hover:text-primary my-2">{child.name}</p>
                                 </div>
                             ))}
+                        </div>
+                        <div className='w-60 h-60 absolute left-0 ml-48'>
+                            <img src={image} />
                         </div>
                     </div>
                 </div>
