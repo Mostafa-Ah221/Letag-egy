@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { faCartShopping, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 
 export default function ShoppingCart() {
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -10,12 +11,12 @@ export default function ShoppingCart() {
   };
 
   return (
-    <div>
+    <div className="w-full">
       {/* زر فتح العربة */}
       <div 
-        className="bg-primary flex items-center justify-center w-12 h-10 hover:cursor-pointer"
+        className="bg-primary flex items-center justify-center w-full h-14 hover:cursor-pointer"
         onClick={toggleCart}
-      >
+    >
         <FontAwesomeIcon icon={faCartShopping} className="text-white text-[1.3rem]" />
       </div>
 
@@ -53,6 +54,7 @@ export default function ShoppingCart() {
           <div className="align-items-center d-flex justify-content-center my-2 emptyCartImg_wrapper">
             <img src="https://img.freepik.com/free-vector/shopping-supermarket-cart-with-grocery-pictogram_1284-11697.jpg?ga=GA1.1.812912771.1724576833&semt=ais_hybrid" alt="" />
           </div>
+          <Link to={'/CartLayout'}>ToPay</Link>
 
           {/* محاكاة محتوى طويل ليتجاوز ارتفاع النافذة */}
           <div style={{ height: '2000px' }}></div>

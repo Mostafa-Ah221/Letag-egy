@@ -97,7 +97,7 @@ export default function SubCategory() {
   if (isError) return <div>Error loading categories</div>;
 
   return (
-    <div className="relative px-6 py-7">
+    <div className="relative  py-7">
         <h2 className='text-right pb-4 text-xl text-secondary'>الفئات الرئيسية</h2>
       <Slider ref={sliderRef} {...settings}>
         {filteredCategory.map((category, index) => (

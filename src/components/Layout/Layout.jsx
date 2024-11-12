@@ -8,15 +8,15 @@ import MenuMobile from "../Menu/MenuMobile";
 export default function Layout() {
   return (
     <div>
-      <div>
+      <div className="grid grid-cols-12 ">
+        <div className="col-span-1">
           <Menu />
+        </div>
           <MenuMobile/>
-        <div className="">
+        <div className="col-span-11">
           <Navbar/>
-       
-        <SecondMenu/>
-      
-        <div className="container mx-auto px-8">
+          <SecondMenu/>
+        <div className="container px-3">
           <Outlet>
           </Outlet>
        </div>
