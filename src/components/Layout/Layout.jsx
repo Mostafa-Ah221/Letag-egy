@@ -9,19 +9,21 @@ export default function Layout() {
   return (
     <div>
       <div>
-          <Menu />
-          <MenuMobile/>
+        <Menu />
+        <MenuMobile />
         <div className="">
-          <Navbar/>
-       
-        <SecondMenu/>
-      
-        <div className="container mx-auto px-8">
-          <Outlet>
-          </Outlet>
-       </div>
-    <Footer/>
-     </div>
+          <Navbar />
+
+          <SecondMenu />
+
+          <div className="container mx-auto px-8">
+            <Outlet>
+            </Outlet>
+          </div>
+          <div>
+            <Footer />
+          </div>
+        </div>
       </div>
     </div>
   )
