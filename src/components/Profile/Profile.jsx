@@ -11,7 +11,7 @@ export default function Profile() {
           <ConstantDetails />
           <div className='container flex flex-col lg:mx-2'>
             <h1 className='font-bold text-3xl text-right'>حساب المستخدم</h1>
-            <div className='bg-primary w-96 mt-2 relative rounded-lg h-40 ml-auto'>
+            <div className='bg-gradient-to-t from-primary700 to-primary w-96 mt-2 relative rounded-lg h-40 ml-auto'>
               <h1 className='text-right font-bold text-3xl text-white pt-4 pr-2'>محفظة المستخدم</h1>
               <p className='text-white pl-2 py-2'>26038*** *** ***</p>
               <p className='text-white text-right pr-2'>الرصيد المتاح</p>
