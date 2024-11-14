@@ -39,3 +39,6 @@ html[lang="en"] {
 html, body, #root {
     overflow-x: hidden;
 }
+.pagination .active {
+    @apply bg-primary text-white rounded-lg;
+}

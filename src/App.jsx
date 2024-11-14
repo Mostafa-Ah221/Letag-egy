@@ -18,6 +18,7 @@ import {CartContextProvider} from "./context/CartContext";
 import { useEffect, useState } from "react";
 import Stock from "./components/Stock/Stock";
 import Profile from "./components/Profile/Profile";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 
 
@@ -61,11 +62,11 @@ function App() {
         { path: "login", element: <Login /> },
         { path: "register", element: <SignUp /> },
         { path: "pageBrand", element: <PageBrands /> },
-        { path: "categoryDetails", element: <CategoryDetails /> },
+        { path: "categoryDetails/:id", element: <CategoryDetails /> },
         { path: "productDetails", element: <ProductDetails /> },
         {
           path: "cartlayout",
-          element: <CartLayout />,
+          element:<ProtectedRoute><CartLayout /></ProtectedRoute> ,
           children: [
             { index: true, element: <Address /> },
             { path: "shipping", element: <Shipping /> },

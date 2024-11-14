@@ -1,7 +1,16 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { ContextData } from '../../context/ContextApis'
 
 function ConstantDetails() {
+        let {userToken,setUserToken}=useContext(ContextData)
+
+    const navigate=useNavigate()
+    function Logout() {
+        navigate('/')
+        setUserToken(null)
+        localStorage.removeItem('userToken')
+    }
     return (
         <>
             <div className='container flex flex-col w-96 bg-white shadow-lg rounded-lg mt-12 text-right ml-auto'>
@@ -21,7 +30,7 @@ function ConstantDetails() {
                 <hr></hr>
                 <Link><h3 className='hover:text-primary text-bold text-right hover:curosr-pointer py-4 px-2'>الطلبية</h3></Link>
                 <hr></hr>
-                <Link><h3 className='hover:text-primary text-bold text-right hover:curosr-pointer py-4 px-2'>تسجيل الخروج</h3></Link>
+                <Link onClick={()=> Logout()} ><h3 className='hover:text-primary text-bold text-right hover:curosr-pointer py-4 px-2'>تسجيل الخروج</h3></Link>
             </div>
         </>
     )

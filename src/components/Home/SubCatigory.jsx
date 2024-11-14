@@ -24,7 +24,7 @@ export default function SubCategory() {
         setFilteredCategory(availableCategor)
     }
   },[data])
-  console.log(data);
+  // console.log(data);
   
   const NextArrow = () => (
     <div
@@ -93,7 +93,15 @@ export default function SubCategory() {
    
   // };
 
-  if (isLoading) return <div>Loading...</div>;
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
   if (isError) return <div>Error loading categories</div>;
 
   return (
@@ -105,7 +113,7 @@ export default function SubCategory() {
             key={index} 
             className='group px-2 cursor-pointer'
           >
-            <Link to={`/categoryDetails?id=${category.id}`}>
+            <Link to={`/categoryDetails/${category.id}`}>
              <div className='overflow-hidden rounded-lg bg-white shadow-sm hover:shadow-md transition-all duration-300'>
               <img 
                 className='h-36 w-full object-cover transform transition-all duration-300 group-hover:scale-110' 

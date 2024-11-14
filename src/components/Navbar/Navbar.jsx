@@ -7,7 +7,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="border-gray-200">
+      <nav className="border-gray-200 relative z-10">
         <div className=" flex-row-reverse justify-start flex flex-wrap items-center lg:justify-around mx-auto p-4">
           <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
             <img src={logo} className="h-10" alt="Logo" />

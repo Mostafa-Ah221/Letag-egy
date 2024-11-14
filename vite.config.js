@@ -10,7 +10,6 @@ export default defineConfig({
         target: 'https://demo.leetag.com',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ''), // إعادة كتابة المسار إذا لزم الأمر
       },
     },
   },

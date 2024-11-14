@@ -4,9 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import Slider from 'react-slick';
 import { IoEyeSharp } from "react-icons/io5";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { FaHeart } from 'react-icons/fa6';
+import { CiHeart } from "react-icons/ci";
 import { useCartData } from '../../context/CartContext'; // Import CartContext
 import { Link } from 'react-router-dom';
+
 
 const CustomArrow = ({ direction, onClick }) => (
   <button onClick={onClick} className={`absolute top-1/2 -translate-y-1/2 z-10
@@ -59,7 +60,14 @@ export default function DataHome({ sectionName }) {
     }
   };
 
-  if (isLoading || isSliderLoading) return <p>Loading...</p>;
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
   if (isError) return <p>Error occurred while fetching data.</p>;
 
   const trendingSection = homeData?.data?.sections?.find(section => section.name === sectionName);
@@ -99,9 +107,12 @@ export default function DataHome({ sectionName }) {
                               className="w-full h-full object-cover absolute inset-0"
                             />
                           </Link>
-                          <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                          <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <button onClick={(e) => { e.preventDefault(); handleProductClick(item); }} className="z-20">
                               <IoEyeSharp className="text-white bg-primary p-2 rounded-full text-[2.4rem]" />
+                            </button>
+                            <button onClick={(e) => { e.preventDefault(); handleProductClick(item); }} className="z-20">
+                              <CiHeart className="text-primary  p-2 rounded-full text-[3.8rem]" />
                             </button>
                           </div>
                         </div>
@@ -137,7 +148,7 @@ export default function DataHome({ sectionName }) {
                 <h3 className="text-xl font-semibold text-right">{selectedProduct.title}</h3>
                 <span className="text-primary text-xl font-bold mb-5 block">{selectedProduct.price} ريال</span>
                 <div className='flex items-center justify-between'>
-                  <FaHeart className='text-red-500 text-2xl '/>
+                  <CiHeart className="text-primary  p-2 rounded-full text-[3.8rem]" />
                   <input 
                     type="number" 
                     value={quantity} 
