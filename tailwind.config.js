@@ -14,6 +14,17 @@ export default {
         "primary700": "#c2410c",
         "primary400": "#f0851f",
       },
+      keyframes: {
+        "slide-in-right": {
+          "0%": {
+            visibility: "visible",
+            transform: "translate3d(100%, 0, 0)",
+          },
+          "100%": {
+            transform: "translate3d(0, 0, 0)",
+          },
+        },
+      },
     },
 
   },

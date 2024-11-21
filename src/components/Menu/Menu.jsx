@@ -15,7 +15,7 @@ function Menu() {
   const {wishList } = useCart(); 
 
     return (
-        <div className="hidden lg:flex bg-Neutral h-[95%] fixed z-50 top-4 flex-col items-center ml-3">
+        <div className="hidden lg:flex bg-Neutral h-[95%] fixed z-50 top-4 flex-col items-center mr-2 ml-3">
             {/* Cart Icon */}
            <div className="flex flex-col w-full h-14 items-center justify-center hover:cursor-pointer group duration-300 bg-primary ">
                 <div className="flex items-center justify-center text-xl">

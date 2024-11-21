@@ -104,12 +104,14 @@ const handleAddToWish = (product, isInWishList, setIsInWishList) => {
     setWishList((prev) => {
       const updatedWishList = [...prev, product];
       localStorage.setItem("wishList", JSON.stringify(updatedWishList));
-      showToast("Product added to wishlist!");
+     showToast("Product added to wishlist!");
+      
       return updatedWishList;
     });
     setIsInWishList(true);
   }
 };
+
 
   return (
     <CartContext.Provider

@@ -4,11 +4,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import { ContextData } from "../../context/ContextApis";
+import { useLanguage } from "../../context/LanguageContextPro";
+import { useQuery } from "@tanstack/react-query";
 
 export default function ShoppingCart() {
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const { cart, removeFromCart, updateQuantity,getTotalPrice } = useCart(); 
-  const { currencyData } = useContext(ContextData);
+   const { cart, removeFromCart, updateQuantity, getTotalPrice } = useCart();
+  const { currencyData, getProdDetails } = useContext(ContextData);
+  const { language } = useLanguage();
+
+
+ const ids = cart.map((item) => item.id);
+
+  const { data: productsData, isError, isLoading } = useQuery({
+    queryKey: ["getProdDetails", ids, language],
+    queryFn: () => Promise.all(ids.map((id) => getProdDetails(id, language))),
+    enabled: ids.length > 0,
+  });
+
 
   const toggleCart = () => {
     setIsCartOpen(!isCartOpen);
@@ -57,49 +70,55 @@ export default function ShoppingCart() {
           </div>
 
           {/* عرض المنتجات في العربة */}
-          {cart.length > 0 ? (
+          {cart.length > 0 && productsData ? (
             <div className="space-y-4 h-72 overflow-auto">
-              {cart.map((item) => (
+              {productsData.map((productData, index) =>  {
+
+                 const product = productData.data.products;
+                 const cartItem = cart.find((item) => item.id === product.id);
+
+              return(
                 <div
-                  key={item.id}
+                  key={product.id}
                   className="flex gap-4 items-center border p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
                 >
                   <div className="w-20 h-20 flex-shrink-0">
                     <img
-                      src={item.photo}
-                      alt={item.name}
+                      src={product.photos[0].url}
+                      alt={product.name}
                       className="w-full h-full object-cover rounded-md"
                     />
                   </div>
                   <div className="flex flex-col flex-grow">
-                    <h3 className="text-lg font-medium truncate">{item.title}</h3>
+                    <h3 className="text-lg font-medium truncate">{product.title}</h3>
                     <span className="text-primary text-lg font-semibold">
-                      {item.price} دينار
+                      {product.price} دينار
                     </span>
                     <div className="flex items-center gap-4 mt-2">
                       <input
                         type="number"
-                        value={item.quantity}
+                        value={cartItem.quantity}
                         onChange={(e) => {
                           const newQuantity = Math.max(
                             1,
                             parseInt(e.target.value, 10) || 1
                           );
-                          updateQuantity(item.id, newQuantity); 
+                          updateQuantity(product.id, newQuantity); 
                         }}
                         min={1}
                         className="w-16 text-center py-1 px-2 border border-gray-300 rounded-md shadow-sm"
                       />
                       <button
                         className="text-red-500 hover:text-red-600 text-sm font-medium"
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => removeFromCart(product.id)}
                       >
                         حذف
                       </button>
                     </div>
                   </div>
                 </div>
-              ))}
+                )
+})}
             </div>
           ) : (
             <div className="text-center mt-8">
@@ -115,11 +134,11 @@ export default function ShoppingCart() {
           )}
            <div>
             <div className="flex justify-between items-center gap-2 my-5">
-              <h3>الاجمالي الفرعي :</h3>
+              <h3> {language === "ar" ?" الاجمالي الفرعي"  : "Subtotal"}:</h3>
               <span>{getTotalPrice().toFixed(2)} {currencyData}</span>
             </div>
             <div className="flex justify-between items-center gap-2">
-              <h3>الاجمالي :</h3>
+              <h3> {language === "ar" ?" الاجمالي "  : "Total"}:</h3>
               <span>{getTotalPrice().toFixed(2)} {currencyData}</span>
             </div>
            </div>
@@ -148,5 +167,7 @@ export default function ShoppingCart() {
         </div>
       </div>
     </div>
+        
   );
+
 }
