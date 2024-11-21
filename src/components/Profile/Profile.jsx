@@ -6,7 +6,7 @@ export default function Profile() {
   return (
     <>
       <div className='my-16'>
-        <h1 className='absolute right-20 font-bold text-3xl'>حسابى</h1>
+        <h1 className='absolute right-20 font-bold text-3xl'> حسابى</h1>
         <div className='flex flex-col lg:flex-row-reverse'>
           <ConstantDetails />
           <div className='container flex flex-col lg:mx-2'>

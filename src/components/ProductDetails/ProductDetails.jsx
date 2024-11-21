@@ -1,40 +1,43 @@
 import { useContext, useEffect, useState } from 'react';
 import { ContextData } from '../../context/ContextApis';
-import { useLocation } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { CiHeart } from "react-icons/ci";
 import { IoEyeSharp } from 'react-icons/io5';
 import { FaStar } from 'react-icons/fa6';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Slider from 'react-slick';
+import { useLanguage } from '../../context/LanguageContextPro';
+import { useCart } from '../../context/CartContext';
+import { IoIosHeart } from 'react-icons/io';
 
 export default function ProductDetails() {
-  const { getProdDetails, getProductCategory } = useContext(ContextData);
+  const { getProdDetails } = useContext(ContextData);
   const [quantity, setQuantity] = useState(1);
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const id = queryParams.get('id');
+    const [showModal, setShowModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+    const { language } = useLanguage();
+      const { addToCart, handleAddToWish,wishList  } = useCart();
 
-  const { data, isError, isLoading } = useQuery({
-    queryKey: ['getProdDetails', id],
-    queryFn: () => getProdDetails(id),
-  });
+ const handleAddToCart = (product) => {
+    addToCart(product, quantity); 
+  };
+  const { id } = useParams(); 
 
-  // Fetch related products
-  const categoryID = data?.data?.sections
-    .find(sec => sec.childreen.some(prod => prod.id === parseInt(id)))
-    ?.childreen.find(prod => prod.id === parseInt(id))
-    ?.category?.[0]?.id;
+ const { data, isError, isLoading } = useQuery({
+  queryKey: ['getProdDetails', id,language], 
+  queryFn: () => getProdDetails(id), 
+  enabled: !!id
+});
 
-  const { data: relatedProductsData } = useQuery({
-    queryKey: ['getRelatedProducts', categoryID],
-    queryFn: () => getProductCategory(categoryID),
-    enabled: !!categoryID,
-  });
+const handleProductClick = (item) => {
+    setSelectedProduct(item);
+    setShowModal(true);
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [id]);
 
   if (isLoading) {
     return (
@@ -46,8 +49,9 @@ export default function ProductDetails() {
 
   if (isError) return <div>Error loading product details</div>;
 
-  const section = data?.data?.sections.find(sec => sec.childreen.some(prod => prod.id === parseInt(id)));
-  const product = section?.childreen.find(prod => prod.id === parseInt(id));
+  const product = data?.data?.products;
+  const related= data?.data?.related;
+// console.log(related);
 
   const CustomArrow = ({ direction, onClick }) => (
     <button onClick={onClick} className={`absolute top-1/2 -translate-y-1/2 z-10
@@ -73,26 +77,44 @@ export default function ProductDetails() {
     prevArrow: <CustomArrow direction="prev" />,
     responsive: [
       { breakpoint: 1024, settings: { slidesToShow: 3 } },
-      { breakpoint: 768, settings: { slidesToShow: 1 } },
-      { breakpoint: 480, settings: { slidesToShow: 1 } },
+      { breakpoint: 768, settings: { slidesToShow: 1, slidesToScroll: 1 } },
+      { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } },
     ],
   };
 
   return (
     <div className="flex flex-col items-center p-6">
       {product ? (
-        <div className="flex flex-row-reverse">
-          <img className="w-full h-80 object-cover" src={product.photo} alt={product.title} />
+        <div className="flex flex-col md:flex-row-reverse md:items-start gap-6">
+          <img className="w-full md:w-1/2 h-80 object-cover rounded-lg" src={product.photos[0].url} alt={product.title} />
 
-          <div className="p-6 text-right">
+          <div className="p-4 text-right flex-1">
             <h2 className="text-3xl font-bold mb-2">{product.title}</h2>
             <div className="flex items-center justify-between mb-4">
               <span className="text-2xl font-bold text-orange-500">ريال {product.price} </span>
-              <span className=" text-gray-400">الكمية المتاحة: {product.stock_qty}</span>
+              <span className="text-gray-400">الكمية المتاحة: {product.stock_qty}</span>
             </div>
             <div className='flex items-center justify-between mb-5 gap-2'>
-              <CiHeart className='text-primary text-4xl' />
-              <button className="px-4 bg-primary w-36 text-white font-bold py-2 rounded hover:bg-orange-600">
+              <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const isInWishList = wishList.some(
+                        (wishItem) => wishItem && wishItem.id === product.id
+                      );
+                      handleAddToWish(product, isInWishList, () => {});
+                    }}
+                    className="z-20"
+                  >
+                    {wishList.some(
+                      (wishItem) => wishItem && wishItem.id === product.id
+                    ) ? (
+                      <IoIosHeart className="text-primary text-[2.5rem]" />
+                    ) : (
+                      <CiHeart className="text-primary text-5xl" />
+                    )}
+                  </button>
+              <button  onClick={() => handleAddToCart(product)}
+               className="px-4 bg-primary w-36 text-white font-bold py-2 rounded hover:bg-orange-600">
                 أضف إلى العربة
               </button>
               <input 
@@ -105,7 +127,7 @@ export default function ProductDetails() {
             </div>
             <hr />
             <div>
-              <h3 className=" mb-4 font-semibold mt-2">:الفئة</h3>
+              <h3 className="mb-4 font-semibold mt-2">:الفئة</h3>
               <p className='text-slate-700'>{product?.category[0]?.name} - {product?.category[1]?.name}</p>
             </div>
             <div className="text-sm text-gray-600">
@@ -124,9 +146,9 @@ export default function ProductDetails() {
       <div className="w-full mt-8">
         <h3 className="text-right text-2xl font-semibold mb-4">منتجات ذات صلة</h3>
         <Slider {...settings}>
-          {relatedProductsData?.data?.products?.map((relatedProduct) => (
+          {related?.map((relatedProduct) => (
             <div key={relatedProduct.id} className="px-2">
-              <div className="bg-white group rounded-lg shadow-md hover:shadow-lg transition-all duration-300 h-full flex flex-col p-2">
+              <Link to={`/productDetails/${relatedProduct.id}`} className="bg-white group rounded-lg shadow-md hover:shadow-lg transition-all duration-300 h-full flex flex-col p-2">
                 <div className="relative overflow-hidden rounded-t-lg">
                   {relatedProduct.photo && (
                     <div className="group h-48 overflow-hidden relative">
@@ -137,11 +159,26 @@ export default function ProductDetails() {
                       />
                       <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                         <button className="z-20">
-                          <IoEyeSharp className="text-white bg-primary p-2 rounded-full text-[2.4rem]" />
+                          <IoEyeSharp className="text-white bg-primary p-2 rounded-full text-[2.4rem]" onClick={(e) => { e.preventDefault(); handleProductClick(relatedProduct); }} />
                         </button>
-                        <button className="z-20">
-                          <CiHeart className="text-primary p-2 rounded-full text-[3.8rem]" />
-                        </button>
+                          <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const isInWishList = wishList.some(
+                        (wishItem) => wishItem && wishItem.id === relatedProduct.id
+                      );
+                      handleAddToWish(relatedProduct, isInWishList, () => {});
+                    }}
+                    className="z-20"
+                  >
+                    {wishList.some(
+                      (wishItem) => wishItem && wishItem.id === relatedProduct.id
+                    ) ? (
+                      <IoIosHeart className="text-primary text-[2.5rem]" />
+                    ) : (
+                      <CiHeart className="text-primary text-5xl" />
+                    )}
+                  </button>
                       </div>
                     </div>
                   )}
@@ -159,11 +196,60 @@ export default function ProductDetails() {
                     <FaStar className="text-yellow-500 inline-block ml-1" />
                   </p>
                 </div>
-              </div>
+              </Link>
             </div>
           ))}
         </Slider>
       </div>
+      
+      {showModal && selectedProduct && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" onClick={() => setShowModal(false)}>
+          <div className="bg-white p-6 rounded-lg relative max-w-2xl w-full mx-4" onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setShowModal(false)} className="absolute top-2 right-2 text-xl font-bold text-gray-600 hover:text-gray-800">
+              ✕
+            </button>
+            <div className="mt-2 flex flex-row-reverse">
+              <img src={selectedProduct.photo} alt={selectedProduct.title} className="w-4/5 h-64 object-cover rounded-md mt-4" />
+              <div className=" mt-6">
+                <h3 className="text-xl font-semibold">{selectedProduct.title}</h3>
+                <span className="text-primary text-xl font-bold mb-5 block">{selectedProduct.price} ريال</span>
+                <div className='flex items-center justify-between'>
+                    <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const isInWishList = wishList.some(
+                        (wishItem) => wishItem && wishItem.id === selectedProduct.id
+                      );
+                      handleAddToWish(selectedProduct, isInWishList, () => {});
+                    }}
+                    className="z-20"
+                  >
+                    {wishList.some(
+                      (wishItem) => wishItem && wishItem.id === selectedProduct.id
+                    ) ? (
+                      <IoIosHeart className="text-primary text-[2.5rem]" />
+                    ) : (
+                      <CiHeart className="text-primary text-5xl" />
+                    )}
+                  </button>
+                  <input 
+                    type="number" 
+                    value={quantity} 
+                    onChange={(e) => setQuantity(Math.max(1, e.target.value))} 
+                    min={1} 
+                    className='rounded-md text-right text-primary border border-stone-500 w-28 py-2 px-2'
+                  />
+                </div>
+                <button onClick={() => handleAddToCart(selectedProduct)}
+                 className="px-2 w-full mt-10 py-2 bg-primary text-white hover:bg-primary/90 transition-colors">
+                  إضافة إلى السلة
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

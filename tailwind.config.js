@@ -12,6 +12,7 @@ export default {
         "Neutral": '#f9f9f9',
         "white": "#ffffff",
         "primary700": "#c2410c",
+        "primary400": "#f0851f",
       },
     },
 

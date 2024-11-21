@@ -5,27 +5,26 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom";
-
+import { useLanguage } from '../../context/LanguageContextPro'; // إضافة context للغة
 
 export default function SubCategory() {
   const { subCategories } = useContext(ContextData);
-    const [filteredCategory, setFilteredCategory] = useState([]);
-
+  const [filteredCategory, setFilteredCategory] = useState([]);
+  const { language } = useLanguage(); // استخدام اللغة الحالية
   const sliderRef = useRef(null);
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['subCategory'],
+    queryKey: ['subCategory', language], // استخدام اللغة كمفتاح لتحديث البيانات بناءً على اللغة
     queryFn: subCategories
   });
 
-  useEffect(()=>{
-    if(data?.data.categories){
-        const availableCategor= data?.data.categories.filter(category => category.photo)
-        setFilteredCategory(availableCategor)
+  useEffect(() => {
+    if (data?.data.categories) {
+      const availableCategor = data?.data.categories.filter(category => category.photo);
+      setFilteredCategory(availableCategor);
     }
-  },[data])
-  // console.log(data);
-  
+  }, [data, language]); // تأكد من التحديث عندما تتغير اللغة
+
   const NextArrow = () => (
     <div
       className="absolute top-1/2 -right-4 transform -translate-y-1/2 cursor-pointer z-10"
@@ -89,11 +88,6 @@ export default function SubCategory() {
     ]
   };
 
-  // const handleCategoryClick = (index) => {
-   
-  // };
-
-
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -105,28 +99,24 @@ export default function SubCategory() {
   if (isError) return <div>Error loading categories</div>;
 
   return (
-    <div className="relative  py-7">
-        <h2 className='text-right pb-4 text-xl text-secondary'>الفئات الرئيسية</h2>
+    <div className="relative py-7">
+      <h2 className='text-right pb-4 text-xl text-secondary'>الفئات الرئيسية</h2>
       <Slider ref={sliderRef} {...settings}>
         {filteredCategory.map((category, index) => (
-          <div 
-            key={index} 
-            className='group px-2 cursor-pointer'
-          >
+          <div key={index} className='group px-2 cursor-pointer'>
             <Link to={`/categoryDetails/${category.id}`}>
-             <div className='overflow-hidden rounded-lg bg-white shadow-sm hover:shadow-md transition-all duration-300'>
-              <img 
-                className='h-36 w-full object-cover transform transition-all duration-300 group-hover:scale-110' 
-                src={category.photo} 
-                alt={category.name} 
-                loading="lazy"
-              />
-              <h3 className='text-center py-2 text-sm font-medium text-secondary group-hover:text-orange-500 transition-all duration-300'>
-                {category.name.split(" ").slice(0,3).join(' ')}
-              </h3>
-            </div>
+              <div className='overflow-hidden rounded-lg bg-white shadow-sm hover:shadow-md transition-all duration-300'>
+                <img 
+                  className='h-36 w-full object-cover transform transition-all duration-300 group-hover:scale-110' 
+                  src={category.photo} 
+                  alt={category.name} 
+                  loading="lazy"
+                />
+                <h3 className='text-center py-2 text-sm font-medium text-secondary group-hover:text-orange-500 transition-all duration-300'>
+                  {category.name.split(" ").slice(0,3).join(' ')}
+                </h3>
+              </div>
             </Link>
-           
           </div>
         ))}
       </Slider>
