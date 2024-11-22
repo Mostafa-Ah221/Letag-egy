@@ -14,7 +14,7 @@ import Address from "./components/ShoppingCart/Address";
 import PayPage from "./components/ShoppingCart/PayPage";
 import Review from "./components/ShoppingCart/Review";
 import Shipping from "./components/ShoppingCart/Shipping";
-import {CartContextProvider} from "./context/CartContext";
+import { CartContextProvider } from "./context/CartContext";
 import { useEffect, useState } from "react";
 import Stock from "./components/Stock/Stock";
 import Profile from "./components/Profile/Profile";
@@ -37,7 +37,7 @@ function App() {
         const data = await resJson.data;
         const stock = await data.multi_stocks_management;
         if (stock == 1) {
-          setIsStock(false);
+          setIsStock(true);
         }
         else {
           setIsStock(false);
@@ -66,7 +66,7 @@ function App() {
         { path: "productDetails", element: <ProductDetails /> },
         {
           path: "cartlayout",
-          element:<ProtectedRoute><CartLayout /></ProtectedRoute> ,
+          element: <ProtectedRoute><CartLayout /></ProtectedRoute>,
           children: [
             { index: true, element: <Address /> },
             { path: "shipping", element: <Shipping /> },
@@ -81,9 +81,9 @@ function App() {
 
   return (
     <CartContextProvider>
-    <DataContextProveder>
-      <RouterProvider router={router} />
-    </DataContextProveder>
+      <DataContextProveder>
+        <RouterProvider router={router} />
+      </DataContextProveder>
     </CartContextProvider>
   );
 }

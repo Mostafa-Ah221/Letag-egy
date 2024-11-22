@@ -10,9 +10,11 @@ import { MdCancel } from "react-icons/md";
 export default function Navbar() {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [isSubOpen, setIsSubOpen] = useState(false);
-  var catChildren = [];
-  var catChildrenNames = [];
+  const [openSubMenus, setOpenSubMenus] = useState({});
+  let ca = {};
+  let catChildren = [];
+  const [ca2, setCa2] = useState({});
+  const [catChildren2, setCatChildren2] = useState([]);
   const { subCategories } = useContext(ContextData);
   const handleOpenMenu = () => {
     isOpen ? setIsOpen(false) : setIsOpen(true);
@@ -21,19 +23,18 @@ export default function Navbar() {
     queryKey: ['subCategory'],
     queryFn: subCategories
   });
-  const handleOpenSubMenu = async (cName) => {
-    isSubOpen ? setIsSubOpen(false) : setIsSubOpen(true);
-    if (!isSubOpen) {
-      catChildren = await data?.data.categories.map((c) => {
-        if (cName == c.name) {
-          console.log(c.childrenCategories);
-          return (c.childrenCategories);
-        }
-        console.log(catChildren);
-        catChildrenNames = catChildren.map((c) => {
-          return c.name;
-        });
-      });
+  const handleOpenSubMenu = async (cName, categoryId) => {
+    setOpenSubMenus((prevState) => ({
+      ...!prevState,
+      [categoryId]: !prevState[categoryId], // Toggle the specific category's state
+    }));
+    if (!openSubMenus[categoryId]) {
+      ca = await data?.data.categories.filter((cat) => cat.name == cName);
+      catChildren = await ca[0].childrenCategories;
+      setCa2(ca);
+      setCatChildren2(catChildren);
+      console.log(catChildren2);
+      console.log(ca2);
     }
   };
   return (
@@ -41,22 +42,30 @@ export default function Navbar() {
       <div className={`bg-white h-full w-full ${isOpen ? "animate-slideInRight" : "hidden"} flex flex-col`}>
         <MdCancel onClick={handleOpenMenu} />
         {data?.data.categories.map((cat) => (
-          <div className="w-full h-12 bg-white flex flex-row-reverse" key={cat.id}>
-            <img src={cat.photo} alt={cat.name} className="mx-2 my-4 w-12 h-12" />
-            <p className="mx-2 my-4">{cat.name}</p>
-            {isSubOpen ? <FaArrowDown className="mr-auto my-4" onClick={() => handleOpenSubMenu(cat.name)} /> : <FaArrowLeft className="mr-auto my-4" onClick={() => handleOpenSubMenu(cat.name)} />}
-          </div>
+          <>
+            <div className="w-full h-12 bg-white flex flex-row-reverse" key={cat.id}>
+              <img src={cat.photo} alt={cat.name} className="mx-2 my-4 w-12 h-12" />
+              <p className="mx-2 my-4">{cat.name}</p>
+              <button
+                className="mr-auto my-4"
+                onClick={() => handleOpenSubMenu(cat.name, cat.id)}
+              >
+                {openSubMenus[cat.id] ? <FaArrowDown /> : <FaArrowLeft />}
+              </button>
+            </div>
+            <div className={`bg-white w-full flex flex-col ${openSubMenus[cat.id] ? "block" : "hidden"}`}>
+              {catChildren2.map((cat) => (
+                <>
+                  <div className={`bg-white flex flex-row-reverse mx-2 my-4`} key={cat.id}>
+                    <Link className={``}>{cat.name}</Link>
+                  </div>
+                </>
+              ))}
+            </div>
+            <hr className="my-4"></hr>
+          </>
         ))}
-        <div className={`bg-white w-full flex flex-col ${isSubOpen ? "block" : "hidden"}`}>
-          {catChildrenNames.map((cat) => (
-            <>
-              <div className="bg-white flex flex-row-reverse mx-2 my-4">
-                <p className="">{cat}</p>
-              </div>
-            </>
-          ))}
-        </div>
-      </div>
+      </div >
       <nav className="border-gray-200 relative z-10">
         <div className=" flex-row-reverse justify-start flex flex-wrap items-center lg:justify-around mx-auto p-4">
           <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
