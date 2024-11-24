@@ -44,7 +44,7 @@ export default function SliderHome() {
     queryFn: getApiHome
   });
 
-  console.log(data?.data);
+  // console.log(data?.data);
   
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error occurred while fetching data.</p>;

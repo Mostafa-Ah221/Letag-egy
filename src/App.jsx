@@ -19,10 +19,10 @@ import { useEffect, useState } from "react";
 import Stock from "./components/Stock/Stock";
 import Profile from "./components/Profile/Profile";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-
-
-
-
+import { LanguageContextPro } from "./context/LanguageContextPro";
+import WishList from "./components/WishList/WishList";
+import CartPage from "./components/CartPage/CartPage";
+import { Toaster } from 'react-hot-toast';
 
 
 
@@ -42,9 +42,9 @@ function App() {
         else {
           setIsStock(false);
         }
-        console.log(isStock);
+        // console.log(isStock);
       } catch (error) {
-        console.log(error);
+        // console.log(error)
       }
     };
     fetchdata();
@@ -62,8 +62,10 @@ function App() {
         { path: "login", element: <Login /> },
         { path: "register", element: <SignUp /> },
         { path: "pageBrand", element: <PageBrands /> },
+        { path: "wishlist", element: <WishList /> },
         { path: "categoryDetails/:id", element: <CategoryDetails /> },
-        { path: "productDetails", element: <ProductDetails /> },
+        { path: "productDetails/:id", element: <ProductDetails /> },
+        { path: "cartpage", element: <CartPage /> },
         {
           path: "cartlayout",
           element: <ProtectedRoute><CartLayout /></ProtectedRoute>,
@@ -80,11 +82,14 @@ function App() {
   ]);
 
   return (
-    <CartContextProvider>
-      <DataContextProveder>
-        <RouterProvider router={router} />
-      </DataContextProveder>
-    </CartContextProvider>
+    <LanguageContextPro>
+      <CartContextProvider>
+        <DataContextProveder>
+          <RouterProvider router={router} />
+          <Toaster />
+        </DataContextProveder>
+      </CartContextProvider>
+    </LanguageContextPro>
   );
 }
 

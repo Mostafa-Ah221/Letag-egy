@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom';
 function Stock() {
     const [towns, setTowns] = useState([]);
     useEffect(() => {
@@ -32,7 +33,7 @@ function Stock() {
                     ))}
                 </select >
                 <div className={`mt-28`}>
-                    <button className={`bg-primary w-32 h-12 flex item-center justify-center absolute right-2 mr-52 text-white pt-3 hover:text-black hover:bg-white rounded-xl`}>اظهار المنتجات</button>
+                    <Link to={"/home"}><button className={`bg-primary w-32 h-12 flex item-center justify-center absolute right-2 mr-52 text-white pt-3 hover:text-black hover:bg-white rounded-xl`}>اظهار المنتجات</button></Link>
                 </div>
                 <div className='absolute right-2 mr-52 mt-20'>
                     <img src='../../../src/assets/images/favicon.png' alt="logo" />

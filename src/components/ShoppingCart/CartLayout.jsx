@@ -38,13 +38,13 @@ export default function CartLayout() {
       });
 
       if (response.ok) {
-        console.log('Order submitted successfully');
+        // console.log('Order submitted successfully');
         alert('success');
       } else {
-        console.error('Error submitting order');
+        // console.error('Error submitting order');
       }
     } catch (error) {
-      console.error('Network error:', error);
+      // console.error('Network error:', error);
     }
   };
 

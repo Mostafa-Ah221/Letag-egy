@@ -1,118 +1,132 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import { createContext, useContext, useState } from "react";
+import toast from 'react-hot-toast';
 
-// Initialize Context
-export const CartContext = createContext();
+const CartContext = createContext();
 
-export  const CartContextProvider = ({ children }) => {
-  const [cartDetails, setCartDetails] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+const showToast = (message, type = 'success') => {
+  toast[type](message, {
+    iconTheme: {
+      primary: 'orange', 
+      secondary: 'white', 
+    },
+    style: {
+      borderRadius: '8px',
+      background: '#fff',
+      color: '#333',
+      padding: '16px',
+    },
+  });
+};
 
-  useEffect(() => {
-    fetchCartDetails();
-  }, []);
+export const CartContextProvider = ({ children }) => {
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
-  // Fetch cart details
-  const fetchCartDetails = async () => {
-    setLoading(true);
-    setError(null);
+  const [wishList, setWishList] = useState(() => {
+    const savedWishList = localStorage.getItem("wishList");
+    return savedWishList ? JSON.parse(savedWishList) : [];
+  });
 
-    try {
-      const response = await fetch("https://demo.leetag.com/api/cart/details", {
-        method: "post",
-        headers: { "Accept": "application/json" },
-        credentials: "include",
-      });
+  const addToCart = (product, quantity = 1) => {
+    const updatedCart = [...cart];
+    const existingProduct = updatedCart.find((item) => item.id === product.id);
 
-      if (!response.ok) throw new Error("Failed to fetch cart details");
-
-      const data = await response.json();
-      setCartDetails(data);
-    } catch (err) {
-      setError("حدث خطأ أثناء تحميل السلة");
-      console.error(err);
-    } finally {
-      setLoading(false);
+    if (existingProduct) {
+      existingProduct.quantity += quantity;
+    } else {
+      updatedCart.push({ ...product, quantity });
     }
+    setCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    // alert("Product added to cart!");
+    showToast("Product added to cart!");
+  }
+
+  const removeFromCart = (productId) => {
+    const updatedCart = cart.filter((item) => item.id!== productId);
+    setCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    showToast("Product removed from cart!");
+  }
+  const updateQuantity = (productId, newQuantity) => {
+    const updatedCart = cart.map((item) =>
+      item.id === productId ? { ...item, quantity: newQuantity } : item
+    );
+    setCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
-  // Add or update product in cart
-  const addToCart = async (productId, quantity = 1) => {
-    if (!productId || quantity < 1) {
-      setError("بيانات المنتج غير صحيحة");
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch("https://demo.leetag.com/api/cart/details", {
-        method: "POST",
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          products_ids: Array(quantity).fill(productId),
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`فشلت العملية بكود: ${response.status}`);
-      }
-
-      const data = await response.json();
-      if (data.error) {
-        throw new Error(data.error);
-      }
-
-      setCartDetails(data);
-      return { success: true, data };
-    } catch (error) {
-      const errorMessage = error.message || "حدث خطأ أثناء إضافة المنتج إلى العربة";
-      setError(errorMessage);
-      return { success: false, error: errorMessage };
-    } finally {
-      setLoading(false);
-    }
+  const getTotalPrice = () => {
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
-  // Clear cart
-  const clearCart = async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch("https://demo.leetag.com/api/cart/clear", {
-        method: "POST",
-        headers: {
-          "Accept": "application/json",
-        },
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error("فشلت عملية تفريغ السلة");
-      }
-
-      setCartDetails(null);
-    } catch (error) {
-      setError("حدث خطأ أثناء تفريغ السلة");
-    } finally {
-      setLoading(false);
+  // Part of Wish List
+  const addToWishList = (product) => {
+    const updatedWishList = [...wishList];
+    const existingProduct = updatedWishList.find((item) => item.id === product.id);
+    if (!existingProduct) {
+      updatedWishList.push(product);
     }
+    setWishList(updatedWishList);
+    localStorage.setItem("wishList", JSON.stringify(updatedWishList));
+    alert("Product added to wishlist!");
   };
+
+  const removeFromWishList = (productId) => {
+    const updatedWishList = wishList.filter((item) => item.id !== productId);
+    setWishList(updatedWishList);
+    localStorage.setItem("wishList", JSON.stringify(updatedWishList));
+  };
+
+  const clearWishList = () => {
+    setWishList([]);
+    localStorage.removeItem("wishList");
+  };
+
+  const clearCart = () => {
+    setCart([]);
+    localStorage.removeItem("cart");
+  };
+
+const handleAddToWish = (product, isInWishList, setIsInWishList) => {
+  if (isInWishList) {
+    setWishList((prev) => {
+      const updatedWishList = prev.filter((item) => item && item.id !== product.id);
+      localStorage.setItem("wishList", JSON.stringify(updatedWishList));
+       showToast("Product removed to wishlist!");
+      return updatedWishList;
+    });
+    setIsInWishList(false);
+  } else {
+   
+    setWishList((prev) => {
+      const updatedWishList = [...prev, product];
+      localStorage.setItem("wishList", JSON.stringify(updatedWishList));
+     showToast("Product added to wishlist!");
+      
+      return updatedWishList;
+    });
+    setIsInWishList(true);
+  }
+};
+
 
   return (
     <CartContext.Provider
       value={{
-        cartDetails,
-        loading,
-        error,
+        cart,
         addToCart,
+        removeFromCart,
         clearCart,
+        updateQuantity,
+        getTotalPrice,
+        addToWishList,
+        removeFromWishList,
+        clearWishList,
+        wishList,
+        handleAddToWish,
       }}
     >
       {children}
@@ -120,4 +134,4 @@ export  const CartContextProvider = ({ children }) => {
   );
 };
 
-export const useCartData = () => useContext(CartContext);
+export const useCart = () => useContext(CartContext);

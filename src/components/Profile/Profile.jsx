@@ -16,7 +16,7 @@ export default function Profile() {
         </div>
         <div className='flex flex-col lg:flex-row-reverse'>
           <ConstantDetails />
-          <div className='flex flex-col justify-center item-center'>
+          <div className='flex flex-col justify-center item-center mx-12'>
             <div>
               <p className='text-end'>amr مرحبا</p>
             </div>
