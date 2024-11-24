@@ -9,14 +9,7 @@ import { FaArrowDown } from "react-icons/fa6";
 import { MdCancel } from "react-icons/md";
 export default function Navbar() {
   const [isMenuOpen, setMenuOpen] = useState(false);
-<<<<<<< HEAD
-  const { language } = useLanguage(); 
-    const { settings_domain } = useContext(ContextData);
-
-// console.log(settings_domain?.data?.logo);
-=======
   const { language } = useLanguage();
->>>>>>> 08d7d3c038ea137c498b361256f0ba814b3a86fa
 
 
   const [isOpen, setIsOpen] = useState(false);
@@ -122,13 +115,8 @@ export default function Navbar() {
           </button>
 
           <div className={`items-center justify-between w-full lg:flex lg:w-auto md:order-2 ${isMenuOpen ? 'block' : 'hidden'}`} id="navbar-search">
-<<<<<<< HEAD
-            <ul className="hidden lg:flex font-medium border-gray-100 rounded-lg space-x-8 rtl:space-x-reverse flex-row bg-white dark:border-gray-700">
-              
-=======
             <ul className="flex flex-col p-4 mt-4 font-medium border border-gray-100 rounded-lg lg:space-x-8 rtl:space-x-reverse lg:flex-row lg:p-0 lg:mt-0 lg:border-0 lg:bg-white dark:border-gray-700">
 
->>>>>>> 08d7d3c038ea137c498b361256f0ba814b3a86fa
               <li>
                 <Link to={isStock ? "/home" : "/"} className="relative block py-2 px-3 ml-2 rounded md:p-0 group">
                   <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-orange-500 transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
