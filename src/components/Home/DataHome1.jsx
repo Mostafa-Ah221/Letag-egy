@@ -232,9 +232,9 @@ export default function DataHome({ sectionName }) {
 
       <div className="flex items-center justify-center my-4">
         {sliderData && sectionName === sections.trending? (
-          <img src={homeData.data.sliders[1].photo} className="w-[100%] h-[25rem] object-cover rounded-lg shadow-2xl" alt="Slider Image" />
+          <img src={homeData.data.sliders[1].photo} className="w-[100%] md:h-[25rem] h-full md:object-cover object-contain  rounded-lg shadow-2xl" alt="Slider Image" />
         ) : sectionName === sections.bestSelling ? (
-          <img src={sliderData.data.sliders[0].photo} className="w-[95%] h-[25rem] object-cover rounded-lg shadow-2xl" alt="Slider Image" />
+          <img src={sliderData.data.sliders[0].photo} className="w-[95%] md:h-[25rem] h-full md:object-cover object-contain rounded-lg shadow-2xl" alt="Slider Image" />
         ) : null}
       </div>
     </div>

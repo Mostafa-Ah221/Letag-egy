@@ -13,10 +13,10 @@ export default function Layout() {
           <Menu />
         </div>
           <MenuMobile/>
-        <div className="col-span-11">
+        <div className="col-span-11 ">
           <Navbar/>
           <SecondMenu/>
-        <div className="container px-3">
+        <div className="container px-7">
           <Outlet>
           </Outlet>
        </div>

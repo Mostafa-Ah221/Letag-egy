@@ -70,9 +70,9 @@ function SecondMenu() {
 
     return (
         <>
-            <div className='flex relative z-40'>
+            <div className=' relative z-40 hidden lg:flex'>
                 <div className='flex flex-row-reverse'>
-                    <button className="block bg-primary w-16 outline-none h-14 mr-3 ml-auto z-30" onClick={handleOpenMenu}>
+                    <button className="block bg-primary w-16 outline-none h-14  ml-auto z-30" onClick={handleOpenMenu}>
                         <FontAwesomeIcon icon={isOpen ? faCircleXmark : faBars} className="text-white text-[1.5rem]" />
                     </button>
 
