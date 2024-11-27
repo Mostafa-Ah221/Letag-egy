@@ -8,7 +8,7 @@ import { useLanguage } from "../../context/LanguageContextPro";
 
 export default function Home() {
   // تحديد اللغة (مبدئيًا العربية، يمكن تغييرها حسب الحاجة)
-    const { language } = useLanguage();
+  const { language } = useLanguage();
 
 
   // تحديد قيم sectionName بناءً على اللغة
