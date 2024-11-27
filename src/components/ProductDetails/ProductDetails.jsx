@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext,  useState } from 'react';
 import { ContextData } from '../../context/ContextApis';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -12,6 +12,8 @@ import { useCart } from '../../context/CartContext';
 import { IoIosHeart } from 'react-icons/io';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import Zoom from 'react-medium-image-zoom';
+
 
 export default function ProductDetails() {
   const { getProdDetails, currencyData, userData, token } = useContext(ContextData);
@@ -86,9 +88,7 @@ try {
 };
 
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [id]);
+ 
 
   if (isLoading) {
     return (
@@ -131,17 +131,30 @@ try {
       { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } },
     ],
   };
-console.log("Mostafa Ahmed abd Al moaaty Al shrife")
   return (
     <div className="flex flex-col items-center mt-5">
       {product ? (
         <>
           <div className="flex flex-col md:flex-row-reverse md:items-start gap-6">
-            <img 
-              className="w-full md:w-1/2 h-80 object-cover rounded-lg" 
+            <div className='w-full md:w-1/2 h-80'>
+           <img 
+                className="w-full h-full object-cover rounded-lg hover:scale-110 transition-transform duration-300" 
               src={product.photos[0].url} 
               alt={product.title} 
             />
+            
+            
+              <div className={`flex rounded-md mt-2 border-2 border-primary w-fit ${language === "ar"? "mr-auto":"ml-auto"}`}>
+              {product.photos.map((photo, index) => (
+                  <img key={index} 
+                  className="w-[4.5rem] h-[4.5rem] object-cover"
+                  src={photo.url}
+                  alt={product.title}
+                />
+                
+              ))}
+              </div>
+            </div>
 
             <div className="p-4 text-right flex-1">
               <h2 className="text-3xl font-bold mb-2">{product.title}</h2>
@@ -203,7 +216,7 @@ console.log("Mostafa Ahmed abd Al moaaty Al shrife")
               
               setShowReview((prev) => !prev);
             }}
-            className="bg-primary px-2 py-1 text-white hover:tracking-widest duration-300 text-xl mt-6"
+            className="bg-primary px-2 py-1 mt-20 text-white rounded-md hover:tracking-widest duration-300 text-xl "
           >
             {language === 'ar' ? 'تقييم' : 'Review'}
           </button>

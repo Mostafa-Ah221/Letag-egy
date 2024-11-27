@@ -28,7 +28,7 @@ function SecondMenu() {
             setFilteredCategory(availableCategor);
             setCategories(data?.data.categories);
         }
-    }, [data, language]); // تحديث الفلاتر بناءً على اللغة
+    }, [data, language]); 
 
 
     // Toggle Menu State
@@ -103,7 +103,10 @@ function SecondMenu() {
                         <div className="h-50px w-0.5 opacity-40 bg-black mx-4 border-l-2"></div>
                         <div className="flex flex-col">
                             {childrenCat.map((child) => (
-                                <Link to={`/categoryDetails/${child.id}`} onClick={() => { setSelectedCategoryId(child.id) setIsOpen(false);}}>
+                                // eslint-disable-next-line react/jsx-key
+                                <Link to={`/categoryDetails/${child.id}`}
+                                 onClick={() => { setSelectedCategoryId(child.id); setIsOpen(false);}}
+                                 >
                                     <div key={child.id} className="flex bg-white group hover:cursor-pointer w-60 z-50">
                                         <p className="text-black group-hover:text-primary my-2">{child.name}</p>
                                     </div>

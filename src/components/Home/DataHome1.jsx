@@ -110,9 +110,9 @@ export default function DataHome({ sectionName }) {
               return (
                 <div key={index} className="product-item px-2">
                   <div className="relative overflow-hidden rounded-md shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 h-full bg-white">
-                    <div className="relative group aspect-w-16 aspect-h-9">
+                    <div className="relative group aspect-h-9">
                       {item.photo && (
-                        <div className="w-full h-48">
+                        <div className="w-full h-44">
                           <div className="relative w-full h-full">
                             <Link to={`/productDetails?id=${item.id}`}>
                               <img

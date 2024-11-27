@@ -1,75 +1,90 @@
-import { useState, useContext } from 'react';
-import { ContextData } from '../../context/ContextApis';
-import { useQuery } from '@tanstack/react-query';
+import { Link, useParams } from "react-router-dom";
+import { ContextData } from "../../context/ContextApis";
+import { useContext, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { IoIosHeart } from "react-icons/io";
+import { CiHeart } from "react-icons/ci";
 import { IoEyeSharp } from "react-icons/io5";
-import { Link } from 'react-router-dom';
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { CiHeart } from 'react-icons/ci';
-import { useCart } from '../../context/CartContext';
-import { IoIosHeart } from 'react-icons/io';
+import { useCart } from "../../context/CartContext";
+import { useLocation } from "react-router-dom";
+import { useLanguage } from "../../context/LanguageContextPro";
 
-export default function DataHomePlay() {
-    const [quantity, setQuantity] = useState(1); 
-      const { addToCart, handleAddToWish,wishList  } = useCart(); 
-  const { getApiHome,currencyData } = useContext(ContextData);
-  
-  const { data: homeData, isLoading, isError } = useQuery({
-    queryKey: ['getApiHome'],
-    queryFn: getApiHome,
-    staleTime: 1000 * 60 * 15, 
-    cacheTime: 1000 * 60 * 30,
-  });
-
-  const trendingSection = homeData?.data?.sections.find(section => section.name === "منتجات وصلت حديثا");
+export default function CategoryFilter() {
+  const { fetchProducts } = useContext(ContextData);
+  const { addToCart, handleAddToWish,wishList  } = useCart(); 
   const [showModal, setShowModal] = useState(false);
-  const [
-    selectedProduct, setSelectedProduct] = useState(null);
-    // const [isInWishList, setIsInWishList] = useState(false);  
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [quantity, setQuantity] = useState(1); 
+  const { currencyData } = useContext(ContextData);
+   const { language } = useLanguage();
+  
+  const { id } = useParams();
+// console.log(id);
+  const filters = {
+    "brands_id[0]":id ,
+  };
 
+const { data, isLoading, isError } = useQuery({
+    queryKey: ["fetchProducts", filters,language],
+    queryFn: () => fetchProducts(filters),
+  });
+  const location = useLocation();
+const title = location.state?.title
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error occurred while fetching data.</p>;
 const handleAddToCart = (product) => {
     addToCart(product, quantity); 
   };
-  const handleProductClick = (item) => {
+const brandProduct=data?.data?.products
+ const handleProductClick = (item) => {
     setSelectedProduct(item);
     setShowModal(true);
   };
+//  useEffect(() => {
+//     window.scrollTo(0, 0);
+//   }, []);
+ if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
-    <div className="container mx-auto px-4 my-11">
-      <h2 className='text-right text-2xl font-semibold my-7'>{trendingSection?.name}</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {trendingSection ? (
-          trendingSection?.childreen.map((item, index) => (
-            <Link to={`/productDetails/${item.id}`} key={index} className="product-item flex flex-col h-full">
+    <div>
+        <div className="flex items-center justify-center py-7">
+         <p className="text-gray-600 text-[1rem] ">{language === "ar" ? "علامة تجارية": "Brand"}/</p>
+         <h1 className=" text-[1.7rem] font-bold text-orange-500 ">{title} </h1>
+        </div>
+         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 my-5">
+        {brandProduct ? 
+         brandProduct.map((prods)=>(
+            <Link to={`/productDetails/${prods.id}`} key={prods.id} className="product-item flex flex-col h-full">
               <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 h-full flex flex-col">
                 <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded-t-lg">
-                  {item.photo && (
+                  {prods.photo && (
                     <div className="group h-48 overflow-hidden">
                       <img
-                        src={item.photo}
-                        alt={item.name}
+                        src={prods.photo}
+                        alt={prods.name}
                         className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
                       />
                      <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <button onClick={(e) => { e.preventDefault(); handleProductClick(item); }} className="z-20">
+                            <button onClick={(e) => { e.preventDefault(); handleProductClick(prods); }} className="z-20">
                               <IoEyeSharp className="text-white bg-primary p-2 rounded-full text-[2.4rem]" />
                             </button>
                             <button
                             onClick={(e) => {
                               e.preventDefault();
                               const isInWishList = wishList.some(
-                                (wishItem) => wishItem && wishItem.id === item.id
+                                (wishItem) => wishItem && wishItem.id === prods.id
                               );
-                              handleAddToWish(item, isInWishList, () => {});
+                              handleAddToWish(prods, isInWishList, () => {});
                             }}
                             className="z-20"
                           >
                             {wishList.some(
-                              (wishItem) => wishItem && wishItem.id === item.id
+                              (wishItem) => wishItem && wishItem.id === prods.id
                             ) ? (
                               <IoIosHeart className="text-primary text-[2.5rem]" />
                             ) : (
@@ -82,23 +97,22 @@ const handleAddToCart = (product) => {
                 </div>
                 <div className="p-4 flex flex-col flex-grow">
                   <h3 className="text-right text-lg font-medium mb-2 line-clamp-2 min-h-[3.5rem]">
-                    {item.title}
+                    {prods.title}
                   </h3>
                   <div className="mt-auto">
                     <div className="flex items-center justify-between">
-                      <span className="text-primary text-lg font-semibold">{item.price} {currencyData}</span>
+                      <span className="text-primary text-lg font-semibold">{prods.price} {currencyData}</span>
                     </div>
                   </div>
                 </div>
               </div>
             </Link>
-          ))
-        ) : (
-          <p className="text-center col-span-full">لم يتم العثور على المنتجات.</p>
-        )}
-      </div>
+         ))
+        :
+        ""
+        }
 
-     {showModal && selectedProduct && (
+         {showModal && selectedProduct && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" onClick={() => setShowModal(false)}>
           <div className="bg-white p-6 rounded-lg relative max-w-2xl w-full mx-4" onClick={(e) => e.stopPropagation()}>
             <button onClick={() => setShowModal(false)} className="absolute top-2 right-2 text-xl font-bold text-gray-600 hover:text-gray-800">
@@ -144,7 +158,8 @@ const handleAddToCart = (product) => {
           </div>
         </div>
       )}
-
     </div>
-  );
+    </div>
+   
+  )
 }

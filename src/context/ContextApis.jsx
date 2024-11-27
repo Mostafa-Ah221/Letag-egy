@@ -5,6 +5,22 @@ import { useQuery } from "@tanstack/react-query";
 
 export const ContextData = createContext();
 
+async function fetchProducts(filters, language) {
+  const formData = new FormData();
+  for (const [key, value] of Object.entries(filters)) {
+    formData.append(key, value);
+  }
+  try {
+    const response = await axios.post(`https://tarshulah.com/api/products`, formData, {
+      headers: { lang: language },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    throw error;
+  }
+}
+
 async function subCategories(language) {
   const response = await axios.get(`https://tarshulah.com/api/categories`, {
     headers: { lang: language },
@@ -81,7 +97,7 @@ export default function DataContextProvider({ children }) {
     return localStorage.getItem("userToken") || null;
   });
 
-  const [userData, setUserData] = useState(null); // تخزين بيانات المستخدم
+  const [userData, setUserData] = useState(null); 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
 
@@ -157,6 +173,7 @@ export default function DataContextProvider({ children }) {
         getCategoriesDetails: (id) => getCategoriesDetails(id, language),
         getProductCategory: (idCategory, page, pageSize) =>
           getProductCategory(idCategory, page, pageSize, language),
+        fetchProducts: (filters) => fetchProducts(filters, language), 
         setUserToken: handleSetUserToken,
         userToken,
         userData,
