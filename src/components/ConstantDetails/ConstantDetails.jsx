@@ -3,13 +3,14 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ContextData } from '../../context/ContextApis'
 
 function ConstantDetails() {
-    let { userToken, setUserToken } = useContext(ContextData)
+        let {setUserToken,setUserData}=useContext(ContextData)
 
     const navigate = useNavigate()
     function Logout() {
         navigate('/')
         setUserToken(null)
         localStorage.removeItem('userToken')
+       setUserData(null)
     }
     return (
         <>

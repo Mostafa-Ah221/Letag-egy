@@ -23,6 +23,7 @@ import { LanguageContextPro } from "./context/LanguageContextPro";
 import WishList from "./components/WishList/WishList";
 import CartPage from "./components/CartPage/CartPage";
 import { Toaster } from 'react-hot-toast';
+import CategoryFilter from "./components/CategoryFilter/CategoryFilter";
 
 
 
@@ -65,6 +66,7 @@ function App() {
         { path: "wishlist", element: <WishList /> },
         { path: "categoryDetails/:id", element: <CategoryDetails /> },
         { path: "productDetails/:id", element: <ProductDetails /> },
+        { path: "categoryFilter/:id", element: <CategoryFilter /> },
         { path: "cartpage", element: <CartPage /> },
         {
           path: "cartlayout",

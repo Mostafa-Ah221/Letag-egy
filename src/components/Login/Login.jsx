@@ -30,6 +30,7 @@ export default function Login() {
         setUserToken(tokenUser);
         setLoading(false);
         navigate('/');
+        
       })
       .catch((error) => {
         setLoading(false);

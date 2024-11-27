@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from "react";
 import { useQuery } from '@tanstack/react-query';
 import logo from '../../assets/images/logo.png';
 import { Link } from "react-router-dom";
-import { useLanguage } from "../../context/LanguageContextPro"; // استيراد اللغة
+import { useLanguage } from "../../context/LanguageContextPro"; 
 import { ContextData } from "../../context/ContextApis";
 import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowDown } from "react-icons/fa6";
@@ -96,10 +96,10 @@ export default function Navbar() {
         ))}
       </div >
       <nav className="border-gray-200 relative z-10">
-        <div className="flex-row-reverse justify-start flex flex-wrap items-center lg:justify-around mx-auto p-4">
-          <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
+        <div className="flex-row justify-start flex flex-wrap items-center lg:justify-around mx-auto p-4">
+          <Link to={"/"} className="flex items-center space-x-3 rtl:space-x-reverse">
             <img src={logo} className="h-10" alt="Logo" />
-          </a>
+          </Link>
           <button
             data-collapse-toggle="navbar-search"
             type="button"
@@ -146,11 +146,11 @@ export default function Navbar() {
             </ul>
           </div>
 
-          <div className="flex md:order-1 mr-3">
+          <div className="flex  mr-3">
             <div className="relative hidden md:block">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <div className="p-[7px] bg-orange-500">
-                  <svg className="w-4 h-4 text-gray-100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <div className="absolute z-40 inset-y-0 start-0 flex items-center ps-3 " >
+                <div className="p-[7px] bg-orange-500 cursor-pointer">
+                  <svg className="w-4 h-4 text-gray-100 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                   </svg>
                 </div>

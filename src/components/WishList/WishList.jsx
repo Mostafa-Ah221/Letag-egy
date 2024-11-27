@@ -103,7 +103,7 @@ if (isLoading) {
                     </h2>
                   </div>
                   <div className="flex items-center flex-row-reverse justify-between">
-                    <p className="text-xl">{language === "ar" ? `دينار ${product.price} ${currencyData}` : `${product.price}${currencyData}`}</p>
+                    <p className="text-xl">{product.price} {currencyData}</p>
                     <p className="text-gray-700">
                       {product.reviews_count ? product.reviews_count : 0}
                       <FaStar className="text-yellow-500 inline-block" />
@@ -126,7 +126,7 @@ if (isLoading) {
               <img src={selectedProduct?.photos?.[0]?.url} alt={selectedProduct?.title} className="w-4/5 h-64 object-cover rounded-md mt-4" />
               <div className="mt-6">
                 <h3 className="text-xl font-semibold">{selectedProduct.title}</h3>
-                <span className="text-primary text-xl font-bold mb-5 block">{selectedProduct.price} ريال</span>
+                <span className="text-primary text-xl font-bold mb-5 block">{selectedProduct.price} {currencyData}</span>
                 <div className="flex items-center justify-between">
                   <button
                     onClick={(e) => {

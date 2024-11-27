@@ -11,12 +11,11 @@ import { IoIosHeart } from 'react-icons/io';
 import { useCart } from '../../context/CartContext';
 
 export default function CategoryDetails() {
-  const { getProductCategory } = useContext(ContextData);
+  const { getProductCategory,currencyData } = useContext(ContextData);
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const { addToCart, handleAddToWish,wishList  } = useCart();
-
    const handleProductClick = (item) => {
     setSelectedProduct(item);
     setShowModal(true);
@@ -107,7 +106,7 @@ export default function CategoryDetails() {
                 </h2>
               </div>
               <div className='flex items-center flex-row-reverse justify-between'>
-                <p className='text-xl'>{language === 'ar' ? `دينار ${subCategory.price}` : `$${subCategory.price}`}</p>
+                <p className='text-xl'>{subCategory.price}{currencyData}</p>
                 <p className='text-gray-700'>
                   {subCategory.reviews_count ? subCategory.reviews_count : 0}
                   <FaStar className='text-yellow-500 inline-block'/>
@@ -126,7 +125,7 @@ export default function CategoryDetails() {
               <img src={selectedProduct.photo} alt={selectedProduct.title} className="w-4/5 h-64 object-cover rounded-md mt-4" />
               <div className=" mt-6">
                 <h3 className="text-xl font-semibold">{selectedProduct.title}</h3>
-                <span className="text-primary text-xl font-bold mb-5 block">{selectedProduct.price} ريال</span>
+                <span className="text-primary text-xl font-bold mb-5 block">{selectedProduct.price} {currencyData}</span>
                 <div className='flex items-center justify-between'>
                    <button
                     onClick={(e) => {
@@ -156,7 +155,7 @@ export default function CategoryDetails() {
                 </div>
                 <button onClick={() => handleAddToCart(selectedProduct)}
                  className="px-2 w-full mt-10 py-2 bg-primary text-white hover:bg-primary/90 transition-colors">
-                  إضافة إلى السلة
+                  {language === "ar" ? "إضافة إلى السلة":"Add To Cart"}
                 </button>
               </div>
             </div>

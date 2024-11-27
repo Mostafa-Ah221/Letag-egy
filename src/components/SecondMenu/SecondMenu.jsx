@@ -10,7 +10,7 @@ import { useLanguage } from '../../context/LanguageContextPro';
 function SecondMenu() {
     const { subCategories } = useContext(ContextData);
     const [filteredCategory, setFilteredCategory] = useState([]);
-    const { language } = useLanguage(); // استخدام اللغة الحالية
+    const { language } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
     const [categories, setCategories] = useState([]);
     const [childrenCat, setChildrenCat] = useState([]);
@@ -28,7 +28,7 @@ function SecondMenu() {
             setFilteredCategory(availableCategor);
             setCategories(data?.data.categories);
         }
-    }, [data, language]); // تحديث الفلاتر بناءً على اللغة
+    }, [data, language]); 
 
 
     // Toggle Menu State
@@ -71,9 +71,9 @@ function SecondMenu() {
 
     return (
         <>
-            <div className='flex relative z-40'>
+            <div className=' relative z-40 hidden lg:flex'>
                 <div className='flex flex-row-reverse'>
-                    <button className="block bg-primary w-16 outline-none h-14 mr-3 ml-auto z-30" onClick={handleOpenMenu}>
+                    <button className="block bg-primary w-16 outline-none h-14  ml-auto z-30" onClick={handleOpenMenu}>
                         <FontAwesomeIcon icon={isOpen ? faCircleXmark : faBars} className="text-white text-[1.5rem]" />
                     </button>
 
@@ -90,7 +90,6 @@ function SecondMenu() {
                         </div>
                     ))}
                 </div>
-
                 <div className={`${isOpen ? "block" : "hidden"} bg-black bg-opacity-50 w-full h-full fixed z-20 overflow-auto`}>
                     <div className={`bg-white flex ${language === "ar" ? "flex-row" : "flex-row mx-auto"} w-5/6 rounded-md relative z-10  mt-5 ml-11 border-2 border-primary`}>
                         <div className="flex flex-col bg-white">
@@ -104,10 +103,14 @@ function SecondMenu() {
                         <div className="h-50px w-0.5 opacity-40 bg-black mx-4 border-l-2"></div>
                         <div className="flex flex-col">
                             {childrenCat.map((child) => (
-                                <Link to={`/categoryDetails/${child.id}`} onClick={() => { setSelectedCategoryId(child.id); setIsOpen(false); }}>
+                                // eslint-disable-next-line react/jsx-key
+                                <Link to={`/categoryDetails/${child.id}`}
+                                 onClick={() => { setSelectedCategoryId(child.id); setIsOpen(false);}}
+                                 >
                                     <div key={child.id} className="flex bg-white group hover:cursor-pointer w-60 z-50">
                                         <p className="text-black group-hover:text-primary my-2">{child.name}</p>
-                                    </div></Link>
+                                    </div>
+                                 </Link>
                             ))}
                         </div>
                         <div className={`w-60 h-60 ${language === "ar" ? "absolute left-0" : "absolute right-0"} ml-48`}>
