@@ -29,6 +29,7 @@ export default function DataHome({ sectionName }) {
   const { language } = useLanguage();
   const { addToCart, handleAddToWish,wishList  } = useCart();
 
+
   const { data: homeData, isLoading, isError } = useQuery({
     queryKey: ['getApiHome', language], 
     queryFn: () => getApiHome(language), 
@@ -68,6 +69,7 @@ export default function DataHome({ sectionName }) {
     trending: language === "ar" ? "المنتجات الرائجة" : "featured",
     bestSelling: language === "ar" ? "أفضل المنتجات مبيعًا" : "best_sell",
   };
+
 
   if (isLoading) {
     return (
@@ -142,6 +144,7 @@ export default function DataHome({ sectionName }) {
                                  <CiHeart className='text-primary text-5xl'/>}
                                 
                               </button>
+                                
                             </div>
                           </div>
                         </div>

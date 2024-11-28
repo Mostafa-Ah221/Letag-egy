@@ -6,12 +6,12 @@ import ShoppingCart from '../ShoppingCart/ShoppingCart';
 import { ContextData } from '../../context/ContextApis';
 import { CgProfile } from "react-icons/cg";
 import { FaRegHeart } from "react-icons/fa";
-import { useLanguage } from "../../context/LanguageContextPro"; // استيراد اللغة
+import { useLanguage } from "../../context/LanguageContextPro"; 
 import { useCart } from '../../context/CartContext';
 
 function Menu() {
     let { userToken, setUserToken } = useContext(ContextData);
-    const { language, toggleLanguage } = useLanguage(); // استخدام اللغة وتبديلها
+    const { language, toggleLanguage } = useLanguage();
   const {wishList } = useCart(); 
 
     return (
