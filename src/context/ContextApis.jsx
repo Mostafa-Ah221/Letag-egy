@@ -100,6 +100,7 @@ export default function DataContextProvider({ children }) {
   const [userData, setUserData] = useState(null); 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
+  const [selectedTownId, setSelectedTownId] = useState(''); // TODO for Stock
 
   const { data: settings } = useQuery({
     queryKey: ["getcurrency", language],
@@ -160,7 +161,6 @@ export default function DataContextProvider({ children }) {
     }
     setUserToken(token);
   };
-// console.log(userData);
 
   return (
     <ContextData.Provider
@@ -182,6 +182,8 @@ export default function DataContextProvider({ children }) {
         data,
         currencyData,
         settings_domain,
+        setSelectedTownId,
+        selectedTownId
       }}
     >
       {children}

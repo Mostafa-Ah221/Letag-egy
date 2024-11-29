@@ -2,25 +2,30 @@ import { useContext, useState, useEffect } from "react";
 import { useQuery } from '@tanstack/react-query';
 import logo from '../../assets/images/logo.png';
 import { Link } from "react-router-dom";
-import { useLanguage } from "../../context/LanguageContextPro"; 
+import { useLanguage } from "../../context/LanguageContextPro"; // استيراد اللغة
 import { ContextData } from "../../context/ContextApis";
 import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowDown } from "react-icons/fa6";
 import { MdCancel } from "react-icons/md";
+
 export default function Navbar() {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const { language } = useLanguage();
-
-
   const [isOpen, setIsOpen] = useState(false);
   const [openSubMenus, setOpenSubMenus] = useState({});
-  let ca = {};
-  let catChildren = [];
   const [ca2, setCa2] = useState({});
   const [catChildren2, setCatChildren2] = useState([]);
   const { subCategories } = useContext(ContextData);
   const [isStock, setIsStock] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [searchData, setSearchData] = useState(null);
+  const [query, setQuery] = useState("");
+  const { selectedTownId, setSelectedTownId } = useContext(ContextData);
+  const { fetchProducts } = useContext(ContextData);
+
+  let ca = {};
+  let catChildren = [];
+  let filteredSuggestions = [];
 
   const handleOpenMenu = () => {
     isOpen ? setIsOpen(false) : setIsOpen(true);
@@ -64,6 +69,25 @@ export default function Navbar() {
     };
     fetchdata();
   }, []);
+
+  const handlChange = (e) => {
+    const value = e.target.value;
+    let data1 = [];
+    setQuery(value); // Update query state
+    console.log(value);
+
+    // Filter suggestions based on the input
+    if (value) {
+      filteredSuggestions = data?.data.categories.filter((item) =>
+        item.name.toLowerCase().includes(value.toLowerCase()) // Case-insensitive matching
+      );
+      setSearchData(filteredSuggestions);
+      console.log(filteredSuggestions);
+    } else {
+      setSearchData([]); // Clear suggestions if input is empty
+    }
+    console.log(searchData);
+  };
   return (
     <>
       <div className={`bg-white h-full w-full ${isOpen ? "transition duration-1000 animate-slideInRight" : "hidden"} flex flex-col`}>
@@ -96,14 +120,14 @@ export default function Navbar() {
         ))}
       </div >
       <nav className="border-gray-200 relative z-10">
-        <div className="flex-row justify-start flex flex-wrap items-center lg:justify-around mx-auto p-4">
-          <Link to={"/"} className="flex items-center space-x-3 rtl:space-x-reverse">
+        <div className="flex-row-reverse justify-start flex flex-wrap items-center lg:justify-around mx-auto p-4">
+          <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
             <img src={logo} className="h-10" alt="Logo" />
-          </Link>
+          </a>
           <button
             data-collapse-toggle="navbar-search"
             type="button"
-            className="absolute left-4 top-4 items-center justify-center p-2 w-10 h-10 text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 hover:cursor-pointer"
+            className="absolute left-4 top-4 items-center justify-center p-2 w-10 h-10 text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
             aria-controls="navbar-search"
             aria-expanded={isMenuOpen}
             onClick={() => setMenuOpen(!isMenuOpen)}
@@ -146,22 +170,37 @@ export default function Navbar() {
             </ul>
           </div>
 
-          <div className="flex  mr-3">
+          <div className="flex md:order-1 mr-3">
             <div className="relative hidden md:block">
-              <div className="absolute z-40 inset-y-0 start-0 flex items-center ps-3 " >
-                <div className="p-[7px] bg-orange-500 cursor-pointer">
-                  <svg className="w-4 h-4 text-gray-100 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                  </svg>
+              <Link to={"/profile"} className="">
+                <button className={`absolute inset-y-0 start-0 flex items-center ${language === "ar" ? "pr-2" : "pl-2"}`}>
+                  <button className="p-[7px] bg-orange-500 hover:cursor-pointer">
+                    <svg className="w-4 h-4 text-gray-100 hover:cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                    </svg>
+                  </button>
+                  <span className="sr-only">Search icon</span>
+                </button>
+              </Link>
+              <div>
+                <input
+                  type="search"
+                  id="search-navbar"
+                  className="block lg:w-[30em] md:w-[25em] p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-right outline-none dark:border-gray-600 dark:placeholder-gray-400 focus:shadow-[0_0_8px_2px_rgba(249,115,22,0.3)] z-0"
+                  placeholder={language === "ar" ? "ابحث عن منتج" : "Search for a product"}
+                  onChange={handlChange}
+                  value={query}
+                />
+                <div className={`${searchData != null ? "block" : "hidden"} lg:w-[30em] md:w-[25em] bg-white flex flex-col relative z-100`}>
+                  <p className={`${language === "ar" ? "ml-auto" : "mr-auto"} mb-4 mt-2`}>الفئات</p>
+                  {searchData?.map((fs) => (
+                    <Link to={`/categoryDetails/${fs.id}`} className={`flex ${language === "ar" ? "flex-row-reverse ml-auto" : "flex-row mr-auto"} bg-white group`} onClick={() => { setSearchData(null); setQuery(""); }}>
+                      <p className="group-hover:text-primary group-hover:cursor-pointer">{fs.name}</p>
+                      <img src={fs.photo} className="w-8 h-8"></img>
+                    </Link>
+                  ))}
                 </div>
-                <span className="sr-only">Search icon</span>
               </div>
-              <input
-                type="search"
-                id="search-navbar"
-                className="block lg:w-[30em] md:w-[25em] p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-right outline-none dark:border-gray-600 dark:placeholder-gray-400 focus:shadow-[0_0_8px_2px_rgba(249,115,22,0.3)]"
-                placeholder={language === "ar" ? "ابحث عن منتج" : "Search for a product"}
-              />
             </div>
           </div>
         </div>
