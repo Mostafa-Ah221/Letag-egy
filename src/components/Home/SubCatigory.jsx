@@ -100,7 +100,7 @@ export default function SubCategory() {
 
   return (
     <div className="relative py-7">
-      <h2 className='text-right pb-4 text-xl text-secondary'>الفئات الرئيسية</h2>
+      <h2 className=' pb-4 text-xl text-secondary'>{language === "ar"? "الفئات الرئيسية ": "Main Categories"}</h2>
       <Slider ref={sliderRef} {...settings}>
         {filteredCategory.map((category, index) => (
           <div key={index} className='group px-2 cursor-pointer'>

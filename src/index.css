@@ -42,3 +42,10 @@ html, body, #root {
 .pagination .active {
     @apply bg-primary text-white rounded-lg;
 }
+
+/* For Desktop */
+@media (min-width: 768px) {
+  .product-item:hover .product-actions {
+    opacity: 1;
+  }
+}

@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { TbCircleLetterR } from "react-icons/tb";
 import { IoMdHome } from "react-icons/io";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import ShoppingCart from "../ShoppingCart/ShoppingCart";
 import { ContextData } from "../../context/ContextApis";
 import { FaRegHeart } from "react-icons/fa";
@@ -34,7 +34,7 @@ function Menu() {
                         </p>
                     </NavLink>
                     <NavLink
-                        to={"/brands"}
+                        to={"/pageBrand"}
                         className="flex flex-col order-5 items-center w-1/5 justify-center hover:cursor-pointer group duration-300 hover:bg-primary h-full"
                     >
                         <div className="flex items-center justify-center">
@@ -84,9 +84,8 @@ function Menu() {
             </div>
 
             {/* Language/Home Icon */}
-            <div
+            <Link to={'/home'}
                 className="flex flex-col order-4 items-center w-1/5 justify-center hover:cursor-pointer group duration-300 hover:bg-primary h-full"
-                onClick={toggleLanguage}
             >
                 <div className="flex items-center justify-center">
                     <IoMdHome className="text-black group-hover:text-white text-[1.3rem]" />
@@ -94,7 +93,7 @@ function Menu() {
                 <p className="text-black text-center text-xs group-hover:text-white">
                     {language === "ar" ? "الرئيسية" : "Home"}
                 </p>
-            </div>
+            </Link>
         </div>
     );
 }

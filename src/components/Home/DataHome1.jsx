@@ -54,11 +54,17 @@ export default function DataHome({ sectionName }) {
     staleTime: 1000 * 60 * 15,
     cacheTime: 1000 * 60 * 30,
   });
+// JavaScript for Mobile Click (Toggle on Click)
+const handleProductClickk = (item) => {
+  if (window.innerWidth < 768) {
+    setSelectedProduct(item);
+    setShowModal(true);
+  }
+};
 
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(1); 
-  // const [isInWishList, setIsInWishList] = useState(false);  
 
   const handleProductClick = (item) => {
     setSelectedProduct(item);
@@ -112,8 +118,8 @@ export default function DataHome({ sectionName }) {
               return (
                 <div key={index} className="product-item px-2">
                   <div className="relative overflow-hidden rounded-md shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 h-full bg-white">
-                    <div className="relative group aspect-h-9">
-                      {item.photo && (
+                    <div onClick={() => handleProductClickk(item)}  className=" relative group aspect-h-9">
+                      {item?.photo && (
                         <div className="w-full h-44">
                           <div className="relative w-full h-full">
                             <Link to={`/productDetails?id=${item.id}`}>
@@ -123,7 +129,7 @@ export default function DataHome({ sectionName }) {
                                 className="w-full h-full object-cover absolute inset-0"
                               />
                             </Link>
-                            <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div className="product-actions absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                               <button
                                 onClick={(e) => {
                                   e.preventDefault();
@@ -182,17 +188,18 @@ export default function DataHome({ sectionName }) {
       >
         ✕
       </button>
-      <div className="mt-2 flex flex-row-reverse">
+      <div className="mt-2 flex flex-col md:flex-row-reverse">
         <img
           src={selectedProduct.photo}
           alt={selectedProduct.title}
-          className="w-4/5 h-64 object-cover rounded-md mt-4"
+          className="md:w-4/5 md:h-64 w-3/5 h-36 m-auto object-cover rounded-md mt-4"
         />
         <div className="mt-6">
           <h3 className="text-xl font-semibold">{selectedProduct.title}</h3>
           <span className="text-primary text-xl font-bold mb-5 block">
             {selectedProduct.price} {currencyData}
           </span>
+          <div className='flex md:block gap-3'>
           <div className="flex items-center justify-between">
             <button
               onClick={(e) => {
@@ -222,10 +229,12 @@ export default function DataHome({ sectionName }) {
           </div>
           <button
             onClick={() => handleAddToCart(selectedProduct)}
-            className="px-2 w-full mt-10 py-2 bg-primary text-white hover:bg-primary/90 transition-colors"
+            className="px-2 w-full md:mt-10 py-2 bg-primary text-white hover:bg-primary/90 transition-colors"
           >
-            إضافة إلى السلة
+           {language === "ar" ? "إضافة إلى السلة":"Add To Cart"}
           </button>
+
+          </div>
         </div>
       </div>
     </div>

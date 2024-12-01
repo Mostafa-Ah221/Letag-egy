@@ -12,7 +12,6 @@ import { useCart } from '../../context/CartContext';
 import { IoIosHeart } from 'react-icons/io';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import Zoom from 'react-medium-image-zoom';
 
 
 export default function ProductDetails() {
@@ -23,6 +22,7 @@ export default function ProductDetails() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
+   const [showReviewModal, setShowReviewModal] = useState(false);
   const { language } = useLanguage();
   const { addToCart, handleAddToWish, wishList } = useCart();
   const { id } = useParams();
@@ -46,7 +46,8 @@ export default function ProductDetails() {
     setRating(value);
   };
 
-
+ const handleOpenModal = () => setShowReviewModal(true);
+  const handleCloseModal = () => setShowReviewModal(false);
   const handleSubmitReview = async () => {
   if (!rating) {
     toast.error(language === 'ar' ? 'يرجى اختيار تقييم' : 'Please select a rating');
@@ -210,18 +211,35 @@ try {
 
           {/* Review Section */}
           <button
-            onClick={() => {
-              
-              setShowReview((prev) => !prev);
-            }}
+             onClick={handleOpenModal}
             className="bg-primary px-2 py-1 mt-20 text-white rounded-md hover:tracking-widest duration-300 text-xl "
           >
             {language === 'ar' ? 'تقييم' : 'Review'}
           </button>
           <span className="inline-block w-1/2 h-[1px] mt-3 bg-primary"></span>
 
-          {showReview && (
-            <div className="w-[70%] my-5">
+          {showReviewModal && (
+        <div className="fixed inset-0  bg-black bg-opacity-50 z-50 flex items-center justify-center"
+        onClick={handleCloseModal}
+        >
+          <div
+            className="bg-white rounded-lg p-6 w-full mx-5 max-w-md relative"
+            onClick={(e) => e.stopPropagation()} 
+          >
+            {/* زر إغلاق المودال */}
+            <button
+              onClick={handleCloseModal}
+              className={`absolute top-2 ${language === 'ar' ? 'left-2' : 'right-2'}  text-xl font-bold text-gray-600 hover:text-gray-800`}
+            >
+              ✕
+            </button>
+
+            {/* محتوى الفورم */}
+            <div>
+              <h3 className="text-2xl font-semibold mb-4">
+                {language === 'ar' ? 'أضف تقييمك' : 'Add Your Review'}
+              </h3>
+
               <div className="grid grid-cols-12 gap-3">
                 <input
                   readOnly
@@ -268,14 +286,18 @@ try {
                   onClick={handleSubmitReview}
                   disabled={!rating || !comment.trim()}
                   className={`bg-primary px-2 py-1 text-white mt-3 hover:bg-secondary ${
-                    (!rating || !comment.trim()) ? 'opacity-50 cursor-not-allowed' : ''
+                    !rating || !comment.trim() ? 'opacity-50 cursor-not-allowed' : ''
                   }`}
                 >
                   {language === 'ar' ? 'أرسل تقييمك' : 'Send Review'}
                 </button>
               )}
             </div>
-          )}
+          </div>
+        </div>
+      )}
+    
+  
 
           {/* Display Reviews Section */}
           {product.reviews && product.reviews.length > 0 && (
@@ -332,7 +354,7 @@ try {
 
       {/* Related Products Section */}
       <div className="w-full mt-8">
-        <h3 className="text-right text-2xl font-semibold mb-4">منتجات ذات صلة</h3>
+        <h3 className=" text-2xl font-semibold mb-4"> {language === 'ar' ? 'منتجات ذات صلة' : 'Related Products'}</h3>
         <Slider {...settings}>
           {related?.map((relatedProduct) => (
             <div key={relatedProduct.id} className="px-2">
@@ -419,45 +441,48 @@ try {
             >
               ✕
             </button>
-            <div className="mt-2 flex flex-row-reverse">
+            <div className="mt-2 flex flex-col md:flex-row-reverse">
               <img
                 src={selectedProduct.photo}
                 
-               alt={selectedProduct.title} className="w-4/5 h-64 object-cover rounded-md mt-4" />
+               alt={selectedProduct.title} className="md:w-4/5 md:h-64 w-3/5 h-36 m-auto object-cover rounded-md mt-4" />
               <div className=" mt-6">
                 <h3 className="text-xl font-semibold">{selectedProduct.title}</h3>
                 <span className="text-primary text-xl font-bold mb-5 block">{selectedProduct.price} {currencyData}</span>
-                <div className='flex items-center justify-between'>
-                    <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const isInWishList = wishList.some(
+                 <div className='flex md:block gap-3'>
+                  <div className='flex items-center justify-between'>
+                      <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const isInWishList = wishList.some(
+                          (wishItem) => wishItem && wishItem.id === selectedProduct.id
+                        );
+                        handleAddToWish(selectedProduct, isInWishList, () => {});
+                      }}
+                      className="z-20"
+                    >
+                      {wishList.some(
                         (wishItem) => wishItem && wishItem.id === selectedProduct.id
-                      );
-                      handleAddToWish(selectedProduct, isInWishList, () => {});
-                    }}
-                    className="z-20"
-                  >
-                    {wishList.some(
-                      (wishItem) => wishItem && wishItem.id === selectedProduct.id
-                    ) ? (
-                      <IoIosHeart className="text-primary text-[2.5rem]" />
-                    ) : (
-                      <CiHeart className="text-primary text-5xl" />
-                    )}
+                      ) ? (
+                        <IoIosHeart className="text-primary text-[2.5rem]" />
+                      ) : (
+                        <CiHeart className="text-primary text-5xl" />
+                      )}
+                    </button>
+                    <input 
+                      type="number" 
+                      value={quantity} 
+                      onChange={(e) => setQuantity(Math.max(1, e.target.value))} 
+                      min={1} 
+                      className='rounded-md text-right text-primary border border-stone-500 w-28 py-2 px-2'
+                    />
+                  </div>
+                  <button onClick={() => handleAddToCart(selectedProduct)}
+                  className="px-2 w-full md:mt-10 py-2 bg-primary text-white hover:bg-primary/90 transition-colors">
+                    {language === "ar" ? "إضافة إلى السلة":"Add To Cart"}
                   </button>
-                  <input 
-                    type="number" 
-                    value={quantity} 
-                    onChange={(e) => setQuantity(Math.max(1, e.target.value))} 
-                    min={1} 
-                    className='rounded-md text-right text-primary border border-stone-500 w-28 py-2 px-2'
-                  />
-                </div>
-                <button onClick={() => handleAddToCart(selectedProduct)}
-                 className="px-2 w-full mt-10 py-2 bg-primary text-white hover:bg-primary/90 transition-colors">
-                  {language === "ar" ? "إضافة إلى السلة":"Add To Cart"}
-                </button>
+
+                 </div>
               </div>
             </div>
           </div>

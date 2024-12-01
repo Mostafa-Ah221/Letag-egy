@@ -71,6 +71,7 @@ async function getCurrency(language) {
   const response = await axios.get(`https://tarshulah.com/api/domain/settings`, {
     headers: { lang: language },
   });
+  
   return response.data;
 }
 
@@ -111,6 +112,8 @@ export default function DataContextProvider({ children }) {
 
   let currencyData = settings?.data?.currency.currency_icon;
   let settings_domain = settings;
+  console.log(settings_domain?.data.locations);
+  
 
   // Fetch user data
   function fetchUserData() {

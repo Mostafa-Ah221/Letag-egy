@@ -8,8 +8,6 @@ import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowDown } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faEarthAmericas } from '@fortawesome/free-solid-svg-icons';
 export default function Navbar() {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const { language,toggleLanguage } = useLanguage();

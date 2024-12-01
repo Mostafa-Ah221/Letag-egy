@@ -87,7 +87,8 @@ function App() {
     <LanguageContextPro>
       <CartContextProvider>
         <DataContextProveder>
-          <RouterProvider router={router} />
+            <RouterProvider router={router} />
+          
           <Toaster />
         </DataContextProveder>
       </CartContextProvider>
