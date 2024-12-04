@@ -90,6 +90,8 @@ async function getProductCategory(idCategory, page, pageSize, language) {
   }
 }
 
+
+
 export default function DataContextProvider({ children }) {
   const { language } = useLanguage();
 

@@ -121,11 +121,12 @@ export default function CategoryDetails() {
             <button onClick={() => setShowModal(false)} className="absolute top-2 right-2 text-xl font-bold text-gray-600 hover:text-gray-800">
               ✕
             </button>
-            <div className="mt-2 flex flex-row-reverse">
-              <img src={selectedProduct.photo} alt={selectedProduct.title} className="w-4/5 h-64 object-cover rounded-md mt-4" />
+            <div className="mt-2 flex md:flex-row-reverse flex-col items-center">
+              <img src={selectedProduct.photo} alt={selectedProduct.title} className="md:w-4/5 md:h-64 w-2/4 h-36 object-cover rounded-md mt-4" />
               <div className=" mt-6">
                 <h3 className="text-xl font-semibold">{selectedProduct.title}</h3>
                 <span className="text-primary text-xl font-bold mb-5 block">{selectedProduct.price} {currencyData}</span>
+                <div className='flex items-center gap-2'>
                 <div className='flex items-center justify-between'>
                    <button
                     onClick={(e) => {
@@ -154,9 +155,10 @@ export default function CategoryDetails() {
                   />
                 </div>
                 <button onClick={() => handleAddToCart(selectedProduct)}
-                 className="px-2 w-full mt-10 py-2 bg-primary text-white hover:bg-primary/90 transition-colors">
+                 className="px-2 w-full md:mt-10 py-2 bg-primary text-white hover:bg-primary/90 transition-colors">
                   {language === "ar" ? "إضافة إلى السلة":"Add To Cart"}
                 </button>
+                </div>
               </div>
             </div>
           </div>

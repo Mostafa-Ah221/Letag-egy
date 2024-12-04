@@ -141,8 +141,6 @@ export default function ProductDetails() {
                 src={product.photos[0].url}
                 alt={product.title}
               />
-
-
               <div className={`flex rounded-md mt-2 border-2 border-primary w-fit ${language === "ar" ? "mr-auto" : "ml-auto"}`}>
                 {product.photos.map((photo, index) => (
                   <img key={index}
@@ -278,26 +276,45 @@ export default function ProductDetails() {
 
           {/* Display Reviews Section */}
           {product.reviews && product.reviews.length > 0 && (
-            <div className="w-full mt-8">
-              <h3 className="text-right text-2xl font-semibold mb-4">
+            <div className="w-full mt-12 bg-white shadow-lg rounded-lg p-6">
+              <h3 className={`text-2xl font-bold mb-6 ${language === 'ar' ? 'text-right' : 'text-left'}`}>
                 {language === 'ar' ? 'التقييمات' : 'Reviews'}
               </h3>
-              <div className="space-y-4">
+              <div className="space-y-6">
                 {product.reviews.map((review, index) => (
-                  <div key={index} className="border p-4 rounded-lg">
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center">
+                  <div
+                    key={index}
+                    className="border border-gray-200 p-6 rounded-lg hover:shadow-md transition-shadow duration-300"
+                  >
+                    <div className="flex justify-between items-center mb-4">
+                      <div className="flex items-center gap-1">
                         {Array.from({ length: 5 }, (_, i) => (
                           <FaStar
                             key={i}
-                            className={`${i < review.rating ? 'text-yellow-500' : 'text-gray-300'
+                            className={`text-xl ${i < review.rating ? 'text-yellow-400' : 'text-gray-300'
                               }`}
                           />
                         ))}
                       </div>
-                      <span className="text-gray-600">{review.user?.name}</span>
+                      <span className="text-gray-500 text-sm">
+                        {review.user?.name || (language === 'ar' ? 'مستخدم مجهول' : 'Anonymous User')}
+                      </span>
                     </div>
-                    <p className="mt-2 text-right">{review.comment}</p>
+                    <p
+                      className={`text-gray-700 ${language === 'ar' ? 'text-right' : 'text-left'
+                        } leading-relaxed`}
+                    >
+                      {review.comment}
+                    </p>
+                    <div className="mt-4 text-right">
+                      <span className="text-sm text-gray-400">
+                        {new Date(review.created_at).toLocaleDateString(language === 'ar' ? 'ar' : 'en', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        })}
+                      </span>
+                    </div>
                   </div>
                 ))}
               </div>

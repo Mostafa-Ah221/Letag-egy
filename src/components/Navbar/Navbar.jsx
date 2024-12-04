@@ -1,51 +1,65 @@
-import { useContext, useState, useEffect } from "react";
-import { useQuery } from '@tanstack/react-query';
-import logo from '../../assets/images/logo.png';
+import React, { useContext, useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import logo from "../../assets/images/logo.png";
 import { Link } from "react-router-dom";
-import { useLanguage } from "../../context/LanguageContextPro"; // استيراد اللغة
+import { useLanguage } from "../../context/LanguageContextPro";
 import { ContextData } from "../../context/ContextApis";
 import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowDown } from "react-icons/fa6";
-import { MdCancel } from "react-icons/md";
+import { IoMdClose } from "react-icons/io";
+import { CgProfile } from "react-icons/cg";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEarthAmericas } from '@fortawesome/free-solid-svg-icons';
+import axios from "axios";
 
 export default function Navbar() {
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const { language } = useLanguage();
+  const { language, toggleLanguage } = useLanguage();
+
   const [isOpen, setIsOpen] = useState(false);
   const [openSubMenus, setOpenSubMenus] = useState({});
   const [ca2, setCa2] = useState({});
   const [catChildren2, setCatChildren2] = useState([]);
-  const { subCategories } = useContext(ContextData);
+  const { subCategories, userData } = useContext(ContextData);
   const [isStock, setIsStock] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [searchData, setSearchData] = useState(null);
+  const [searchData2, setSearchData2] = useState(null);
   const [query, setQuery] = useState("");
+  const [query2, setQuery2] = useState("");
   const { selectedTownId, setSelectedTownId } = useContext(ContextData);
-  const { fetchProducts } = useContext(ContextData);
 
-  let ca = {};
-  let catChildren = [];
+
   let filteredSuggestions = [];
+  let filteredSuggestionsProducts = [];
 
   const handleOpenMenu = () => {
-    isOpen ? setIsOpen(false) : setIsOpen(true);
+    if (isOpen) {
+      document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
+      setIsOpen(false);
+    } else {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      setIsOpen(true);
+    }
   };
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['subCategory'],
-    queryFn: subCategories
+    queryKey: ["subCategory", language],
+    queryFn: subCategories,
   });
+
   const handleOpenSubMenu = async (cName, categoryId) => {
     setOpenSubMenus((prevState) => ({
-      ...!prevState,
-      [categoryId]: !prevState[categoryId], // Toggle the specific category's state
+      ...prevState,
+      [categoryId]: !prevState[categoryId],
     }));
     if (!openSubMenus[categoryId]) {
-      ca = await data?.data.categories.filter((cat) => cat.name == cName);
-      catChildren = await ca[0].childrenCategories;
+      const ca = await data?.data.categories.filter((cat) => cat.name === cName);
+      const catChildren = ca[0]?.childrenCategories || [];
       setCa2(ca);
       setCatChildren2(catChildren);
-      console.log(catChildren2);
-      console.log(ca2);
     }
   };
 
@@ -55,92 +69,196 @@ export default function Navbar() {
         const res = await fetch("https://tarshulah.com/api/domain/settings");
         const resJson = await res.json();
         const data = await resJson.data;
-        const stock = await data.multi_stocks_management;
-        if (stock == 1) {
-          setIsStock(true);
-        }
-        else {
-          setIsStock(false);
-        }
-        // console.log(isStock);
+        setIsStock(data.multi_stocks_management === 1);
       } catch (error) {
-        // console.log(error)
+        console.error(error);
       }
     };
     fetchdata();
+
+    return () => {
+      document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
+    };
   }, []);
 
-  const handlChange = (e) => {
+  const handlChange = async (e) => {
     const value = e.target.value;
-    let data1 = [];
     setQuery(value); // Update query state
     console.log(value);
+    console.log(selectedTownId);
+    if (value) {
+      if (selectedTownId != "") {
+        const formData = new FormData();
+        formData.append("search", value);
+        formData.append("city_id", selectedTownId);
+        try {
+          const response = await axios.post(`https://tarshulah.com/api/products`, formData, {
+            headers: { lang: language },
+          });
+          const resdata = await response.data;
+          const resproducts = await resdata.data.products;
+          filteredSuggestionsProducts = await resproducts;
+          console.log(filteredSuggestionsProducts);
+        } catch (error) {
+          console.error("Error fetching products:", error);
+        }
 
+        setSearchData2(filteredSuggestionsProducts);
+        console.log(searchData2);
+      } else {
+        const formData = new FormData();
+        formData.append("search", value);
+        formData.append("city_id", "");
+        try {
+          const response = await axios.post(`https://tarshulah.com/api/products`, formData, {
+            headers: { lang: language },
+          });
+          const resdata = await response.data;
+          const resproducts = await resdata.products;
+          filteredSuggestionsProducts = resproducts;
+        } catch (error) {
+          console.error("Error fetching products:", error);
+        }
+
+        setSearchData2(filteredSuggestionsProducts);
+      }
+    }
+    else {
+      setSearchData2(null);
+    }
     // Filter suggestions based on the input
     if (value) {
       filteredSuggestions = data?.data.categories.filter((item) =>
         item.name.toLowerCase().includes(value.toLowerCase()) // Case-insensitive matching
       );
-      setSearchData(filteredSuggestions);
+      if (filteredSuggestions.length != 0) {
+        setSearchData(filteredSuggestions);
+      }
+      else {
+        setSearchData(null);
+      }
       console.log(filteredSuggestions);
     } else {
-      setSearchData([]); // Clear suggestions if input is empty
+      setSearchData(null); // Clear suggestions if input is empty
     }
     console.log(searchData);
   };
   return (
     <>
-      <div className={`bg-white h-full w-full ${isOpen ? "transition duration-1000 animate-slideInRight" : "hidden"} flex flex-col`}>
-        <MdCancel onClick={handleOpenMenu} />
-        {data?.data.categories.map((cat) => (
-          <>
-            <div className={`w-full h-12 bg-white flex ${language === "ar" ? "flex-row" : "flex-row-reverse"}`} key={cat.id}>
-              <img src={cat.photo} alt={cat.name} className="mx-2 my-4 w-12 h-12" />
-              <p className="mx-2 my-4">{cat.name}</p>
-              <button
-                className={`${language === "ar" ? "mr-auto" : "ml-auto"} my-4`}
-                onClick={() => handleOpenSubMenu(cat.name, cat.id)}
+      <div
+        className={`fixed top-0 left-0 w-full h-full bg-white z-40 overflow-y-auto ${isOpen ? "block" : "hidden"
+          } ${isOpen ? "animate-slideInRight" : ""}`}
+      >
+        <div className="p-6">
+          <IoMdClose
+            onClick={handleOpenMenu}
+            className="cursor-pointer text-slate-600 self-end mr-auto text-3xl border border-primary rounded-md mb-4"
+          />
+          <div className=" flex flex-row-reverse justify-center items-center text-primary text-2xl mb-3 font-thin gap-2">
+            {userData === null ?
+              <Link
+                to="/login"
+                onClick={() => {
+                  handleOpenMenu();
+                }}
               >
-                {openSubMenus[cat.id] ? <FaArrowDown /> : <FaArrowLeft />}
-              </button>
+                {language === 'ar' ? ' تسجيل الدخول' : ' Login'}
+              </Link>
+              :
+              <Link
+                to="/profile"
+                onClick={() => {
+                  handleOpenMenu();
+                }}
+              >
+                {userData.name}
+              </Link>
+            }
+            <div className="icon-profile">
+              <CgProfile className="text-4xl text-gray-500" />
             </div>
-            <div className={`bg-white w-full flex flex-col ${openSubMenus[cat.id] ? "block" : "hidden"}`}>
-              {catChildren2.map((cat) => (
-                <>
-                  <Link className={``} to={`/categoryDetails/${cat.id}`} onClick={() => { setSelectedCategoryId(cat.id); setIsOpen(false); }}>
-                    <div className={`bg-white flex ${language === "ar" ? "flex-row" : "flex-row-reverse"} mx-2 my-4`} key={cat.id}>
+          </div>
+          {data?.data.categories.map((cat) => (
+            <React.Fragment key={cat.id}>
+              <div
+                className={`w-full h-12 bg-white flex `}
+              >
+                <Link to={`/categoryDetails/${cat.id}`} onClick={() => { handleOpenMenu() }} className="flex items-center"
+                >
+                  <img src={cat.photo} alt={cat.name} className="mx-2 my-4 w-12 h-12" />
+                  <p className="mx-2 my-4">{cat.name}</p>
+                </Link>
+                <button
+                  className={`${language === "ar" ? "mr-auto" : "ml-auto"
+                    } my-4`}
+                  onClick={() => handleOpenSubMenu(cat.name, cat.id)}
+                >
+                  {openSubMenus[cat.id] ? <FaArrowDown className="text-slate-600" /> : <FaArrowLeft className="text-slate-600" />}
+                </button>
+              </div>
+              <div
+                className={`bg-white w-full flex flex-col ${openSubMenus[cat.id] ? "block" : "hidden"
+                  }`}
+              >
+                {catChildren2.map((cat) => (
+                  <Link
+                    className=""
+                    to={`/categoryDetails/${cat.id}`}
+                    key={cat.id}
+                    onClick={() => {
+                      setSelectedCategoryId(cat.id);
+                      handleOpenMenu();
+                    }}
+                  >
+                    <div
+                      className={`bg-white flex ${language === "ar" ? "flex-row" : "flex-row-reverse"
+                        } mx-2 my-4`}
+                    >
                       {cat.name}
                     </div>
                   </Link>
-                </>
-              ))}
-            </div>
-            <hr className="my-4 bg-Neutral"></hr>
-          </>
-        ))}
-      </div >
+                ))}
+              </div>
+              <hr className="my-4 bg-gray-200" />
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+
       <nav className="border-gray-200 relative z-10">
-        <div className="flex-row-reverse justify-start flex flex-wrap items-center lg:justify-around mx-auto p-4">
-          <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
+        <div className="flex-row justify-start flex flex-wrap items-center lg:justify-around mx-auto p-4">
+          <Link to={"/"} className={`flex items-center space-x-3 ${language === "ar" ? "ml-20" : "mr-20"}  md:ml-0 rtl:space-x-reverse`}>
             <img src={logo} className="h-10" alt="Logo" />
-          </a>
-          <button
-            data-collapse-toggle="navbar-search"
-            type="button"
-            className="absolute left-4 top-4 items-center justify-center p-2 w-10 h-10 text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-            aria-controls="navbar-search"
-            aria-expanded={isMenuOpen}
-            onClick={() => setMenuOpen(!isMenuOpen)}
-          >
-            <span className="sr-only">Open main menu</span>
-            <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14" onClick={handleOpenMenu}>
-              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
-            </svg>
-          </button>
+          </Link>
+          <div className={`absolute top-4 ${language === "ar" ? "left-4 " : "right-4 "} flex items-center`}>
+            <div
+              className=" group hover:cursor-pointer m-2 lg:hidden"
+              onClick={toggleLanguage}
+            >
+              <p className="text-black text-center ">
+                {language === "ar" ? "EN" : "AR"}
+              </p>
+            </div>
+            <button
+              data-collapse-toggle="navbar-search"
+              type="button"
+              className=" items-center justify-center p-2 w-10 h-10 text-gray-500 rounded-lg lg:hidden hover:border hover:border-primary duration-200 cursor-pointer"
+              aria-controls="navbar-search"
+              aria-expanded={isMenuOpen}
+              onClick={() => setMenuOpen(!isMenuOpen)}
+            >
+              <span className="sr-only">Open main menu</span>
+              <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14" onClick={handleOpenMenu}>
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
+              </svg>
+            </button>
 
-          <div className={`items-center justify-between w-full lg:flex lg:w-auto md:order-2 ${isMenuOpen ? 'block' : 'hidden'}`} id="navbar-search">
-            <ul className="flex flex-col p-4 mt-4 font-medium border border-gray-100 rounded-lg lg:space-x-8 rtl:space-x-reverse lg:flex-row lg:p-0 lg:mt-0 lg:border-0 lg:bg-white dark:border-gray-700">
+          </div>
 
+
+          <div className={`items-center  justify-between w-full lg:flex lg:w-auto md:order-2 ${isMenuOpen ? 'block' : 'hidden'}`} id="navbar-search">
+            <ul className="lg:flex font-medium lg:space-x-8 lg:bg-white hidden">
               <li>
                 <Link to={isStock ? "/home" : "/"} className="relative block py-2 px-3 ml-2 rounded md:p-0 group">
                   <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-orange-500 transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
@@ -157,8 +275,6 @@ export default function Navbar() {
                   </span>
                 </Link>
               </li>
-
-
               <li>
                 <Link to={"/pageBrand"} className="relative block py-2 px-3 rounded md:p-0 group">
                   <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-orange-500 transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
@@ -172,8 +288,8 @@ export default function Navbar() {
 
           <div className="flex md:order-1 mr-3">
             <div className="relative hidden md:block">
-              <Link to={"/profile"} className="">
-                <button className={`absolute inset-y-0 start-0 flex items-center ${language === "ar" ? "pr-2" : "pl-2"}`}>
+              <Link to={`/SearchByItem?id=${query}`} className="">
+                <button className={`absolute inset-y-0 start-0 flex items-center ${language === "ar" ? "pr-2" : "pl-2"} z-100`}>
                   <button className="p-[7px] bg-orange-500 hover:cursor-pointer">
                     <svg className="w-4 h-4 text-gray-100 hover:cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
@@ -182,27 +298,34 @@ export default function Navbar() {
                   <span className="sr-only">Search icon</span>
                 </button>
               </Link>
-              <div>
-                <input
-                  type="search"
-                  id="search-navbar"
-                  className="block lg:w-[30em] md:w-[25em] p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-right outline-none dark:border-gray-600 dark:placeholder-gray-400 focus:shadow-[0_0_8px_2px_rgba(249,115,22,0.3)] z-0"
-                  placeholder={language === "ar" ? "ابحث عن منتج" : "Search for a product"}
-                  onChange={handlChange}
-                  value={query}
-                />
-                <div className={`${searchData != null ? "block" : "hidden"} lg:w-[30em] md:w-[25em] bg-white flex flex-col relative z-100`}>
-                  <p className={`${language === "ar" ? "ml-auto" : "mr-auto"} mb-4 mt-2`}>الفئات</p>
-                  {searchData?.map((fs) => (
-                    <Link to={`/categoryDetails/${fs.id}`} className={`flex ${language === "ar" ? "flex-row-reverse ml-auto" : "flex-row mr-auto"} bg-white group`} onClick={() => { setSearchData(null); setQuery(""); }}>
-                      <p className="group-hover:text-primary group-hover:cursor-pointer">{fs.name}</p>
-                      <img src={fs.photo} className="w-8 h-8"></img>
-                    </Link>
-                  ))}
-                </div>
-              </div>
+              <input
+                type="search"
+                id="search-navbar"
+                className="block lg:w-[30em] md:w-[25em] p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-right outline-none dark:border-gray-600 dark:placeholder-gray-400 focus:shadow-[0_0_8px_2px_rgba(249,115,22,0.3)] z-0"
+                placeholder={language === "ar" ? "ابحث عن منتج" : "Search for a product"}
+                onChange={handlChange}
+                value={query}
+              />
             </div>
           </div>
+        </div>
+        <div className={`${searchData != null || searchData2 != null ? "block" : "hidden"} lg:w-[30em] md:w-[25em] bg-white flex flex-col relative z-50 mx-auto`}>
+          <p className={`${searchData2 != null ? "block" : "hidden"} ${language === "ar" ? "ml-auto" : "mr-auto"} mb-4 mt-2`}>المنتجات</p>
+          {searchData2?.map((fs) => (
+            <Link to={`/productDetails/${fs.id}`} className={`flex ${language === "ar" ? "flex-row-reverse ml-auto" : "flex-row mr-auto"} bg-white group`} onClick={() => { setSearchData(null); setQuery(""); }}>
+              <p className="group-hover:text-primary group-hover:cursor-pointer">{fs.title}</p>
+              <img src={fs.photo} className="w-8 h-8"></img>
+            </Link>
+          ))}
+          <hr className={`${searchData != null ? "block" : "hidden"}`}></hr>
+          <p className={`${searchData != null ? "block" : "hidden"} ${language === "ar" ? "ml-auto" : "mr-auto"} mb-4 mt-2`}>الفئات</p>
+          {searchData?.map((fs) => (
+            <Link to={`/categoryDetails/${fs.id}`} className={`flex ${language === "ar" ? "flex-row-reverse ml-auto" : "flex-row mr-auto"} bg-white group`} onClick={() => { setSearchData(null); setQuery(""); }}>
+              <p className="group-hover:text-primary group-hover:cursor-pointer">{fs.name}</p>
+              <img src={fs.photo} className="w-8 h-8"></img>
+            </Link>
+          ))}
+          <Link to={"/SearchByAll"} className="bg-white rounded-xl w-48 border-black border-2 hover:border-primary mr-auto"><button><p className="px-4 py-1">عرض جميع المنتجات</p></button></Link>
         </div>
       </nav>
     </>

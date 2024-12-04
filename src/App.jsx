@@ -24,6 +24,8 @@ import WishList from "./components/WishList/WishList";
 import CartPage from "./components/CartPage/CartPage";
 import { Toaster } from 'react-hot-toast';
 import CategoryFilter from "./components/CategoryFilter/CategoryFilter";
+import SearchByItem from "./components/SearchByItem/SearchByItem";
+import SearchByAll from "./components/SearchByAll/SearchByAll";
 
 
 
@@ -64,6 +66,8 @@ function App() {
         { path: "register", element: <SignUp /> },
         { path: "pageBrand", element: <PageBrands /> },
         { path: "wishlist", element: <WishList /> },
+        { path: "SearchByItem", element: <SearchByItem /> },
+        { path: "SearchByAll", element: <SearchByAll /> },
         { path: "categoryDetails/:id", element: <CategoryDetails /> },
         { path: "productDetails/:id", element: <ProductDetails /> },
         { path: "categoryFilter/:id", element: <CategoryFilter /> },

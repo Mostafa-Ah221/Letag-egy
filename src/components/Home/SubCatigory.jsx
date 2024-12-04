@@ -5,16 +5,16 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom";
-import { useLanguage } from '../../context/LanguageContextPro'; // إضافة context للغة
+import { useLanguage } from '../../context/LanguageContextPro'; 
 
 export default function SubCategory() {
   const { subCategories } = useContext(ContextData);
   const [filteredCategory, setFilteredCategory] = useState([]);
-  const { language } = useLanguage(); // استخدام اللغة الحالية
+  const { language } = useLanguage();
   const sliderRef = useRef(null);
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['subCategory', language], // استخدام اللغة كمفتاح لتحديث البيانات بناءً على اللغة
+    queryKey: ['subCategory', language], 
     queryFn: subCategories
   });
 
@@ -23,7 +23,7 @@ export default function SubCategory() {
       const availableCategor = data?.data.categories.filter(category => category.photo);
       setFilteredCategory(availableCategor);
     }
-  }, [data, language]); // تأكد من التحديث عندما تتغير اللغة
+  }, [data, language]); 
 
   const NextArrow = () => (
     <div

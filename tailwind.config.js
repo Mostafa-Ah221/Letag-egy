@@ -11,6 +11,7 @@ export default {
         "secondary": '#161616',
         "Neutral": '#f9f9f9',
         "white": "#ffffff",
+        "black": "#000000",
         "primary700": "#c2410c",
         "primary400": "#f0851f",
       },
