@@ -41,10 +41,12 @@ export default function SliderHome() {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['getApiHome'],
-    queryFn: getApiHome
+    queryFn: getApiHome,
+     staleTime: 1000 * 60 * 30,
+    cacheTime: 1000 * 60 * 40,
   });
 
-  console.log(data?.data);
+  // console.log(data?.data);
   
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error occurred while fetching data.</p>;

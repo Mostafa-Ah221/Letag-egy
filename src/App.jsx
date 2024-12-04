@@ -1,6 +1,6 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Layout from "./components/Layout/Layout";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import Home from "./components/Home/Home";
+import Layout from "./components/Layout/Layout";
 import About from "./components/About/About";
 import Contact from "./components/Contact-us/Contact";
 import Login from "./components/Login/Login";
@@ -14,29 +14,63 @@ import Address from "./components/ShoppingCart/Address";
 import PayPage from "./components/ShoppingCart/PayPage";
 import Review from "./components/ShoppingCart/Review";
 import Shipping from "./components/ShoppingCart/Shipping";
-import {CartContextProvider} from "./context/CartContext";
-import { useEffect } from "react";
+import { CartContextProvider } from "./context/CartContext";
+import { useEffect, useState } from "react";
+import Stock from "./components/Stock/Stock";
+import Profile from "./components/Profile/Profile";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
+import { LanguageContextPro } from "./context/LanguageContextPro";
+import WishList from "./components/WishList/WishList";
+import CartPage from "./components/CartPage/CartPage";
+import { Toaster } from 'react-hot-toast';
+import CategoryFilter from "./components/CategoryFilter/CategoryFilter";
+
+
 
 function App() {
+  const [isStock, setIsStock] = useState(false);
+
   useEffect(() => {
-  window.scrollTo(0, 0);
-}, []);
+    const fetchdata = async () => {
+      try {
+        const res = await fetch("https://tarshulah.com/api/domain/settings");
+        const resJson = await res.json();
+        const data = await resJson.data;
+        const stock = await data.multi_stocks_management;
+        if (stock == 1) {
+          setIsStock(true);
+        }
+        else {
+          setIsStock(false);
+        }
+        // console.log(isStock);
+      } catch (error) {
+        // console.log(error)
+      }
+    };
+    fetchdata();
+  }, []);
+
   let router = createBrowserRouter([
     {
       path: "/",
       element: <Layout />,
       children: [
-        { path: "/", element: <Home /> },
+        { path: "/", element: isStock ? <Stock /> : <Home /> },
+        { path: "home", element: isStock ? <Home /> : <Navigate replace to={"/"} /> },
         { path: "about", element: <About /> },
         { path: "contactUs", element: <Contact /> },
         { path: "login", element: <Login /> },
         { path: "register", element: <SignUp /> },
         { path: "pageBrand", element: <PageBrands /> },
-        { path: "categoryDetails", element: <CategoryDetails /> },
-        { path: "productDetails", element: <ProductDetails /> },
+        { path: "wishlist", element: <WishList /> },
+        { path: "categoryDetails/:id", element: <CategoryDetails /> },
+        { path: "productDetails/:id", element: <ProductDetails /> },
+        { path: "categoryFilter/:id", element: <CategoryFilter /> },
+        { path: "cartpage", element: <CartPage /> },
         {
           path: "cartlayout",
-          element: <CartLayout />,
+          element: <ProtectedRoute><CartLayout /></ProtectedRoute>,
           children: [
             { index: true, element: <Address /> },
             { path: "shipping", element: <Shipping /> },
@@ -44,16 +78,21 @@ function App() {
             { path: "review", element: <Review /> },
           ],
         },
+        { path: "profile", element: <Profile /> }
       ],
     },
   ]);
 
   return (
-    <CartContextProvider>
-    <DataContextProveder>
-      <RouterProvider router={router} />
-    </DataContextProveder>
-    </CartContextProvider>
+    <LanguageContextPro>
+      <CartContextProvider>
+        <DataContextProveder>
+            <RouterProvider router={router} />
+          
+          <Toaster />
+        </DataContextProveder>
+      </CartContextProvider>
+    </LanguageContextPro>
   );
 }
 

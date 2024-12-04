@@ -6,7 +6,11 @@
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
 
-/* html[lang="ar"] {
+:root {
+  --primary-color: #f0852a;
+}
+
+html[lang="ar"] {
   direction: rtl;
   text-align: right;
 }
@@ -14,7 +18,7 @@
 html[lang="en"] {
   direction: ltr;
   text-align: left;
-} */
+}
  /* input-field */
 .input-field {
   display: block;
@@ -38,4 +42,14 @@ html[lang="en"] {
 
 html, body, #root {
     overflow-x: hidden;
+}
+.pagination .active {
+    @apply bg-primary text-white rounded-lg;
+}
+
+/* For Desktop */
+@media (min-width: 768px) {
+  .product-item:hover .product-actions {
+    opacity: 1;
+  }
 }

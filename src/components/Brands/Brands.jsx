@@ -4,14 +4,19 @@ import { useQuery } from "@tanstack/react-query";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Link } from "react-router-dom";
+import { useLanguage } from "../../context/LanguageContextPro";
 
 export default function Brands() {
   const { getBrands } = useContext(ContextData);
+     const { language } = useLanguage();
   const sliderRef = useRef(null);
   const [filteredBrands, setFilteredBrands] = useState([]);
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["getBrands"],
-    queryFn: getBrands,
+    queryKey: ["getBrands",language],
+    queryFn:()=> getBrands(language),
+     staleTime: 1000 * 60 * 30,
+    cacheTime: 1000 * 60 * 40,
   });
 
   useEffect(() => {
@@ -20,6 +25,10 @@ export default function Brands() {
       setFilteredBrands(availableBrands);
     }
   }, [data]);
+  
+if (filteredBrands.length === 0) {
+  return <div>لا توجد علامات تجارية متاحة حالياً.</div>;
+}
 
   const settings = {
     dots: false,
@@ -54,7 +63,7 @@ export default function Brands() {
       },
     ],
     afterChange: (currentSlide) => {
-      sliderRef.current.slickGoTo(currentSlide); // تحديد الموضع الجديد للشريحة
+      sliderRef.current.slickGoTo(currentSlide); 
     },
   };
 
@@ -65,7 +74,7 @@ export default function Brands() {
     <div className="relative px-6 py-4">
       <Slider ref={sliderRef} {...settings}>
         {filteredBrands.map((brand) => (
-          <div key={brand.id} className="flex items-center justify-center px-2 cursor-pointer">
+          <Link to={`/categoryFilter/${brand.id}`} key={brand.id} className="flex items-center justify-center px-2 cursor-pointer" state={{ title: brand.name }}>
             <div className="w-28 h-28 border border-gray-200 rounded-lg overflow-hidden transition-transform duration-300 hover:scale-110 group">
               <div className="w-full h-full flex items-center justify-center p-2">
                 <img
@@ -76,7 +85,7 @@ export default function Brands() {
                 />
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </Slider>
     </div>

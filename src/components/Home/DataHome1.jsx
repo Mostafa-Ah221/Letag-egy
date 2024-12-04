@@ -1,12 +1,15 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { ContextData } from '../../context/ContextApis';
 import { useQuery } from '@tanstack/react-query';
 import Slider from 'react-slick';
 import { IoEyeSharp } from "react-icons/io5";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { FaHeart } from 'react-icons/fa6';
-import { useCartData } from '../../context/CartContext'; // Import CartContext
+import { CiHeart } from "react-icons/ci";
+import { IoIosHeart } from "react-icons/io";
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../../context/LanguageContextPro';
+import { useCart } from '../../context/CartContext';
+import Modal from '../Modal/Modal';
 
 const CustomArrow = ({ direction, onClick }) => (
   <button onClick={onClick} className={`absolute top-1/2 -translate-y-1/2 z-10
@@ -23,13 +26,25 @@ const CustomArrow = ({ direction, onClick }) => (
 );
 
 export default function DataHome({ sectionName }) {
-  const { getApiHome } = useContext(ContextData);
+  const { getApiHome, currencyData } = useContext(ContextData);
+  const { language } = useLanguage();
+  const { addToCart, handleAddToWish,wishList  } = useCart();
+
+
   const { data: homeData, isLoading, isError } = useQuery({
-    queryKey: ['getApiHome'],
-    queryFn: getApiHome,
-    staleTime: 1000 * 60 * 15,
-    cacheTime: 1000 * 60 * 30,
+    queryKey: ['getApiHome', language], 
+    queryFn: () => getApiHome(language), 
+    staleTime: 1000 * 60 * 30,
+    cacheTime: 1000 * 60 * 40,
   });
+
+  const handleAddToCart = (product) => {
+    addToCart(product, quantity); 
+  };
+
+  useEffect(() => {
+   
+  }, [language, homeData]);
 
   const { data: sliderData, isLoading: isSliderLoading } = useQuery({
     queryKey: ['getSliderImages'],
@@ -40,26 +55,36 @@ export default function DataHome({ sectionName }) {
     staleTime: 1000 * 60 * 15,
     cacheTime: 1000 * 60 * 30,
   });
+// JavaScript for Mobile Click (Toggle on Click)
+const handleProductClickk = (item) => {
+  if (window.innerWidth < 768) {
+    setSelectedProduct(item);
+    setShowModal(true);
+  }
+};
 
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(1); 
-
-  const { addToCart } = useCartData();
 
   const handleProductClick = (item) => {
     setSelectedProduct(item);
     setShowModal(true);
   };
 
-  const handleAddToCart = () => {
-    if (selectedProduct) {
-      addToCart(selectedProduct.id, quantity); 
-      setShowModal(false); 
-    }
+  const sections = {
+    trending: language === "ar" ? "المنتجات الرائجة" : "featured",
+    bestSelling: language === "ar" ? "أفضل المنتجات مبيعًا" : "best_sell",
   };
 
-  if (isLoading || isSliderLoading) return <p>Loading...</p>;
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
   if (isError) return <p>Error occurred while fetching data.</p>;
 
   const trendingSection = homeData?.data?.sections?.find(section => section.name === sectionName);
@@ -81,85 +106,95 @@ export default function DataHome({ sectionName }) {
 
   return (
     <div className="relative">
-      <h2 className='text-right text-2xl my-7'>{trendingSection?.name}</h2>
+      <h2 className={`text-2xl font-semibold my-7 ${language === 'ar' ? 'text-right' : 'text-left'}`}>
+        {trendingSection?.name}
+      </h2>      
       <div className="relative">
-        <Slider {...settings}>
+          <Slider {...settings}>
           {trendingSection ? (
-            trendingSection?.childreen.map((item, index) => (
-              <div key={index} className="product-item px-2">
-                <div className="relative overflow-hidden rounded-md shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 h-full bg-white">
-                  <div className="relative group aspect-w-16 aspect-h-9">
-                    {item.photo && (
-                      <div className="w-full h-48">
-                        <div className="relative w-full h-full">
-                          <Link to={`/productDetails?id=${item.id}`}>
-                            <img
-                              src={item.photo}
-                              alt={item.name}
-                              className="w-full h-full object-cover absolute inset-0"
-                            />
-                          </Link>
-                          <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <button onClick={(e) => { e.preventDefault(); handleProductClick(item); }} className="z-20">
-                              <IoEyeSharp className="text-white bg-primary p-2 rounded-full text-[2.4rem]" />
-                            </button>
+            trendingSection?.childreen.map((item, index) => {
+              // Check if the product is in the wishlist
+             const isInWishList = wishList.some((wishItem) => wishItem && wishItem.id === item.id);
+
+              return (
+                <div key={index} className="product-item px-2">
+                  <div className="relative overflow-hidden rounded-md shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 h-full bg-white">
+                    <div onClick={() => handleProductClickk(item)}  className=" relative group aspect-h-9">
+                      {item?.photo && (
+                        <div className="w-full h-44">
+                          <div className="relative w-full h-full">
+                            <Link to={`/productDetails?id=${item.id}`}>
+                              <img
+                                src={item.photo}
+                                alt={item.name}
+                                className="w-full h-full object-cover absolute inset-0"
+                              />
+                            </Link>
+                            <div className="product-actions absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleProductClick(item);
+                                }}
+                                className="z-20"
+                              >
+                                <IoEyeSharp className="text-white bg-primary p-2 rounded-full text-[2.4rem]" />
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleAddToWish(item, isInWishList, () => {});
+                                }}
+                                className="z-20"
+                              >
+                                {isInWishList ?<IoIosHeart className='text-primary text-[2.5rem]'/> : 
+                                 <CiHeart className='text-primary text-5xl'/>}
+                                
+                              </button>
+                                
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                  <Link to={`/productDetails?id=${item.id}`}>
-                    <div className="p-4 flex flex-col justify-between h-24">
-                      <h3 className="text-right text-lg font-medium truncate">{item.title}</h3>
-                      <div className="flex items-center justify-between mt-2">
-                        <span className="text-primary text-sm">{item.price} ريال</span>
-                      </div>
+                      )}
                     </div>
-                  </Link>
+                    <Link to={`/productDetails/${item.id}`}>
+                      <div className="p-4 flex flex-col justify-between h-24">
+                        <h3 className="text-lg font-medium truncate">{item.title}</h3>
+                        <div className="flex items-center justify-between mt-2">
+                          <span className="text-primary text-sm">{item.price} {currencyData}</span>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <p>لم يتم العثور على المنتجات الرائجة.</p>
           )}
         </Slider>
       </div>
-
-      {showModal && selectedProduct && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" onClick={() => setShowModal(false)}>
-          <div className="bg-white p-6 rounded-lg relative max-w-2xl w-full mx-4" onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setShowModal(false)} className="absolute top-2 right-2 text-xl font-bold text-gray-600 hover:text-gray-800">
-              ✕
-            </button>
-            <div className="mt-2 flex flex-row-reverse">
-              <img src={selectedProduct.photo} alt={selectedProduct.title} className="w-4/5 h-64 object-cover rounded-md mt-4" />
-              <div className=" mt-6">
-                <h3 className="text-xl font-semibold text-right">{selectedProduct.title}</h3>
-                <span className="text-primary text-xl font-bold mb-5 block">{selectedProduct.price} ريال</span>
-                <div className='flex items-center justify-between'>
-                  <FaHeart className='text-red-500 text-2xl '/>
-                  <input 
-                    type="number" 
-                    value={quantity} 
-                    onChange={(e) => setQuantity(Math.max(1, e.target.value))} 
-                    min={1} 
-                    className='rounded-md text-right text-primary border border-stone-500 w-28 py-2 px-2'
-                  />
-                </div>
-                <button onClick={handleAddToCart} className="px-2 w-full mt-10 py-2 bg-primary text-white hover:bg-primary/90 transition-colors">
-                  إضافة إلى السلة
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+ {showModal && (
+        <Modal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)} 
+        product={selectedProduct} 
+        handleAddToCart={handleAddToCart} 
+        language={language}
+        currency={currencyData}
+          handleAddToWish={handleAddToWish}
+         wishList={wishList}
+         setQuantity={setQuantity}
+         quantity={quantity}
+      />
       )}
 
+
       <div className="flex items-center justify-center my-4">
-        {sliderData && sectionName === "أفضل المنتجات مبيعًا" ? (
-          <img src={sliderData.data.sliders[0].photo} className="w-[100%] h-[25rem] object-cover rounded-lg shadow-2xl" alt="Slider Image" />
-        ) : sectionName === "المنتجات الرائجة" ? (
-          <img src={homeData.data.sliders[1].photo} className="w-[95%] h-[25rem] object-cover rounded-lg shadow-2xl" alt="Slider Image" />
+        {sliderData && sectionName === sections.trending? (
+          <img src={homeData.data.sliders[1].photo} className="w-[100%] md:h-[25rem] h-full md:object-cover object-contain  rounded-lg shadow-2xl" alt="Slider Image" />
+        ) : sectionName === sections.bestSelling ? (
+          <img src={sliderData.data.sliders[0].photo} className="w-[95%] md:h-[25rem] h-full md:object-cover object-contain rounded-lg shadow-2xl" alt="Slider Image" />
         ) : null}
       </div>
     </div>
