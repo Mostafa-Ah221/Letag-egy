@@ -15,7 +15,9 @@ export default function SubCategory() {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['subCategory', language], 
-    queryFn: subCategories
+    queryFn: () => subCategories(language),
+    staleTime: 1000 * 60 * 30,
+    cacheTime: 1000 * 60 * 40,
   });
 
   useEffect(() => {

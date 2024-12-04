@@ -86,7 +86,7 @@ export default function Footer() {
         {/* Footer Bottom */}
 
       {/* </footer> */} 
-      <div className="flex mt-16 py-3 px-3 justify-between flex-row-reverse text-center text-sm bg-primary text-white">
+      <div className="flex mt-1 py-3 px-3 justify-between flex-row-reverse text-center text-sm bg-primary text-white">
         <p>&copy; 2024 Leetag All Rights Reserved | <a href="/terms" className="hover:underline">الشروط و الأحكام</a></p>
         <p>Powered by <a href="https://egydesigner.com" className="hover:underline">EGYdesigner</a></p>
       </div>

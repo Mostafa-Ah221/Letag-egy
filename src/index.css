@@ -6,6 +6,10 @@
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
 
+:root {
+  --primary-color: #f0852a;
+}
+
 html[lang="ar"] {
   direction: rtl;
   text-align: right;

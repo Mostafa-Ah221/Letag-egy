@@ -8,6 +8,7 @@ import { IoEyeSharp } from "react-icons/io5";
 import { useCart } from "../../context/CartContext";
 import { useLocation } from "react-router-dom";
 import { useLanguage } from "../../context/LanguageContextPro";
+import Modal from "../Modal/Modal";
 
 export default function CategoryFilter() {
   const { fetchProducts } = useContext(ContextData);
@@ -26,6 +27,8 @@ export default function CategoryFilter() {
 const { data, isLoading, isError } = useQuery({
     queryKey: ["fetchProducts", filters,language],
     queryFn: () => fetchProducts(filters),
+    staleTime: 1000 * 60 * 30,
+    cacheTime: 1000 * 60 * 40,
   });
   const location = useLocation();
 const title = location.state?.title
@@ -51,7 +54,7 @@ const brandProduct=data?.data?.products
     <div>
         <div className="flex items-center justify-center py-7">
          <p className="text-gray-600 text-[1rem] ">{language === "ar" ? "علامة تجارية": "Brand"}/</p>
-         <h1 className=" text-[1.7rem] font-bold text-orange-500 ">{title} </h1>
+         <h1 className=" text-[1.7rem] font-bold text-primary ">{title} </h1>
         </div>
          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 my-5">
         {brandProduct ? 
@@ -109,55 +112,19 @@ const brandProduct=data?.data?.products
         ""
         }
 
-         {showModal && selectedProduct && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" onClick={() => setShowModal(false)}>
-          <div className="bg-white p-6 rounded-lg relative max-w-2xl w-full mx-4" onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setShowModal(false)} className="absolute top-2 right-2 text-xl font-bold text-gray-600 hover:text-gray-800">
-              ✕
-            </button>
-            <div className="mt-2 flex flex-col md:flex-row-reverse">
-              <img src={selectedProduct.photo} alt={selectedProduct.title} className="md:w-4/5 md:h-64 w-3/5 h-36 m-auto object-cover rounded-md mt-4" />
-              <div className=" mt-6">
-                <h3 className="text-xl font-semibold">{selectedProduct.title}</h3>
-                <span className="text-primary text-xl font-bold mb-5 block">{selectedProduct.price} {currencyData}
-                </span>
-                <div className='flex md:block gap-3'>
-                <div className='flex items-center justify-between'>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const isInWishList = wishList.some(
-                        (wishItem) => wishItem && wishItem.id === selectedProduct.id
-                      );
-                      handleAddToWish(selectedProduct, isInWishList, () => {});
-                    }}
-                    className="z-20"
-                  >
-                    {wishList.some(
-                      (wishItem) => wishItem && wishItem.id === selectedProduct.id
-                    ) ? (
-                      <IoIosHeart className="text-primary text-[2.5rem]" />
-                    ) : (
-                      <CiHeart className="text-primary text-5xl" />
-                    )}
-                  </button>
-                  <input 
-                    type="number" 
-                    value={quantity} 
-                    onChange={(e) => setQuantity(Math.max(1, e.target.value))} 
-                    min={1} 
-                    className='rounded-md text-right text-primary border border-stone-500 w-28 py-2 px-2'
-                  />
-                </div>
-                <button onClick={() => handleAddToCart(selectedProduct)}  className="px-2 w-full md:mt-10 py-2 bg-primary text-white hover:bg-primary/90 transition-colors">
-                  {language === "ar" ? "إضافة إلى السلة":"Add To Cart"}
-                </button>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {showModal && (
+        <Modal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)} 
+        product={selectedProduct} 
+        handleAddToCart={handleAddToCart} 
+        language={language}
+        currency={currencyData}
+          handleAddToWish={handleAddToWish}
+         wishList={wishList}
+         setQuantity={setQuantity}
+         quantity={quantity}
+      />
       )}
     </div>
     </div>

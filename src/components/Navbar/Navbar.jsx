@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import logo from "../../assets/images/logo.png";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../../context/LanguageContextPro";
 import { ContextData } from "../../context/ContextApis";
@@ -16,10 +15,13 @@ export default function Navbar() {
   const [openSubMenus, setOpenSubMenus] = useState({});
   const [ca2, setCa2] = useState({});
   const [catChildren2, setCatChildren2] = useState([]);
-  const { subCategories, userData } = useContext(ContextData);
+  const { subCategories, userData,settings_domain } = useContext(ContextData);
   const [isStock, setIsStock] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
+  const logo=settings_domain?.data.logo
+  // console.log(logo);
+  
   const handleOpenMenu = () => {
     if (isOpen) {
       document.body.style.overflow = "auto";
@@ -76,12 +78,13 @@ export default function Navbar() {
           isOpen ? "block" : "hidden"
         } ${isOpen ? "animate-slideInRight" : ""}`}
       >
-        <div className="p-6">
-          <IoMdClose 
+        <div className="p-6 ">
+          <div className={`flex  ${language === "ar" ? "flex-row-reverse":"flex-row"} items-center `}>
+             <IoMdClose 
             onClick={handleOpenMenu} 
             className="cursor-pointer text-slate-600 self-end mr-auto text-3xl border border-primary rounded-md mb-4" 
           />
-          <div className=" flex flex-row-reverse justify-center items-center text-primary text-2xl mb-3 font-thin gap-2">
+          <div className=" flex flex-row-reverse justify-center items-center mr-auto mb-4 text-primary text-2xl  font-thin gap-2">
             {userData === null ? 
                <Link
                   to="/login"
@@ -105,10 +108,12 @@ export default function Navbar() {
                       <CgProfile className="text-4xl text-gray-500"/>
                   </div>
           </div>
+          </div>
+         
           {data?.data.categories.map((cat) => (
             <React.Fragment key={cat.id}>
               <div
-                className={`w-full h-12 bg-white flex `}
+                className={`w-full h-12 bg-white flex mt-5 `}
               >
                 <Link to={`/categoryDetails/${cat.id}`}  onClick={() => {handleOpenMenu()}} className="flex items-center"
                 > 
@@ -190,7 +195,7 @@ export default function Navbar() {
             <ul className="lg:flex font-medium lg:space-x-8 lg:bg-white hidden">
               <li>
                 <Link to={isStock ? "/home" : "/"} className="relative block py-2 px-3 ml-2 rounded md:p-0 group">
-                  <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-orange-500 transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
+                  <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-primary transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
                   <span className="relative z-10">
                     {language === "ar" ? "الرئيسية" : "Home"}
                   </span>
@@ -198,7 +203,7 @@ export default function Navbar() {
               </li>
               <li>
                 <Link to={"/about"} className="relative block py-2 px-3 rounded md:p-0 group">
-                  <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-orange-500 transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
+                  <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-primary transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
                   <span className="relative z-10">
                     {language === "ar" ? "نبذة عنا" : "About"}
                   </span>
@@ -206,7 +211,7 @@ export default function Navbar() {
               </li>
               <li>
                 <Link to={"/pageBrand"} className="relative block py-2 px-3 rounded md:p-0 group">
-                  <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-orange-500 transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
+                  <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-primary transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
                   <span className="relative z-10">
                     {language === "ar" ? "العلامات التجارية" : "Brands"}
                   </span>
@@ -218,7 +223,7 @@ export default function Navbar() {
           <div className="flex  md:mr-3 mt-3 md:mt-0">
             <div className="relative w-[17rem] lg:w-[23em] md:w-[22em] mr- md:mr-0">
               <div className="absolute z-40 inset-y-0 start-0 flex items-center ps-3">
-                <div className="p-[7px] bg-orange-500 cursor-pointer">
+                <div className="p-[7px] bg-primary cursor-pointer">
                   <svg className="w-4 h-4 text-gray-100 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                     <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                   </svg>

@@ -12,10 +12,12 @@ import { ContextData } from "../../context/ContextApis";
 import { FaRegHeart } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import { useLanguage } from "../../context/LanguageContextPro";
+import { useCart } from "../../context/CartContext";
 
 function Menu() {
     const { userToken } = useContext(ContextData);
     const { language, toggleLanguage } = useLanguage();
+  const {wishList } = useCart(); 
 
     return (
         <div className="lg:hidden rounded-tr-2xl rounded-tl-2xl bg-Neutral z-[60] flex w-full justify-between items-center fixed bottom-0 h-16">
@@ -33,17 +35,7 @@ function Menu() {
                             {language === "ar" ? "البيانات" : "Profile"}
                         </p>
                     </NavLink>
-                    <NavLink
-                        to={"/pageBrand"}
-                        className="flex flex-col order-5 items-center w-1/5 justify-center hover:cursor-pointer group duration-300 hover:bg-primary h-full"
-                    >
-                        <div className="flex items-center justify-center">
-                            <TbCircleLetterR className="text-black text-[1.5rem] group-hover:text-white" />
-                        </div>
-                        <p className="text-black text-center text-xs group-hover:text-white">
-                            {language === "ar" ? "العلامات التجارية" : "Brands"}
-                        </p>
-                    </NavLink>
+                      
                 </>
             ) : (
                 <NavLink
@@ -61,7 +53,23 @@ function Menu() {
                     </p>
                 </NavLink>
             )}
-
+             <NavLink
+                            to={'/wishlist'}
+                          className="flex flex-col order-5 items-center w-1/5 justify-center hover:cursor-pointer group duration-300 hover:bg-primary h-full"
+                        >
+                            <div className="flex items-center justify-center">
+                                <FaRegHeart
+                                    icon={faRightFromBracket}
+                                    className="text-black text-[1.7rem] group-hover:text-white"
+                                />
+                                <div className="bg-primary flex justify-center items-center rounded text-center w-4 h-4 text-[0.8rem] text-white absolute border border-white bottom-11 left-[11%] shadow-md">
+                                <span>{wishList.length}</span>
+                                </div>
+                            </div>
+                            <p className='text-black text-center text-xs group-hover:text-white'>
+                                {language === "ar" ? "المفضلة" : "Favorites"}
+                            </p>
+                        </NavLink>
             {/* Contact Icon */}
             <div className="flex flex-col order-2 items-center w-1/5 justify-center hover:cursor-pointer group duration-300 hover:bg-primary h-full">
                 <div className="flex items-center justify-center">

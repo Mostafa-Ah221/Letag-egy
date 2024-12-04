@@ -21,7 +21,7 @@ export default function Layout() {
         <div className="col-span-11 flex flex-col">
           <Navbar/>
           <SecondMenu/>
-        <div className={`container flex-grow ${language === "ar" ? "pl-11 pr-0":"pl-4 pr-7"}`}>
+        <div className={`container mb-24 flex-grow ${language === "ar" ? "pl-11 pr-0":"pl-4 pr-7"}`}>
           <Outlet>
           </Outlet>
        </div>

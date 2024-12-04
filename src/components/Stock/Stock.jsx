@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import favicon from '../../../src/assets/images/favicon.png';
+// import favicon from '../../../src/assets/images/favicon.png';
 import { ContextData } from '../../context/ContextApis';
 import { useLanguage } from '../../context/LanguageContextPro';
 
 function Stock() {
     const { selectedTownId, setSelectedTownId, settings_domain } = useContext(ContextData);
     const { language } = useLanguage();
-
+const favicon=settings_domain?.data.logo
     const towns = settings_domain?.data?.locations || []; 
-console.log(settings_domain?.data.locations);
+// console.log(settings_domain?.data.locations);
 
     const handleTownChange = (event) => {
         const selectedId = event.target.value;
@@ -18,6 +18,7 @@ console.log(settings_domain?.data.locations);
 
     return (
         <div className='container mb-[9.3rem]'>
+
             <h1 className='text-center font-bold text-2xl mt-10'>  
                 {language === 'ar' ? 'يرجى اختيار المدينة الذي تريد التوصيل إليه' : 'Please select the city you want to deliver to'}
             </h1>

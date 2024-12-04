@@ -153,7 +153,7 @@ export default function SignUp() {
                 required
                 type="password"
                 id="password_confirmation"
-                className="border border-primary text-gray-900 text-sm rounded-md block w-full p-2.5 dark:placeholder-gray-400 focus:shadow-[0_0_8px_2px_rgba(249,115,22,0.3)] outline-none "
+                className={`border border-primary text-gray-900 text-sm rounded-md block w-full p-2.5 dark:placeholder-gray-400 focus:shadow-[0_0_8px_2px_rgba(249,115,22,0.3)] outline-none `}
               />
               {formik.errors.password_confirmation && formik.touched.password_confirmation && (
                 <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
@@ -162,7 +162,7 @@ export default function SignUp() {
               )}
             </div>
           </div>
-          <button type="submit" className="bg-orange-500 m-auto block  hover:tracking-widest duration-300 text-white font-bold py-2 px-4 rounded mt-5">    {loading?<ClipLoader color="#36d7b7" size={15} />:"Register"}</button>
+          <button type="submit" className="bg-primary m-auto block  hover:tracking-widest duration-300 text-white font-bold py-2 px-4 rounded mt-5">    {loading?<ClipLoader color="#36d7b7" size={15} />:"Register"}</button>
            <div className="ml-40 mt-5">
             Do you have an account? <Link to="/login" className="text-primary font-semibold hover:underline">Login</Link>
            </div>

@@ -1,3 +1,4 @@
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -7,12 +8,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        "primary": '#f0852a',
-        "secondary": '#161616',
-        "Neutral": '#f9f9f9',
-        "white": "#ffffff",
-        "primary700": "#c2410c",
-        "primary400": "#f0851f",
+        primary: 'var(--primary-color)' ,
+        secondary: '#161616',
+        Neutral: '#f9f9f9',
+        white: "#ffffff",
+        primary700: "#c2410c",
+        primary400: "#f0851f",
       },
       keyframes: {
         "slide-in-right": {
@@ -26,7 +27,6 @@ export default {
         },
       },
     },
-
   },
   plugins: [],
 }

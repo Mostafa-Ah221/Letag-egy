@@ -8,6 +8,7 @@ import { useContext, useState } from "react";
 import { useLanguage } from "../../context/LanguageContextPro";
 import { ContextData } from "../../context/ContextApis";
 import { useQuery } from "@tanstack/react-query";
+import Modal from "../Modal/Modal";
 
 export default function WishList() {
   const [showModal, setShowModal] = useState(false);
@@ -44,13 +45,13 @@ if (isLoading) {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-center text-4xl font-bold text-orange-500 mb-6">
+      <h1 className="text-center text-4xl font-bold text-primary mb-14">
         {language === "ar" ?"المفضلة": "Favorites"} 
       </h1>
       {wishList.length === 0 || isError ? (
         <div className="flex flex-col items-center justify-center mt-10">
-          <FaHeartBroken className="text-orange-500 text-6xl mb-4" />
-          <p className="text-gray-700 text-lg">لا توجد عناصر في قائمة المفضلة.</p>
+          <FaHeartBroken className="text-primary text-6xl mb-4" />
+          <p className="text-gray-700 text-lg">{language === "ar" ? "لا توجد عناصر في قائمة المفضلة.":"There are no items in the favorites list."}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -66,7 +67,8 @@ if (isLoading) {
                       <div className="group h-48 overflow-hidden">
                         <img
                           src={product.photos[0].url}
-                          alt={product.title}
+                          alt=
+                          {product.title}
                           className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -76,23 +78,8 @@ if (isLoading) {
                               className="text-white bg-primary p-2 rounded-full text-[2.4rem]" 
                             />
                           </button>
-                          <button 
-                            onClick={(e) => {
-                              e.preventDefault();
-                              const isInWishList = wishList.some(
-                                (wishItem) => wishItem && wishItem.id === product.id
-                              );
-                              handleAddToWish(product, isInWishList, () => {});
-                            }}
-                            className="z-20"
-                          >
-                            {wishList.some((wishItem) => wishItem && wishItem.id === product.id) ? (
-                              <IoIosHeart className="text-primary text-[2.5rem]" />
-                            ) : (
-                              <CiHeart className="text-primary text-5xl" />
-                            )}
-                          </button>
                         </div>
+                          
                       </div>
                     )}
                   </div>
@@ -106,62 +93,38 @@ if (isLoading) {
                     <p className="text-xl">{product.price} {currencyData}</p>
                     <p className="text-gray-700">
                       {product.reviews_count ? product.reviews_count : 0}
-                      <FaStar className="text-yellow-500 inline-block" />
+                      <FaStar className="text-orange-500 inline-block" />
                     </p>
                   </div>
                 </Link>
+                <button  onClick={(e) => {
+                              e.preventDefault();
+                              const isInWishList = wishList.some(
+                                (wishItem) => wishItem && wishItem.id === product.id
+                              );
+                              handleAddToWish(product, isInWishList, () => {});
+                            }} className="relative bottom-[104%] right-[94%] w-8 h-8 text-white bg-primary rounded-full">X</button>
               </div>
             );
           })}
         </div>
       )}
 
-      {showModal && selectedProduct && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" onClick={() => setShowModal(false)}>
-          <div className="bg-white p-6 rounded-lg relative max-w-2xl w-full mx-4" onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setShowModal(false)} className="absolute top-2 right-2 text-xl font-bold text-gray-600 hover:text-gray-800">
-              ✕
-            </button>
-            <div className="mt-2 flex flex-row-reverse">
-              <img src={selectedProduct?.photos?.[0]?.url} alt={selectedProduct?.title} className="w-4/5 h-64 object-cover rounded-md mt-4" />
-              <div className="mt-6">
-                <h3 className="text-xl font-semibold">{selectedProduct.title}</h3>
-                <span className="text-primary text-xl font-bold mb-5 block">{selectedProduct.price} {currencyData}</span>
-                <div className="flex items-center justify-between">
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const isInWishList = wishList.some(
-                        (wishItem) => wishItem && wishItem.id === selectedProduct.id
-                      );
-                      handleAddToWish(selectedProduct, isInWishList, () => {});
-                    }}
-                    className="z-20"
-                  >
-                    {wishList.some(
-                      (wishItem) => wishItem && wishItem.id === selectedProduct.id
-                    ) ? (
-                      <IoIosHeart className="text-primary text-[2.5rem]" />
-                    ) : (
-                      <CiHeart className="text-primary text-5xl" />
-                    )}
-                  </button>
-                  <input
-                    type="number"
-                    value={quantity}
-                    onChange={(e) => setQuantity(Math.max(1, e.target.value))}
-                    min={1}
-                    className="rounded-md text-right text-primary border border-stone-500 w-28 py-2 px-2"
-                  />
-                </div>
-                <button onClick={() => handleAddToCart(selectedProduct)} className="px-2 w-full mt-10 py-2 bg-primary text-white hover:bg-primary/90 transition-colors">
-                  إضافة إلى السلة
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+      {showModal && (
+        <Modal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)} 
+        product={selectedProduct} 
+        handleAddToCart={handleAddToCart} 
+        language={language}
+        currency={currencyData}
+          handleAddToWish={handleAddToWish}
+         wishList={wishList}
+         setQuantity={setQuantity}
+         quantity={quantity}
+      />
       )}
+      
     </div>
   );
 }
