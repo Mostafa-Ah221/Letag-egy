@@ -6,6 +6,10 @@
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
 
+:root {
+  --primary-color: #f0852a;
+}
+
 html[lang="ar"] {
   direction: rtl;
   text-align: right;
@@ -41,4 +45,11 @@ html, body, #root {
 }
 .pagination .active {
     @apply bg-primary text-white rounded-lg;
+}
+
+/* For Desktop */
+@media (min-width: 768px) {
+  .product-item:hover .product-actions {
+    opacity: 1;
+  }
 }

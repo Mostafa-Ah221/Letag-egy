@@ -42,24 +42,7 @@ function Menu() {
                             </div>
                         </NavLink>
                         <hr className="w-full border-neutral-400 relative bottom-1" />
-                        <NavLink
-                            to={'/wishlist'}
-                            className="hover:cursor-pointer my-1 group duration-300 hover:bg-primary w-full p-2"
-                        >
-                            <div className="flex items-center justify-center relative">
-                                <FaRegHeart
-                                    icon={faRightFromBracket}
-                                    className="text-black text-[1.5rem] group-hover:text-white"
-                                />
-                                <div className="bg-primary flex justify-center items-center rounded text-center w-4 h-4 text-[0.8rem] text-white absolute bottom-[0.9rem] border border-white -right-1 shadow-md">
-                                <span>{wishList.length}</span>
-                                </div>
-                            </div>
-                            <div className='text-black text-right text-[0.8rem] group-hover:text-white'>
-                                {language === "ar" ? "المفضلة" : "Favorites"}
-                            </div>
-                        </NavLink>
-                        <hr className="w-full border-neutral-400 relative bottom-1" />
+                        
                     </>
                 ) : (
                     <>
@@ -85,6 +68,24 @@ function Menu() {
                         </NavLink>
                     </>
                 )}
+                <NavLink
+                            to={'/wishlist'}
+                            className="hover:cursor-pointer my-1 group duration-300 hover:bg-primary w-full p-2"
+                        >
+                            <div className="flex items-center justify-center relative">
+                                <FaRegHeart
+                                    icon={faRightFromBracket}
+                                    className="text-black text-[1.5rem] group-hover:text-white"
+                                />
+                                <div className="bg-primary flex justify-center items-center rounded text-center w-4 h-4 text-[0.8rem] text-white absolute bottom-[0.9rem] border border-white -right-1 shadow-md">
+                                <span>{wishList.length}</span>
+                                </div>
+                            </div>
+                            <div className='text-black text-right text-[0.8rem] group-hover:text-white'>
+                                {language === "ar" ? "المفضلة" : "Favorites"}
+                            </div>
+                        </NavLink>
+                        <hr className="w-full border-neutral-400 relative bottom-1" />
             </div>
 
             {/* Main Icons Section */}

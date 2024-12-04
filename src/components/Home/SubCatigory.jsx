@@ -15,7 +15,9 @@ export default function SubCategory() {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['subCategory', language], 
-    queryFn: subCategories
+    queryFn: () => subCategories(language),
+    staleTime: 1000 * 60 * 30,
+    cacheTime: 1000 * 60 * 40,
   });
 
   useEffect(() => {
@@ -100,7 +102,7 @@ export default function SubCategory() {
 
   return (
     <div className="relative py-7">
-      <h2 className='text-right pb-4 text-xl text-secondary'>الفئات الرئيسية</h2>
+      <h2 className=' pb-4 text-xl text-secondary'>{language === "ar"? "الفئات الرئيسية ": "Main Categories"}</h2>
       <Slider ref={sliderRef} {...settings}>
         {filteredCategory.map((category, index) => (
           <div key={index} className='group px-2 cursor-pointer'>

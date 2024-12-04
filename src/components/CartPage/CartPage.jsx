@@ -29,13 +29,13 @@ export default function CartPage() {
   return (
     <div className="w-full relative">
       <div className="my-9">
-        <h1 className="font-bold text-3xl">
+        <h1 className="font-bold text-3xl text-center md:text-start">
           {language === "ar" ? "تحقق من عربة التسوق الخاص بك" : "Check Your Cart"}
         </h1>
       </div>
       {cart.length > 0 && productsData ? (
         <div className="grid grid-cols-12 gap-7 px-5">
-          <div className="space-y-4 col-span-8">
+          <div className="space-y-4 col-span-12 md:col-span-8 ">
             {productsData.map((productData, index) => {
               const product = productData.data.products;
               const cartItem = cart.find((item) => item.id === product.id);
@@ -53,7 +53,7 @@ export default function CartPage() {
                     />
                   </div>
                   <div className="flex flex-col flex-grow">
-                    <h3 className="text-lg font-medium truncate">{product.title}</h3>
+                   <h3 className="text-lg font-medium break-words">{product.title}</h3>
                     <span className="text-primary text-lg font-semibold">
                       {product.price} {currencyData}
                     </span>
@@ -81,7 +81,7 @@ export default function CartPage() {
               );
             })}
           </div>
-          <div className="col-span-4 border p-4 hover:shadow-md transition-shadow duration-300 h-fit">
+          <div className="col-span-12 md:col-span-4 border p-4 hover:shadow-md transition-shadow duration-300 h-fit">
             <h2 className="text-center text-[1.1rem]">
               {language === "ar" ? "معلومات الطلب" : "Order Information"}
             </h2>

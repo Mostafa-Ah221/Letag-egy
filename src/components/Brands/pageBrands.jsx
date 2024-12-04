@@ -30,8 +30,8 @@ export default function PageBrands() {
 
   return (
     <div className=" px-6 py-4">
-        <h2 className="text-2xl text-right mb-7">{language === "ar" ? "العلامات التجارية<": "Brands"} </h2>
-        <div className="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">  
+        <h2 className="text-2xl text-right mb-7">{language === "ar" ? "العلامات التجارية": "Brands"} </h2>
+        <div className="relative grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4a lg:grid-cols-6 gap-4">  
         {filteredBrands.map((brand) => (
           <Link to={`/categoryFilter/${brand.id}`} key={brand.id} className="flex items-center justify-center px-2 cursor-pointer" state={{ title: brand.name }}>
             <div className="w-28 h-28 my-5 text-center  border border-gray-200 rounded-lg transition-transform duration-300 hover:scale-110 group">

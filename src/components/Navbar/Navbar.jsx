@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import logo from "../../assets/images/logo.png";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../../context/LanguageContextPro";
 import { ContextData } from "../../context/ContextApis";
@@ -20,7 +19,7 @@ export default function Navbar() {
   const [openSubMenus, setOpenSubMenus] = useState({});
   const [ca2, setCa2] = useState({});
   const [catChildren2, setCatChildren2] = useState([]);
-  const { subCategories, userData } = useContext(ContextData);
+  const { subCategories, userData, settings_domain } = useContext(ContextData);
   const [isStock, setIsStock] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [searchData, setSearchData] = useState(null);
@@ -32,6 +31,9 @@ export default function Navbar() {
 
   let filteredSuggestions = [];
   let filteredSuggestionsProducts = [];
+
+  const logo = settings_domain?.data.logo
+  // console.log(logo);
 
   const handleOpenMenu = () => {
     if (isOpen) {
@@ -179,51 +181,52 @@ export default function Navbar() {
               <CgProfile className="text-4xl text-gray-500" />
             </div>
           </div>
-          {data?.data.categories.map((cat) => (
-            <React.Fragment key={cat.id}>
-              <div
-                className={`w-full h-12 bg-white flex `}
-              >
-                <Link to={`/categoryDetails/${cat.id}`} onClick={() => { handleOpenMenu() }} className="flex items-center"
-                >
-                  <img src={cat.photo} alt={cat.name} className="mx-2 my-4 w-12 h-12" />
-                  <p className="mx-2 my-4">{cat.name}</p>
-                </Link>
-                <button
-                  className={`${language === "ar" ? "mr-auto" : "ml-auto"
-                    } my-4`}
-                  onClick={() => handleOpenSubMenu(cat.name, cat.id)}
-                >
-                  {openSubMenus[cat.id] ? <FaArrowDown className="text-slate-600" /> : <FaArrowLeft className="text-slate-600" />}
-                </button>
-              </div>
-              <div
-                className={`bg-white w-full flex flex-col ${openSubMenus[cat.id] ? "block" : "hidden"
-                  }`}
-              >
-                {catChildren2.map((cat) => (
-                  <Link
-                    className=""
-                    to={`/categoryDetails/${cat.id}`}
-                    key={cat.id}
-                    onClick={() => {
-                      setSelectedCategoryId(cat.id);
-                      handleOpenMenu();
-                    }}
-                  >
-                    <div
-                      className={`bg-white flex ${language === "ar" ? "flex-row" : "flex-row-reverse"
-                        } mx-2 my-4`}
-                    >
-                      {cat.name}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-              <hr className="my-4 bg-gray-200" />
-            </React.Fragment>
-          ))}
         </div>
+
+        {data?.data.categories.map((cat) => (
+          <React.Fragment key={cat.id}>
+            <div
+              className={`w-full h-12 bg-white flex mt-5 `}
+            >
+              <Link to={`/categoryDetails/${cat.id}`} onClick={() => { handleOpenMenu() }} className="flex items-center"
+              >
+                <img src={cat.photo} alt={cat.name} className="mx-2 my-4 w-12 h-12" />
+                <p className="mx-2 my-4">{cat.name}</p>
+              </Link>
+              <button
+                className={`${language === "ar" ? "mr-auto" : "ml-auto"
+                  } my-4`}
+                onClick={() => handleOpenSubMenu(cat.name, cat.id)}
+              >
+                {openSubMenus[cat.id] ? <FaArrowDown className="text-slate-600" /> : <FaArrowLeft className="text-slate-600" />}
+              </button>
+            </div>
+            <div
+              className={`bg-white w-full flex flex-col ${openSubMenus[cat.id] ? "block" : "hidden"
+                }`}
+            >
+              {catChildren2.map((cat) => (
+                <Link
+                  className=""
+                  to={`/categoryDetails/${cat.id}`}
+                  key={cat.id}
+                  onClick={() => {
+                    setSelectedCategoryId(cat.id);
+                    handleOpenMenu();
+                  }}
+                >
+                  <div
+                    className={`bg-white flex ${language === "ar" ? "flex-row" : "flex-row-reverse"
+                      } mx-2 my-4`}
+                  >
+                    {cat.name}
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <hr className="my-4 bg-gray-200" />
+          </React.Fragment>
+        ))}
       </div>
 
       <nav className="border-gray-200 relative z-10">
@@ -261,7 +264,7 @@ export default function Navbar() {
             <ul className="lg:flex font-medium lg:space-x-8 lg:bg-white hidden">
               <li>
                 <Link to={isStock ? "/home" : "/"} className="relative block py-2 px-3 ml-2 rounded md:p-0 group">
-                  <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-orange-500 transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
+                  <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-primary transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
                   <span className="relative z-10">
                     {language === "ar" ? "الرئيسية" : "Home"}
                   </span>
@@ -269,7 +272,7 @@ export default function Navbar() {
               </li>
               <li>
                 <Link to={"/about"} className="relative block py-2 px-3 rounded md:p-0 group">
-                  <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-orange-500 transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
+                  <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-primary transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
                   <span className="relative z-10">
                     {language === "ar" ? "نبذة عنا" : "About"}
                   </span>
@@ -277,7 +280,7 @@ export default function Navbar() {
               </li>
               <li>
                 <Link to={"/pageBrand"} className="relative block py-2 px-3 rounded md:p-0 group">
-                  <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-orange-500 transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
+                  <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-primary transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
                   <span className="relative z-10">
                     {language === "ar" ? "العلامات التجارية" : "Brands"}
                   </span>
@@ -290,7 +293,7 @@ export default function Navbar() {
             <div className="relative hidden md:block">
               <Link to={`/SearchByItem?id=${query}`} className="">
                 <button className={`absolute inset-y-0 start-0 flex items-center ${language === "ar" ? "pr-2" : "pl-2"} z-100`}>
-                  <button className="p-[7px] bg-orange-500 hover:cursor-pointer">
+                  <button className="p-[7px] bg-primary hover:cursor-pointer">
                     <svg className="w-4 h-4 text-gray-100 hover:cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                     </svg>

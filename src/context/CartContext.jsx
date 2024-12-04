@@ -4,9 +4,14 @@ import toast from 'react-hot-toast';
 const CartContext = createContext();
 
 const showToast = (message, type = 'success') => {
+  const getCSSVariable = (variableName) => {
+  return getComputedStyle(document.documentElement).getPropertyValue(variableName).trim();
+};
+  const primaryColor = getCSSVariable('--primary-color');
+
   toast[type](message, {
     iconTheme: {
-      primary: 'orange', 
+      primary: primaryColor, 
       secondary: 'white', 
     },
     style: {

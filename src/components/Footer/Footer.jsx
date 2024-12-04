@@ -1,14 +1,14 @@
-import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+// import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
+// import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
     <>
-      <footer className="bg-[#5e5d5a] text-white py-10 mt-96 px-4">
+      {/* <footer className="bg-[#5e5d5a] text-white py-10 mt-96 px-4">
         <div className="container mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 text-sm">
 
           {/* Logo and About Section */}
-          <div className='order-4 text-right'>
+          {/* <div className='order-4 text-right'>
             <h3 className="text-lg font-semibold mb-4 text-primary">ليتاج</h3>
             <ul className="space-y-2">
               <li><Link to="/about" className="hover:underline">عن ليتاج</Link></li>
@@ -28,10 +28,10 @@ export default function Footer() {
               <li><a href="/electric-supplies" className="hover:underline">مستلزمات كهرباء</a></li>
               <li><a href="/paints" className="hover:underline">دهانات</a></li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Payment Options */}
-          <div className='order-2 text-right'>
+          {/* <div className='order-2 text-right'>
             <h3 className="text-lg font-semibold mb-4 text-primary">خيارات السداد</h3>
             <ul className="space-y-2 grid grid-cols-2 md:grid-cols-3 relative left-11">
               <li><img src="https://e-motion-cdn.fra1.cdn.digitaloceanspaces.com/uploads/media-uploader/aman-70-701692272507.png" alt="" /></li>
@@ -44,8 +44,8 @@ export default function Footer() {
               <li><img src="https://e-motion-cdn.fra1.cdn.digitaloceanspaces.com/uploads/media-uploader/master-card1696171284.png" alt="" /></li>
 
             </ul>
-          </div>
-          <div className='order-1'>
+          </div> */}
+          {/* <div className='order-1'>
 
             <div className="container mx-auto text-right space-y-4 ">
               <h3 className="text-lg font-semibold text-primary">تابعنا </h3>
@@ -80,13 +80,13 @@ export default function Footer() {
             <li><strong>للتواصل:</strong> 01211117114</li>
             <li><strong>للتصدير:</strong> 01203100919</li>
           </ul>
-        </div>
+        </div> */}
 
 
         {/* Footer Bottom */}
 
-      </footer>
-      <div className="flex py-3 px-3 justify-between flex-row-reverse text-center text-sm bg-primary text-white">
+      {/* </footer> */} 
+      <div className="flex mt-1 py-3 px-3 justify-between flex-row-reverse text-center text-sm bg-primary text-white">
         <p>&copy; 2024 Leetag All Rights Reserved | <a href="/terms" className="hover:underline">الشروط و الأحكام</a></p>
         <p>Powered by <a href="https://egydesigner.com" className="hover:underline">EGYdesigner</a></p>
       </div>

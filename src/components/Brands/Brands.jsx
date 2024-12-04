@@ -15,6 +15,8 @@ export default function Brands() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["getBrands",language],
     queryFn:()=> getBrands(language),
+     staleTime: 1000 * 60 * 30,
+    cacheTime: 1000 * 60 * 40,
   });
 
   useEffect(() => {
@@ -23,6 +25,10 @@ export default function Brands() {
       setFilteredBrands(availableBrands);
     }
   }, [data]);
+  
+if (filteredBrands.length === 0) {
+  return <div>لا توجد علامات تجارية متاحة حالياً.</div>;
+}
 
   const settings = {
     dots: false,

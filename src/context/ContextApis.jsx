@@ -35,6 +35,12 @@ async function getCategoriesDetails(id, language) {
   });
   return response.data;
 }
+async function getReviews(id, language) {
+  const response = await axios.get(`https://tarshulah.com/api/reviews/${id}`, {
+    headers: { lang: language },
+  });  
+  return response.data;
+}
 
 async function getBrands(language) {
   const response = await axios.get(`https://tarshulah.com/api/brands`, {
@@ -71,6 +77,7 @@ async function getCurrency(language) {
   const response = await axios.get(`https://tarshulah.com/api/domain/settings`, {
     headers: { lang: language },
   });
+  
   return response.data;
 }
 
@@ -111,11 +118,22 @@ export default function DataContextProvider({ children }) {
 
   let currencyData = settings?.data?.currency.currency_icon;
   let settings_domain = settings;
+  let colorWebSite = settings_domain?.data.theme_color;
+  let nameWebSite = settings_domain?.data.shop_name;
+  // let logoWebSite = settings_domain?.data.logo;
+  // console.log(nameWebSite);
+  
+// =================================Web Site Color=======================================
+useEffect(() => {
+  if (colorWebSite && nameWebSite) {
+    document.documentElement.style.setProperty('--primary-color', colorWebSite);
+        document.title = nameWebSite
+  }
+}, [colorWebSite,nameWebSite]);
 
   // Fetch user data
   function fetchUserData() {
     if (!userToken) return; 
-
     axios
       .get(`https://demo.leetag.com/api/customer/profile`, {
         headers: { Authorization: `${userToken}` },
@@ -176,6 +194,7 @@ export default function DataContextProvider({ children }) {
         getProductCategory: (idCategory, page, pageSize) =>
           getProductCategory(idCategory, page, pageSize, language),
         fetchProducts: (filters) => fetchProducts(filters, language), 
+        getReviews:(id,language)=> getReviews(id, language),
         setUserToken: handleSetUserToken,
         userToken,
         userData,
@@ -185,7 +204,8 @@ export default function DataContextProvider({ children }) {
         currencyData,
         settings_domain,
         setSelectedTownId,
-        selectedTownId
+        selectedTownId,
+        colorWebSite
       }}
     >
       {children}
