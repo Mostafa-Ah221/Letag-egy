@@ -19,14 +19,13 @@ export default function Navbar() {
   const [openSubMenus, setOpenSubMenus] = useState({});
   const [ca2, setCa2] = useState({});
   const [catChildren2, setCatChildren2] = useState([]);
-  const { subCategories, userData, settings_domain } = useContext(ContextData);
+  const { subCategories, userData, settings_domain,selectedTownId, setSelectedTownId } = useContext(ContextData);
   const [isStock, setIsStock] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [searchData, setSearchData] = useState(null);
   const [searchData2, setSearchData2] = useState(null);
   const [query, setQuery] = useState("");
   // const [query2, setQuery2] = useState("");
-  const { selectedTownId, setSelectedTownId } = useContext(ContextData);
 
 const [isFocused, setIsFocused] = useState(false);
 
@@ -319,11 +318,11 @@ const handleBlur = () => {
             </div>
           </div>
         </div>
-        <div className="flex justify-center items-center ml-28">
+        <div className="flex justify-center items-center ml-[9.7rem]">
        <div
         className={`${
         searchData || searchData2 ? "flex" : "hidden"
-        } lg:w-[90%] h-[50%] md:w-[25em] bg-white flex-col z-50 fixed top-16 rounded-md shadow-lg border border-gray-200 overflow-auto`}>
+        } lg:w-[32%] h-[50%] md:w-[25em] bg-white flex-col z-50 fixed top-14 rounded-md shadow-lg border border-gray-200 overflow-auto`}>
         
             <p
               className={`text-gray-600 text-sm px-4 py-2 ${
