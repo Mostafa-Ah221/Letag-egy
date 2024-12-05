@@ -78,21 +78,21 @@ export default function SliderHome() {
           }
 
           .custom-dots li.slick-active div {
-            background-color: orange; /* Active dot color */
-            transform: scale(1.5); /* Make the active dot bigger */
+            background-color: var(--primary-color); 
+            transform: scale(1.5); 
           }
 
           .custom-dots li:not(.slick-active) div {
-            background-color: white; /* Inactive dot color */
-            transform: scale(0.8); /* Default size for inactive dots */
+            background-color: white;
+            transform: scale(0.8); 
           }
 
           .custom-dots li.slick-active + li div {
-            transform: scale(1.1); /* Slightly bigger size for next dot */
+            transform: scale(1.1); 
           }
 
           .custom-dots li.slick-active ~ li div {
-            transform: scale(0.7); /* Even smaller for dots further away */
+            transform: scale(0.7); 
           }
         `}
       </style>

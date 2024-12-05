@@ -80,6 +80,12 @@ async function getCurrency(language) {
   
   return response.data;
 }
+async function getMenuPage() {
+  const response = await axios.get(`https://demo.leetag.com/api/menu`);
+  console.log(response.data);
+  
+  return response.data;
+}
 
 async function getProductCategory(idCategory, page, pageSize, language) {
   try {
@@ -127,7 +133,7 @@ export default function DataContextProvider({ children }) {
 useEffect(() => {
   if (colorWebSite && nameWebSite) {
     document.documentElement.style.setProperty('--primary-color', colorWebSite);
-        document.title = nameWebSite
+     document.title = nameWebSite
   }
 }, [colorWebSite,nameWebSite]);
 
@@ -195,6 +201,7 @@ useEffect(() => {
           getProductCategory(idCategory, page, pageSize, language),
         fetchProducts: (filters) => fetchProducts(filters, language), 
         getReviews:(id,language)=> getReviews(id, language),
+        getMenuPage,
         setUserToken: handleSetUserToken,
         userToken,
         userData,
@@ -205,7 +212,8 @@ useEffect(() => {
         settings_domain,
         setSelectedTownId,
         selectedTownId,
-        colorWebSite
+        colorWebSite,
+        nameWebSite
       }}
     >
       {children}
