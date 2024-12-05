@@ -1,10 +1,10 @@
-import { useContext,  useEffect,  useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ContextData } from '../../context/ContextApis';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { CiHeart } from "react-icons/ci";
 import { IoEyeSharp } from 'react-icons/io5';
-import {  FaStar } from 'react-icons/fa6';
+import { FaStar } from 'react-icons/fa6';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Slider from 'react-slick';
 import { useLanguage } from '../../context/LanguageContextPro';
@@ -32,27 +32,27 @@ export default function ProductDetails() {
     queryFn: () => getProdDetails(id),
     enabled: !!id
   });
-  const { data:reviews} = useQuery({
+  const { data: reviews } = useQuery({
     queryKey: ['getReviews', id, language],
     queryFn: () => getReviews(id),
     enabled: !!id
   });
-const product = data?.data?.products;
+  const product = data?.data?.products;
   const related = data?.data?.related;
-    const [selectedImage, setSelectedImage] = useState(null); 
+  const [selectedImage, setSelectedImage] = useState(null);
 
-    useEffect(() => {
+  useEffect(() => {
     if (product && product.photos.length > 0) {
       setSelectedImage(product.photos[0].url);
     }
   }, [product]);
- const averageRating = reviews?.data.reviews.length > 0
-? 
-      reviews?.data.reviews
-        .map((item) => Number(item.rating))
-        .reduce((acc, item) => acc + item, 0) / reviews?.data.reviews.length : 0;  
+  const averageRating = reviews?.data.reviews.length > 0
+    ?
+    reviews?.data.reviews
+      .map((item) => Number(item.rating))
+      .reduce((acc, item) => acc + item, 0) / reviews?.data.reviews.length : 0;
 
-// console.log(averageRating.toFixed(1));
+  // console.log(averageRating.toFixed(1));
 
 
   const handleAddToCart = (product) => {
@@ -68,7 +68,7 @@ const product = data?.data?.products;
   const openModal = (modalName) => setActiveModal(modalName);
   const closeModal = () => setActiveModal(null);
 
-   const handleAddReview = async (reviewData) => {
+  const handleAddReview = async (reviewData) => {
     try {
       const response = await axios.post(`https://tarshulah.com/api/review/store/${id}`, reviewData);
       if (response.data.message.includes("successfully added")) {
@@ -89,7 +89,7 @@ const product = data?.data?.products;
 
   if (isError) return <div>Error loading product details</div>;
 
-  
+
 
   const CustomArrow = ({ direction, onClick }) => (
     <button onClick={onClick} className={`absolute top-1/2 -translate-y-1/2 z-10
@@ -125,21 +125,21 @@ const product = data?.data?.products;
         <>
           <div className="flex flex-col md:flex-row-reverse md:items-start gap-6 mb-44">
             <div className='w-full md:w-1/2 h-80'>
-           <img 
-                className="w-full h-full object-cover rounded-lg hover:scale-110 transition-transform duration-300" 
-              src={selectedImage} 
-              alt={product.title} 
-            />
-              <div className={`flex rounded-md mt-2 border-2 border-primary w-fit ${language === "ar"? "mr-auto":"ml-auto"}`}>
-              {product.photos.map((photo, index) => (
-                  <img key={index} 
-                  className="w-[4.5rem] h-[4.5rem] object-cover cursor-pointer"
-                  src={photo.url}
-                  alt={product.title}
-                  onClick={() => setSelectedImage(photo.url)}
-                />
-                
-              ))}
+              <img
+                className="w-full h-full object-cover rounded-lg hover:scale-110 transition-transform duration-300"
+                src={selectedImage}
+                alt={product.title}
+              />
+              <div className={`flex rounded-md mt-2 border-2 border-primary w-fit ${language === "ar" ? "mr-auto" : "ml-auto"}`}>
+                {product.photos.map((photo, index) => (
+                  <img key={index}
+                    className="w-[4.5rem] h-[4.5rem] object-cover cursor-pointer"
+                    src={photo.url}
+                    alt={product.title}
+                    onClick={() => setSelectedImage(photo.url)}
+                  />
+
+                ))}
               </div>
             </div>
 
@@ -150,7 +150,7 @@ const product = data?.data?.products;
                   {product.price} {currencyData}
                 </span>
                 <span className="text-gray-400">
-                 {language === 'ar' ? 'الكمية' : 'Quantity'}: {product.stock_qty}
+                  {language === 'ar' ? 'الكمية' : 'Quantity'}: {product.stock_qty}
                 </span>
               </div>
               <div className="flex items-center justify-between mb-5 gap-2">
@@ -160,7 +160,7 @@ const product = data?.data?.products;
                     const isInWishList = wishList.some(
                       (wishItem) => wishItem && wishItem.id === product.id
                     );
-                    handleAddToWish(product, isInWishList, () => {});
+                    handleAddToWish(product, isInWishList, () => { });
                   }}
                   className="z-20"
                 >
@@ -176,7 +176,7 @@ const product = data?.data?.products;
                   onClick={() => handleAddToCart(product)}
                   className="px-4 bg-primary w-36 text-white font-bold py-2 rounded "
                 >
-                  
+
                   {language === 'ar' ? 'أضف إلى العربة' : 'Add To Cart'}
                 </button>
                 <input
@@ -203,105 +203,105 @@ const product = data?.data?.products;
                   {language === 'ar' ? 'التقييم' : 'Review'}:
                 </h3>
                 <div className='flex items-center gap-2'>
-                    <ul className="rate flex gap-1">
-                      {[1, 2, 3, 4, 5].map((star) => {
-                        const decimalPart = averageRating - Math.floor(averageRating); 
-                        if (star <= Math.floor(averageRating)) {
-                          // نجوم ممتلئة
-                          return (
-                            <li key={star} className="text-orange-500 ">
-                              <FaStar />
-                            </li>
-                          );
-                        } else if (star === Math.ceil(averageRating) && decimalPart > 0) {
-                          return (
-                            <li
-                              key={star}
-                              className="relative"
-                              style={{ width: "0.9rem", height: "0.9rem" }}
-                            >
-                              <FaStar className="text-slate-200  absolute inset-0" />
-                              <FaStar
-                                className="text-orange-500 absolute inset-0 overflow-hidden"
-                                style={{ clipPath: `${language === "ar" ? `inset(0 0 0 ${100 - decimalPart * 100}%)`:`inset(0 ${100 - decimalPart * 100}% 0 0)`} ` }} 
-                              />
-                            </li>
-                          );
-                        } else {
-                          return (
-                            <li key={star} className="text-slate-200">
-                              <FaStar />
-                            </li>
-                          );
-                        }
-                      })}
-                    </ul>
-                    <p className='text-[0.9rem]'>({averageRating.toFixed(1)})</p>
+                  <ul className="rate flex gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => {
+                      const decimalPart = averageRating - Math.floor(averageRating);
+                      if (star <= Math.floor(averageRating)) {
+                        // نجوم ممتلئة
+                        return (
+                          <li key={star} className="text-orange-500 ">
+                            <FaStar />
+                          </li>
+                        );
+                      } else if (star === Math.ceil(averageRating) && decimalPart > 0) {
+                        return (
+                          <li
+                            key={star}
+                            className="relative"
+                            style={{ width: "0.9rem", height: "0.9rem" }}
+                          >
+                            <FaStar className="text-slate-200  absolute inset-0" />
+                            <FaStar
+                              className="text-orange-500 absolute inset-0 overflow-hidden"
+                              style={{ clipPath: `${language === "ar" ? `inset(0 0 0 ${100 - decimalPart * 100}%)` : `inset(0 ${100 - decimalPart * 100}% 0 0)`} ` }}
+                            />
+                          </li>
+                        );
+                      } else {
+                        return (
+                          <li key={star} className="text-slate-200">
+                            <FaStar />
+                          </li>
+                        );
+                      }
+                    })}
+                  </ul>
+                  <p className='text-[0.9rem]'>({averageRating.toFixed(1)})</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Review Section */}
-       
-       </>
+
+        </>
       ) : (
         <p>المنتج غير موجود.</p>
       )}
-     <div className='flex justify-evenly gap-7 '>
-            <div className='w-64 flex flex-col'>
-                <button
-          onClick={() => openModal('reviewForm')}
-          className="px-4 py-2 rounded hover:bg-primary hover:text-white duration-200"
-        >
-          {language === 'ar' ? 'إضافة تقييم' : 'Add Review'}
+      <div className='flex justify-evenly gap-7 '>
+        <div className='w-64 flex flex-col'>
+          <button
+            onClick={() => openModal('reviewForm')}
+            className="px-4 py-2 rounded hover:bg-primary hover:text-white duration-200"
+          >
+            {language === 'ar' ? 'إضافة تقييم' : 'Add Review'}
           </button>
-           <span className="inline-block w-full h-[1px]  bg-primary"></span>
-            </div>
-          <div className='w-64 flex flex-col'>
-            <button
-              onClick={() => openModal('reviewList')}
-              className="px-4 py-2 rounded hover:bg-primary hover:text-white duration-200"
-            >
-              {language === 'ar' ? 'عرض التقييمات' : 'View Reviews'}
-            </button>         
-             <span className="inline-block w-full h-[1px] bg-primary"></span>
-          </div>
-          </div>
+          <span className="inline-block w-full h-[1px]  bg-primary"></span>
+        </div>
+        <div className='w-64 flex flex-col'>
+          <button
+            onClick={() => openModal('reviewList')}
+            className="px-4 py-2 rounded hover:bg-primary hover:text-white duration-200"
+          >
+            {language === 'ar' ? 'عرض التقييمات' : 'View Reviews'}
+          </button>
+          <span className="inline-block w-full h-[1px] bg-primary"></span>
+        </div>
+      </div>
 
-        {activeModal === 'reviewForm' && (
-           <div className="fixed inset-0  bg-black bg-opacity-50 z-50 flex items-center justify-center" 
-            onClick={closeModal}>
-          <div  className="bg-white rounded-lg p-6 w-full mx-5 max-w-md relative"
+      {activeModal === 'reviewForm' && (
+        <div className="fixed inset-0  bg-black bg-opacity-50 z-50 flex items-center justify-center"
+          onClick={closeModal}>
+          <div className="bg-white rounded-lg p-6 w-full mx-5 max-w-md relative"
             onClick={(e) => e.stopPropagation()} >
-          <ReviewForm
-            onSubmit={handleAddReview}
-            userData={userData}
-            language={language}
-          />
+            <ReviewForm
+              onSubmit={handleAddReview}
+              userData={userData}
+              language={language}
+            />
             <button
               onClick={closeModal}
               className={`absolute top-2 ${language === 'ar' ? 'left-2' : 'right-2'}  text-xl font-bold text-gray-600 hover:text-gray-800`}
             >
-            ✕
-          </button>
+              ✕
+            </button>
+          </div>
         </div>
-           </div>
       )}
 
       {activeModal === 'reviewList' && (
-       <div className="fixed inset-0  bg-black bg-opacity-50 z-50 flex items-center justify-center" 
-            onClick={closeModal}>
-          <div  className="bg-white rounded-lg p-6 w-full mx-5 max-w-md relative"
+        <div className="fixed inset-0  bg-black bg-opacity-50 z-50 flex items-center justify-center"
+          onClick={closeModal}>
+          <div className="bg-white rounded-lg p-6 w-full mx-5 max-w-md relative"
             onClick={(e) => e.stopPropagation()} >
-          <ReviewList reviews={reviews?.data.reviews} language={language} />
-             <button
+            <ReviewList reviews={reviews?.data.reviews} language={language} />
+            <button
               onClick={closeModal}
               className={`absolute top-2 ${language === 'ar' ? 'left-2' : 'right-2'}  text-xl font-bold text-gray-600 hover:text-gray-800`}
             >
-            ✕
-          </button>
-        </div>
+              ✕
+            </button>
+          </div>
         </div>
       )}
       {/* Related Products Section */}
@@ -338,7 +338,7 @@ const product = data?.data?.products;
                             const isInWishList = wishList.some(
                               (wishItem) => wishItem && wishItem.id === relatedProduct.id
                             );
-                            handleAddToWish(relatedProduct, isInWishList, () => {});
+                            handleAddToWish(relatedProduct, isInWishList, () => { });
                           }}
                           className="z-20"
                         >
@@ -376,19 +376,19 @@ const product = data?.data?.products;
           ))}
         </Slider>
       </div>
-        {showModal && (
+      {showModal && (
         <Modal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)} 
-        product={selectedProduct} 
-        handleAddToCart={handleAddToCart} 
-        language={language}
-        currency={currencyData}
+          isOpen={showModal}
+          onClose={() => setShowModal(false)}
+          product={selectedProduct}
+          handleAddToCart={handleAddToCart}
+          language={language}
+          currency={currencyData}
           handleAddToWish={handleAddToWish}
-         wishList={wishList}
-         setQuantity={setQuantity}
-         quantity={quantity}
-      />
+          wishList={wishList}
+          setQuantity={setQuantity}
+          quantity={quantity}
+        />
       )}
     </div>
   );

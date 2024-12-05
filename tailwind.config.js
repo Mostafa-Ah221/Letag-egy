@@ -8,12 +8,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: 'var(--primary-color)' ,
+        primary: 'var(--primary-color)',
         secondary: '#161616',
         Neutral: '#f9f9f9',
         white: "#ffffff",
         primary700: "#c2410c",
         primary400: "#f0851f",
+        black: "#000000",
       },
       keyframes: {
         "slide-in-right": {
