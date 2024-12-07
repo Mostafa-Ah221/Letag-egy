@@ -81,8 +81,8 @@ function SearchByItem() {
             <h1 className={`mx-2 my-2`}>{language === "ar" ? "الفئات" : "Categories"}</h1>
             <div className={`grid grid-cols-4 gap-4 mx-2 my-2`}>
                 {searchData ? searchData?.map((s) => (
-                    <Link to={`/categoryDetails/${s.id}`}>
-                        <div className='flex flex-col' key={s.id}>
+                    <Link to={`/categoryDetails/${s.id}`} key={s.id}>
+                        <div className='flex flex-col'>
                             <img src={s.photo} alt={s.title} className="w-18 h-18 block"></img>
                             <p>{s.name}</p>
                         </div>
@@ -93,8 +93,8 @@ function SearchByItem() {
             <h1 className='mx-2 my-2'>{language === "ar" ? "المنتجات" : "Products"}</h1>
             <div className='grid grid-cols-4 gap-4 mx-2 my-2'>
                 {searchData2 ? searchData2?.map((s) => (
-                    <Link to={`/productDetails/${s.id}`}>
-                        <div className='flex flex-col' key={s.id}>
+                    <Link to={`/productDetails/${s.id}`} key={s.id}>
+                        <div className='flex flex-col'>
                             <img src={s.photo} alt={s.title} className="w-18 h-18"></img>
                             <p>{s.title}</p>
                         </div>
