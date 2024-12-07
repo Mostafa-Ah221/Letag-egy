@@ -25,7 +25,7 @@ import CartPage from "./components/CartPage/CartPage";
 import { Toaster } from 'react-hot-toast';
 import CategoryFilter from "./components/CategoryFilter/CategoryFilter";
 import SearchByItem from "./components/SearchByItem/SearchByItem";
-import SearchByAll from "./components/SearchByAll/SearchByAll";
+import Orders from "./components/Orders/Orders";
 
 
 
@@ -66,11 +66,11 @@ function App() {
         { path: "register", element: <SignUp /> },
         { path: "pageBrand", element: <PageBrands /> },
         { path: "wishlist", element: <WishList /> },
-        { path: "SearchByItem", element: <SearchByItem /> },
-        { path: "SearchByAll", element: <SearchByAll /> },
+        { path: "SearchByItem/:id", element: <SearchByItem /> },
         { path: "categoryDetails/:id", element: <CategoryDetails /> },
         { path: "productDetails/:id", element: <ProductDetails /> },
         { path: "categoryFilter/:id", element: <CategoryFilter /> },
+        { path: "Orders", element: <Orders /> },
         { path: "cartpage", element: <CartPage /> },
         {
           path: "cartlayout",
@@ -91,8 +91,8 @@ function App() {
     <LanguageContextPro>
       <CartContextProvider>
         <DataContextProveder>
-            <RouterProvider router={router} />
-          
+          <RouterProvider router={router} />
+
           <Toaster />
         </DataContextProveder>
       </CartContextProvider>

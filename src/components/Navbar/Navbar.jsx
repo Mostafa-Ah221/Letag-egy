@@ -90,7 +90,7 @@ export default function Navbar() {
     console.log(value);
     console.log(selectedTownId);
     if (value) {
-      if (selectedTownId != "") {
+      if (selectedTownId != null) {
         const formData = new FormData();
         formData.append("search", value);
         formData.append("city_id", selectedTownId);
@@ -111,19 +111,19 @@ export default function Navbar() {
       } else {
         const formData = new FormData();
         formData.append("search", value);
-        formData.append("city_id", "");
         try {
           const response = await axios.post(`https://tarshulah.com/api/products`, formData, {
             headers: { lang: language },
           });
           const resdata = await response.data;
-          const resproducts = await resdata.products;
+          const resproducts = await resdata.data.products;
           filteredSuggestionsProducts = resproducts;
         } catch (error) {
           console.error("Error fetching products:", error);
         }
 
         setSearchData2(filteredSuggestionsProducts);
+        console.log(searchData2);
       }
     }
     else {
@@ -291,8 +291,8 @@ export default function Navbar() {
 
           <div className="flex md:order-1 mr-3">
             <div className="relative hidden md:block">
-              <Link to={`/SearchByItem?id=${query}`} className="">
-                <button className={`absolute inset-y-0 start-0 flex items-center ${language === "ar" ? "pr-2" : "pl-2"} z-100`}>
+              <Link to={`/SearchByItem/${query}`} className="">
+                <button className={`absolute inset-y-0 start-0 flex items-center ${language === "ar" ? "pr-2" : "pl-2"} z-100`} onClick={() => { setSearchData(null); setQuery(""); setSearchData2(null); }}>
                   <button className="p-[7px] bg-primary hover:cursor-pointer">
                     <svg className="w-4 h-4 text-gray-100 hover:cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
@@ -315,7 +315,7 @@ export default function Navbar() {
         <div className={`${searchData != null || searchData2 != null ? "block" : "hidden"} lg:w-[30em] md:w-[25em] bg-white flex flex-col relative z-50 mx-auto`}>
           <p className={`${searchData2 != null ? "block" : "hidden"} ${language === "ar" ? "ml-auto" : "mr-auto"} mb-4 mt-2`}>المنتجات</p>
           {searchData2?.map((fs) => (
-            <Link to={`/productDetails/${fs.id}`} className={`flex ${language === "ar" ? "flex-row-reverse ml-auto" : "flex-row mr-auto"} bg-white group`} onClick={() => { setSearchData(null); setQuery(""); }}>
+            <Link to={`/productDetails/${fs.id}`} className={`flex ${language === "ar" ? "flex-row-reverse ml-auto" : "flex-row mr-auto"} bg-white group`} onClick={() => { setSearchData(null); setQuery(""); setSearchData2(null); }}>
               <p className="group-hover:text-primary group-hover:cursor-pointer">{fs.title}</p>
               <img src={fs.photo} className="w-8 h-8"></img>
             </Link>
@@ -323,12 +323,12 @@ export default function Navbar() {
           <hr className={`${searchData != null ? "block" : "hidden"}`}></hr>
           <p className={`${searchData != null ? "block" : "hidden"} ${language === "ar" ? "ml-auto" : "mr-auto"} mb-4 mt-2`}>الفئات</p>
           {searchData?.map((fs) => (
-            <Link to={`/categoryDetails/${fs.id}`} className={`flex ${language === "ar" ? "flex-row-reverse ml-auto" : "flex-row mr-auto"} bg-white group`} onClick={() => { setSearchData(null); setQuery(""); }}>
+            <Link to={`/categoryDetails/${fs.id}`} className={`flex ${language === "ar" ? "flex-row-reverse ml-auto" : "flex-row mr-auto"} bg-white group`} onClick={() => { setSearchData(null); setQuery(""); setSearchData2(null); }}>
               <p className="group-hover:text-primary group-hover:cursor-pointer">{fs.name}</p>
               <img src={fs.photo} className="w-8 h-8"></img>
             </Link>
           ))}
-          <Link to={"/SearchByAll"} className="bg-white rounded-xl w-48 border-black border-2 hover:border-primary mr-auto"><button><p className="px-4 py-1">عرض جميع المنتجات</p></button></Link>
+          <Link to={`/SearchByItem/${query}`} className="bg-white rounded-xl w-48 border-black border-2 hover:border-primary mr-auto"><button onClick={() => { setSearchData(null); setQuery(""); setSearchData2(null); }}><p className="px-4 py-1">عرض جميع المنتجات</p></button></Link>
         </div>
       </nav>
     </>
