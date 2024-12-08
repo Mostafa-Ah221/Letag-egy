@@ -4,14 +4,11 @@ import { ContextData } from "../../context/ContextApis";
 import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "../../context/LanguageContextPro";
 import axios from "axios";
-<<<<<<< HEAD
 import { IoEyeSharp } from 'react-icons/io5';
 import { IoIosHeart } from 'react-icons/io';
 import { CiHeart } from 'react-icons/ci';
 import { useCart } from '../../context/CartContext';
-=======
 import { useLocation } from 'react-router-dom';
->>>>>>> 377ff4a012d9f70d7050e19e6d2baecd691f4418
 
 function SearchByItem() {
     const { id } = useParams();
@@ -31,7 +28,6 @@ function SearchByItem() {
         queryKey: ["subCategory", language],
         queryFn: subCategories,
     });
-<<<<<<< HEAD
      const handleProductClick = (item) => {
     setSelectedProduct(item);
     setShowModal(true);
@@ -40,7 +36,6 @@ function SearchByItem() {
 //     addToCart(product, quantity); 
 //   };
 
-=======
     // useEffect(() => {
     //     console.log(location.pathname);
     //     const fetchData = async () => {
@@ -99,7 +94,6 @@ function SearchByItem() {
     //     }
     //     fetchData();
     // }, []);
->>>>>>> 377ff4a012d9f70d7050e19e6d2baecd691f4418
     useEffect(() => {
         console.log(location.pathname);
         const fetchData = async () => {
