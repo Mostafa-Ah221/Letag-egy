@@ -19,7 +19,7 @@ export default function Navbar() {
   const [openSubMenus, setOpenSubMenus] = useState({});
   const [ca2, setCa2] = useState({});
   const [catChildren2, setCatChildren2] = useState([]);
-  const { subCategories, userData, settings_domain,selectedTownId, setSelectedTownId } = useContext(ContextData);
+  const { subCategories, userData, settings_domain, selectedTownId, setSelectedTownId } = useContext(ContextData);
   const [isStock, setIsStock] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [searchData, setSearchData] = useState(null);
@@ -27,11 +27,12 @@ export default function Navbar() {
   const [query, setQuery] = useState("");
   // const [query2, setQuery2] = useState("");
 
+  const [isFocused, setIsFocused] = useState(false);
 
-const handleFocus = () => setIsFocused(true);
-const handleBlur = () => {
-  if (!query) setIsFocused(false);
-}
+  const handleFocus = () => setIsFocused(true);
+  const handleBlur = () => {
+    if (!query) setIsFocused(false);
+  }
   let filteredSuggestions = [];
   let filteredSuggestionsProducts = [];
 
@@ -93,7 +94,7 @@ const handleBlur = () => {
     console.log(value);
     console.log(selectedTownId);
     if (value) {
-      if (selectedTownId != "") {
+      if (selectedTownId != null) {
         const formData = new FormData();
         formData.append("search", value);
         formData.append("city_id", selectedTownId);
@@ -114,19 +115,19 @@ const handleBlur = () => {
       } else {
         const formData = new FormData();
         formData.append("search", value);
-        formData.append("city_id", "");
         try {
           const response = await axios.post(`https://tarshulah.com/api/products`, formData, {
             headers: { lang: language },
           });
           const resdata = await response.data;
-          const resproducts = await resdata.products;
+          const resproducts = await resdata.data.products;
           filteredSuggestionsProducts = resproducts;
         } catch (error) {
           console.error("Error fetching products:", error);
         }
 
         setSearchData2(filteredSuggestionsProducts);
+        console.log(searchData2);
       }
     }
     else {
@@ -294,8 +295,8 @@ const handleBlur = () => {
 
           <div className="flex md:order-1 mr-3">
             <div className="relative hidden md:block">
-              <Link to={`/SearchByItem?id=${query}`} className="">
-                <button className={`absolute inset-y-0 start-0 flex items-center ${language === "ar" ? "pr-2" : "pl-2"} z-100`}>
+              <Link to={`/SearchByItem/${query}`} className="">
+                <button className={`absolute inset-y-0 start-0 flex items-center ${language === "ar" ? "pr-2" : "pl-2"} z-100`} onClick={() => { setSearchData(null); setQuery(""); setSearchData2(null); }}>
                   <button className="p-[7px] bg-primary hover:cursor-pointer">
                     <svg className="w-4 h-4 text-gray-100 hover:cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
@@ -304,7 +305,7 @@ const handleBlur = () => {
                   <span className="sr-only">Search icon</span>
                 </button>
               </Link>
-                <input
+              <input
                 type="search"
                 id="search-navbar"
                 className="block lg:w-[30em] md:w-[25em] p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-right outline-none dark:border-gray-600 dark:placeholder-gray-400 focus:shadow-[0_0_8px_2px_rgba(249,115,22,0.3)] z-0"

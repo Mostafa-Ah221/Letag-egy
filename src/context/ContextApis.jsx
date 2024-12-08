@@ -38,7 +38,7 @@ async function getCategoriesDetails(id, language) {
 async function getReviews(id, language) {
   const response = await axios.get(`https://tarshulah.com/api/reviews/${id}`, {
     headers: { lang: language },
-  });  
+  });
   return response.data;
 }
 
@@ -77,13 +77,13 @@ async function getCurrency(language) {
   const response = await axios.get(`https://tarshulah.com/api/domain/settings`, {
     headers: { lang: language },
   });
-  
+
   return response.data;
 }
 async function getMenuPage() {
   const response = await axios.get(`https://demo.leetag.com/api/menu`);
   console.log(response.data);
-  
+
   return response.data;
 }
 
@@ -112,10 +112,10 @@ export default function DataContextProvider({ children }) {
     return localStorage.getItem("userToken") || null;
   });
 
-  const [userData, setUserData] = useState(null); 
+  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
-  const [selectedTownId, setSelectedTownId] = useState(''); // TODO for Stock
+  const [selectedTownId, setSelectedTownId] = useState(null); // TODO for Stock
 
   const { data: settings } = useQuery({
     queryKey: ["getcurrency", language],
@@ -128,18 +128,18 @@ export default function DataContextProvider({ children }) {
   let nameWebSite = settings_domain?.data.shop_name;
   // let logoWebSite = settings_domain?.data.logo;
   // console.log(nameWebSite);
-  
-// =================================Web Site Color=======================================
-useEffect(() => {
-  if (colorWebSite && nameWebSite) {
-    document.documentElement.style.setProperty('--primary-color', colorWebSite);
-     document.title = nameWebSite
-  }
-}, [colorWebSite,nameWebSite]);
+
+  // =================================Web Site Color=======================================
+  useEffect(() => {
+    if (colorWebSite && nameWebSite) {
+      document.documentElement.style.setProperty('--primary-color', colorWebSite);
+      document.title = nameWebSite
+    }
+  }, [colorWebSite, nameWebSite]);
 
   // Fetch user data
   function fetchUserData() {
-    if (!userToken) return; 
+    if (!userToken) return;
     axios
       .get(`https://demo.leetag.com/api/customer/profile`, {
         headers: { Authorization: `${userToken}` },
@@ -150,7 +150,7 @@ useEffect(() => {
           name: response.data.data.customer.first_name,
           email: response.data.data.customer.email,
         };
-        setUserData(user); 
+        setUserData(user);
       })
       .catch((error) => {
         console.error("Failed to fetch user data:", error);
@@ -199,8 +199,8 @@ useEffect(() => {
         getCategoriesDetails: (id) => getCategoriesDetails(id, language),
         getProductCategory: (idCategory, page, pageSize) =>
           getProductCategory(idCategory, page, pageSize, language),
-        fetchProducts: (filters) => fetchProducts(filters, language), 
-        getReviews:(id,language)=> getReviews(id, language),
+        fetchProducts: (filters) => fetchProducts(filters, language),
+        getReviews: (id, language) => getReviews(id, language),
         getMenuPage,
         setUserToken: handleSetUserToken,
         userToken,
