@@ -7,8 +7,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowDown } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faEarthAmericas } from '@fortawesome/free-solid-svg-icons';
+
 import axios from "axios";
 
 export default function Navbar() {
@@ -27,12 +26,7 @@ export default function Navbar() {
   const [query, setQuery] = useState("");
   // const [query2, setQuery2] = useState("");
 
-  const [isFocused, setIsFocused] = useState(false);
-
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => {
-    if (!query) setIsFocused(false);
-  }
+ 
   let filteredSuggestions = [];
   let filteredSuggestionsProducts = [];
 
@@ -310,8 +304,6 @@ export default function Navbar() {
                 id="search-navbar"
                 className="block lg:w-[30em] md:w-[25em] p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-right outline-none dark:border-gray-600 dark:placeholder-gray-400 focus:shadow-[0_0_8px_2px_rgba(249,115,22,0.3)] z-0"
                 placeholder={language === "ar" ? "ابحث عن منتج" : "Search for a product"}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
                 onChange={handlChange}
                 value={query}
               />
@@ -338,6 +330,7 @@ export default function Navbar() {
                 onClick={() => {
                   setSearchData(null);
                   setQuery("");
+                  setSearchData2(null);
                 }}>
                 <img
                   src={product.photo}
@@ -367,6 +360,7 @@ export default function Navbar() {
                 onClick={() => {
                   setSearchData(null);
                   setQuery("");
+                  setSearchData2(null);
                 }}>
                 <img
                   src={category.photo}
@@ -382,11 +376,7 @@ export default function Navbar() {
           </>
         )}
 
-        <Link
-          to={"/SearchByAll"}
-          className="bg-primary text-white text-center py-2 px-4 mx-4 mb-2 rounded-md  transition-colors">
-          {language === "ar" ? "عرض جميع المنتجات" : "View All Products"}
-        </Link>
+                  <Link to={`/SearchByItem/${query}`} className={`bg-white rounded-xl w-48 border-black border-2 hover:border-primary ${language === "ar" ? "mr-auto" : "ml-auto"}`}><button onClick={() => { setSearchData(null); setQuery(""); setSearchData2(null); }}><p className="px-4 py-1">{language === "ar" ? "عرض جميع المنتجات" : "View All Products"}</p></button></Link>
       </div>
         </div>
 

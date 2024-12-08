@@ -125,21 +125,21 @@ export default function ProductDetails() {
         <>
           <div className="flex flex-col md:flex-row-reverse md:items-start gap-6 mb-44">
             <div className='w-full md:w-1/2 h-80'>
-              <img
-                className="w-full h-full object-cover rounded-lg hover:scale-110 transition-transform duration-300"
-                src={selectedImage}
-                alt={product.title}
-              />
-              <div className={`flex rounded-md mt-2 border-2 border-primary w-fit ${language === "ar" ? "mr-auto" : "ml-auto"}`}>
-                {product.photos.map((photo, index) => (
-                  <img key={index}
-                    className="w-[4.5rem] h-[4.5rem] object-cover cursor-pointer"
-                    src={photo.url}
-                    alt={product.title}
-                    onClick={() => setSelectedImage(photo.url)}
-                  />
-
-                ))}
+           <img 
+                className="w-full h-full object-cover rounded-lg hover:scale-110 transition-transform duration-300" 
+              src={selectedImage} 
+              alt={product.title} 
+            />
+              <div className={`flex rounded-md mt-2 border-2 border-primary w-fit ${language === "ar"? "mr-auto":"ml-auto"}`}>
+              {product.photos.map((photo, index) => (
+                  <img key={index} 
+                  className="w-[4.5rem] h-[4.5rem] object-cover cursor-pointer"
+                  src={photo.url}
+                  alt={product.title}
+                  onClick={() => setSelectedImage(photo.url)}
+                />
+                
+              ))}
               </div>
             </div>
 
@@ -150,7 +150,7 @@ export default function ProductDetails() {
                   {product.price} {currencyData}
                 </span>
                 <span className="text-gray-400">
-                  {language === 'ar' ? 'الكمية' : 'Quantity'}: {product.stock_qty}
+                 {language === 'ar' ? 'الكمية' : 'Quantity'}: {product.stock_qty}
                 </span>
               </div>
               <div className="flex items-center justify-between mb-5 gap-2">
@@ -160,8 +160,9 @@ export default function ProductDetails() {
                     const isInWishList = wishList.some(
                       (wishItem) => wishItem && wishItem.id === product.id
                     );
-                    handleAddToWish(product, isInWishList, () => { });
+                    handleAddToWish(product, isInWishList, () => {});
                   }}
+                  className="z-20"
                 >
                   {wishList.some(
                     (wishItem) => wishItem && wishItem.id === product.id
@@ -175,7 +176,7 @@ export default function ProductDetails() {
                   onClick={() => handleAddToCart(product)}
                   className="px-4 bg-primary w-36 text-white font-bold py-2 rounded "
                 >
-
+                  
                   {language === 'ar' ? 'أضف إلى العربة' : 'Add To Cart'}
                 </button>
                 <input
@@ -202,48 +203,48 @@ export default function ProductDetails() {
                   {language === 'ar' ? 'التقييم' : 'Review'}:
                 </h3>
                 <div className='flex items-center gap-2'>
-                  <ul className="rate flex gap-1">
-                    {[1, 2, 3, 4, 5].map((star) => {
-                      const decimalPart = averageRating - Math.floor(averageRating);
-                      if (star <= Math.floor(averageRating)) {
-                        // نجوم ممتلئة
-                        return (
-                          <li key={star} className="text-orange-500 ">
-                            <FaStar />
-                          </li>
-                        );
-                      } else if (star === Math.ceil(averageRating) && decimalPart > 0) {
-                        return (
-                          <li
-                            key={star}
-                            className="relative"
-                            style={{ width: "0.9rem", height: "0.9rem" }}
-                          >
-                            <FaStar className="text-slate-200  absolute inset-0" />
-                            <FaStar
-                              className="text-orange-500 absolute inset-0 overflow-hidden"
-                              style={{ clipPath: `${language === "ar" ? `inset(0 0 0 ${100 - decimalPart * 100}%)` : `inset(0 ${100 - decimalPart * 100}% 0 0)`} ` }}
-                            />
-                          </li>
-                        );
-                      } else {
-                        return (
-                          <li key={star} className="text-slate-200">
-                            <FaStar />
-                          </li>
-                        );
-                      }
-                    })}
-                  </ul>
-                  <p className='text-[0.9rem]'>({averageRating.toFixed(1)})</p>
+                    <ul className="rate flex gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => {
+                        const decimalPart = averageRating - Math.floor(averageRating); 
+                        if (star <= Math.floor(averageRating)) {
+                          // نجوم ممتلئة
+                          return (
+                            <li key={star} className="text-orange-500 ">
+                              <FaStar />
+                            </li>
+                          );
+                        } else if (star === Math.ceil(averageRating) && decimalPart > 0) {
+                          return (
+                            <li
+                              key={star}
+                              className="relative"
+                              style={{ width: "0.9rem", height: "0.9rem" }}
+                            >
+                              <FaStar className="text-slate-200  absolute inset-0" />
+                              <FaStar
+                                className="text-orange-500 absolute inset-0 overflow-hidden"
+                                style={{ clipPath: `${language === "ar" ? `inset(0 0 0 ${100 - decimalPart * 100}%)`:`inset(0 ${100 - decimalPart * 100}% 0 0)`} ` }} 
+                              />
+                            </li>
+                          );
+                        } else {
+                          return (
+                            <li key={star} className="text-slate-200">
+                              <FaStar />
+                            </li>
+                          );
+                        }
+                      })}
+                    </ul>
+                    <p className='text-[0.9rem]'>({averageRating.toFixed(1)})</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Review Section */}
-
-        </>
+       
+       </>
       ) : (
         <p>المنتج غير موجود.</p>
       )}

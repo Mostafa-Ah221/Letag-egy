@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import toast from 'react-hot-toast';
 
 const CartContext = createContext();
@@ -117,7 +117,9 @@ const handleAddToWish = (product, isInWishList, setIsInWishList) => {
   }
 };
 
-
+// useEffect(() => {
+//   console.log("Total Price:", getTotalPrice());
+// }, [cart]);
   return (
     <CartContext.Provider
       value={{
