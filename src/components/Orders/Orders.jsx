@@ -26,6 +26,7 @@ function Orders() {
                     headers: {
                         "Authorization": token,
                         "lang": language,
+                        "Accept": "application/json",
                     }
                 });
                 const resData2 = await res2.data;
