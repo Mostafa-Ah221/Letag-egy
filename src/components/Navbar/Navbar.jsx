@@ -8,6 +8,9 @@ import { FaArrowDown } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 
+import { useLocation } from 'react-router-dom';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faEarthAmericas } from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
 
 export default function Navbar() {
@@ -24,6 +27,7 @@ export default function Navbar() {
   const [searchData, setSearchData] = useState(null);
   const [searchData2, setSearchData2] = useState(null);
   const [query, setQuery] = useState("");
+  let location = useLocation();
   // const [query2, setQuery2] = useState("");
 
  
@@ -290,7 +294,9 @@ export default function Navbar() {
           <div className="flex md:order-1 mr-3">
             <div className="relative hidden md:block">
               <Link to={`/SearchByItem/${query}`} className="">
-                <button className={`absolute inset-y-0 start-0 flex items-center ${language === "ar" ? "pr-2" : "pl-2"} z-100`} onClick={() => { setSearchData(null); setQuery(""); setSearchData2(null); }}>
+                <button className={`absolute inset-y-0 start-0 flex items-center ${language === "ar" ? "pr-2" : "pl-2"} z-100`} onClick={() => {
+                  setSearchData(null); setQuery(""); setSearchData2(null);
+                }}>
                   <button className="p-[7px] bg-primary hover:cursor-pointer">
                     <svg className="w-4 h-4 text-gray-100 hover:cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
