@@ -27,7 +27,6 @@ export default function Navbar() {
   const [query, setQuery] = useState("");
   // const [query2, setQuery2] = useState("");
 
-const [isFocused, setIsFocused] = useState(false);
 
 const handleFocus = () => setIsFocused(true);
 const handleBlur = () => {
@@ -325,9 +324,7 @@ const handleBlur = () => {
         } lg:w-[32%] h-[50%] md:w-[25em] bg-white flex-col z-50 fixed top-14 rounded-md shadow-lg border border-gray-200 overflow-auto`}>
         
             <p
-              className={`text-gray-600 text-sm px-4 py-2 ${
-                language === "ar" ? "text-right" : "text-left"
-              }`}>
+              className={`text-gray-600 text-sm px-4 py-2 `}>
               {language === "ar" ? "المنتجات" : "Products"}
             </p>
         {searchData2 && (
@@ -336,9 +333,7 @@ const handleBlur = () => {
               <Link
                 key={index}
                 to={`/productDetails/${product.id}`}
-                className={`flex items-center gap-2 px-4 py-2 hover:bg-gray-100 ${
-                  language === "ar" ? "flex-row-reverse" : "flex-row"
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 hover:bg-gray-100 `}
                 onClick={() => {
                   setSearchData(null);
                   setQuery("");
@@ -358,9 +353,7 @@ const handleBlur = () => {
         )}
 
             <p
-              className={`text-gray-600 text-sm px-4 py-2 ${
-                language === "ar" ? "text-right" : "text-left"
-              }`}>
+              className={`text-gray-600 text-sm px-4 py-2 `}>
               {language === "ar" ? "الفئات" : "Categories"}
             </p>
         {searchData && (
@@ -369,9 +362,7 @@ const handleBlur = () => {
               <Link
                 key={index}
                 to={`/categoryDetails/${category.id}`}
-                className={`flex items-center gap-2 px-4 py-2 hover:bg-gray-100 ${
-                  language === "ar" ? "flex-row-reverse" : "flex-row"
-                }`}
+                className={`flex items-center gap-2 px-4 py-2 hover:bg-gray-100 `}
                 onClick={() => {
                   setSearchData(null);
                   setQuery("");

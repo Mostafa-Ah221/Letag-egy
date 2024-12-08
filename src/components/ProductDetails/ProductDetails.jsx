@@ -162,7 +162,6 @@ export default function ProductDetails() {
                     );
                     handleAddToWish(product, isInWishList, () => { });
                   }}
-                  className="z-20"
                 >
                   {wishList.some(
                     (wishItem) => wishItem && wishItem.id === product.id
