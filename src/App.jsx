@@ -12,7 +12,6 @@ import ProductDetails from "./components/ProductDetails/ProductDetails";
 import CartLayout from "./components/ShoppingCart/CartLayout";
 import Address from "./components/ShoppingCart/Address";
 import PayPage from "./components/ShoppingCart/PayPage";
-import Review from "./components/ShoppingCart/Review";
 import Shipping from "./components/ShoppingCart/Shipping";
 import { CartContextProvider } from "./context/CartContext";
 import { useEffect, useState } from "react";
@@ -78,12 +77,12 @@ function App() {
         { path: "AddAddress", element: <AddAddress /> },
         {
           path: "cartlayout",
-          element: <ProtectedRoute><CartLayout /></ProtectedRoute>,
+          element: <CartLayout />,
           children: [
             { index: true, element: <Address /> },
             { path: "shipping", element: <Shipping /> },
             { path: "payment", element: <PayPage /> },
-            { path: "review", element: <Review /> },
+           
           ],
         },
         { path: "profile", element: <Profile /> }

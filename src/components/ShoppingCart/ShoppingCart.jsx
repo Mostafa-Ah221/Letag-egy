@@ -24,6 +24,9 @@ export default function ShoppingCart() {
   });
 
 
+ 
+
+
   const toggleCart = () => {
     setIsCartOpen(!isCartOpen);
   };

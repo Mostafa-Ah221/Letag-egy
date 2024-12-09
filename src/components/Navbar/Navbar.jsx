@@ -7,6 +7,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowDown } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
+
 import { useLocation } from 'react-router-dom';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faEarthAmericas } from '@fortawesome/free-solid-svg-icons';
@@ -29,12 +30,7 @@ export default function Navbar() {
   let location = useLocation();
   // const [query2, setQuery2] = useState("");
 
-  const [isFocused, setIsFocused] = useState(false);
-
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => {
-    if (!query) setIsFocused(false);
-  }
+ 
   let filteredSuggestions = [];
   let filteredSuggestionsProducts = [];
 
@@ -314,31 +310,80 @@ export default function Navbar() {
                 id="search-navbar"
                 className="block lg:w-[30em] md:w-[25em] p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-right outline-none dark:border-gray-600 dark:placeholder-gray-400 focus:shadow-[0_0_8px_2px_rgba(249,115,22,0.3)] z-0"
                 placeholder={language === "ar" ? "ابحث عن منتج" : "Search for a product"}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
                 onChange={handlChange}
                 value={query}
               />
             </div>
           </div>
         </div>
-        <div className={`${searchData != null || searchData2 != null ? "block" : "hidden"} lg:w-[30em] md:w-[25em] bg-white flex flex-col relative z-50 mx-auto`}>
-          <p className={`${searchData2 != null ? "block" : "hidden"} ${language === "ar" ? "ml-auto" : "mr-auto"} mb-4 mt-2`}>المنتجات</p>
-          {searchData2?.map((fs) => (
-            <Link to={`/productDetails/${fs.id}`} className={`flex ${language === "ar" ? "flex-row-reverse ml-auto" : "flex-row mr-auto"} bg-white group`} onClick={() => { setSearchData(null); setQuery(""); setSearchData2(null); }}>
-              <p className="group-hover:text-primary group-hover:cursor-pointer">{fs.title}</p>
-              <img src={fs.photo} className="w-8 h-8"></img>
-            </Link>
-          ))}
-          <hr className={`${searchData != null ? "block" : "hidden"}`}></hr>
-          <p className={`${searchData != null ? "block" : "hidden"} ${language === "ar" ? "ml-auto" : "mr-auto"} mb-4 mt-2`}>الفئات</p>
-          {searchData?.map((fs) => (
-            <Link to={`/categoryDetails/${fs.id}`} className={`flex ${language === "ar" ? "flex-row-reverse ml-auto" : "flex-row mr-auto"} bg-white group`} onClick={() => { setSearchData(null); setQuery(""); setSearchData2(null); }}>
-              <p className="group-hover:text-primary group-hover:cursor-pointer">{fs.name}</p>
-              <img src={fs.photo} className="w-8 h-8"></img>
-            </Link>
-          ))}
-          <Link to={`/SearchByItem/${query}`} className={`bg-white rounded-xl w-48 border-black border-2 hover:border-primary ${language === "ar" ? "mr-auto" : "ml-auto"}`}><button onClick={() => { setSearchData(null); setQuery(""); setSearchData2(null); }}><p className="px-4 py-1">{language === "ar" ? "عرض جميع المنتجات" : "View All Products"}</p></button></Link>
+        <div className="flex justify-center items-center ml-[9.7rem]">
+       <div
+        className={`${
+        searchData || searchData2 ? "flex" : "hidden"
+        } lg:w-[32%] h-[50%] md:w-[25em] bg-white flex-col z-50 fixed top-14 rounded-md shadow-lg border border-gray-200 overflow-auto`}>
+        
+            <p
+              className={`text-gray-600 text-sm px-4 py-2 `}>
+              {language === "ar" ? "المنتجات" : "Products"}
+            </p>
+        {searchData2 && (
+          <>
+            {searchData2.map((product, index) => (
+              <Link
+                key={index}
+                to={`/productDetails/${product.id}`}
+                className={`flex items-center gap-2 px-4 py-2 hover:bg-gray-100 `}
+                onClick={() => {
+                  setSearchData(null);
+                  setQuery("");
+                  setSearchData2(null);
+                }}>
+                <img
+                  src={product.photo}
+                  alt={product.title}
+                  className="w-10 h-10 object-cover rounded-md border border-gray-300"
+                />
+                <p className="text-gray-800 hover:text-primary text-sm">
+                  {product.title}
+                </p>
+              </Link>
+            ))}
+            <hr className="my-2" />
+          </>
+        )}
+
+            <p
+              className={`text-gray-600 text-sm px-4 py-2 `}>
+              {language === "ar" ? "الفئات" : "Categories"}
+            </p>
+        {searchData && (
+          <>
+            {searchData.map((category, index) => (
+              <Link
+                key={index}
+                to={`/categoryDetails/${category.id}`}
+                className={`flex items-center gap-2 px-4 py-2 hover:bg-gray-100 `}
+                onClick={() => {
+                  setSearchData(null);
+                  setQuery("");
+                  setSearchData2(null);
+                }}>
+                <img
+                  src={category.photo}
+                  alt={category.name}
+                  className="w-10 h-10 object-cover rounded-md border border-gray-300"
+                />
+                <p className="text-gray-800 hover:text-primary text-sm">
+                  {category.name}
+                </p>
+              </Link>
+            ))}
+            <hr className="my-2" />
+          </>
+        )}
+
+                  <Link to={`/SearchByItem/${query}`} className={`bg-white rounded-xl w-48 border-black border-2 hover:border-primary ${language === "ar" ? "mr-auto" : "ml-auto"}`}><button onClick={() => { setSearchData(null); setQuery(""); setSearchData2(null); }}><p className="px-4 py-1">{language === "ar" ? "عرض جميع المنتجات" : "View All Products"}</p></button></Link>
+      </div>
         </div>
 
       </nav>

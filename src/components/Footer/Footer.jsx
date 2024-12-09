@@ -2,9 +2,11 @@ import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { ContextData } from '../../context/ContextApis';
 import { useQuery } from '@tanstack/react-query';
+import { useLanguage } from '../../context/LanguageContextPro';
 
 export default function Footer() {
   const { nameWebSite, getMenuPage,settings_domain } = useContext(ContextData);
+  const { language } = useLanguage();
 
   const { data } = useQuery({
     queryKey: ['getMenuPage'],
@@ -20,17 +22,23 @@ export default function Footer() {
   return (
     <>
       <footer className="bg-slate-100 py-10 mt-96 px-4">
-        <div className="container mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 text-sm">
+        <div className="container mx-auto grid grid-cols-2 md:grid-cols-3  gap-8 text-sm">
           <div>
             <img
-              className="w-32 h-auto object-cover"
+              className="w-32 mb-7 h-auto object-cover"
               src={logo}
               alt="Letag Logo"
             />
-            <p>إمتلك متجر الكتروني الأن كل الأدوات الممكنة في متناول يدك لإنشاء متجر الكتروني إحترافي مع لي تاج، بخطوات بسیطة وبدون أي خبرة تقنیة والبدء في البيع على الفور</p>
+            <p className='text-[1rem] text-[#888] leading-6'>
+              {language === "ar"
+                ? "إمتلك متجر الكتروني الأن كل الأدوات الممكنة في متناول يدك لإنشاء متجر الكتروني إحترافي مع لي تاج، بخطوات بسیطة وبدون أي خبرة تقنیة والبدء في البيع على الفور"
+                : "Own an online store now! All the tools you need are at your fingertips to create a professional online store with Leetag. With simple steps and no technical expertise required, you can start selling immediately!"}
+            </p>
+
+           
           </div>
           {/* Logo and About Section */}
-          <div className=" ">
+          <div className=" text-center">
             <h3 className="text-lg font-semibold mb-4 text-primary">حول</h3>
             <ul className="space-y-2">
               {firstFourItems.map((item) => (
@@ -44,7 +52,7 @@ export default function Footer() {
           </div>
 
           {/* Popular Links */}
-          <div className=" ">
+          <div className="text-center ">
             <h3 className="text-lg font-semibold mb-4 text-primary">روابط مفيدة</h3>
             <ul className="space-y-2">
               {remainingItems.map((item) => (
@@ -62,7 +70,7 @@ export default function Footer() {
       <div className="flex mt-1 py-3 px-3 justify-between flex-row-reverse text-center text-sm bg-primary text-white">
         <p>
           &copy; 2024 {nameWebSite || 'Leetag'} All Rights Reserved |{' '}
-          <a href="/terms" className="hover:underline">
+          <a href="#" className="hover:underline">
             الشروط و الأحكام
           </a>
         </p>

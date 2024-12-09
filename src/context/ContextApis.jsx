@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const ContextData = createContext();
 
+
 async function fetchProducts(filters, language) {
   const formData = new FormData();
   for (const [key, value] of Object.entries(filters)) {
@@ -82,10 +83,24 @@ async function getCurrency(language) {
 }
 async function getMenuPage() {
   const response = await axios.get(`https://demo.leetag.com/api/menu`);
-  console.log(response.data);
 
   return response.data;
 }
+const getAddressList = async (userToken) => {
+        const token = userToken.startsWith("bearer") ? userToken : `Bearer ${userToken}`;
+
+        const response = await fetch('https://tarshulah.com/api/customer/addresses', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': token,
+          },
+        });
+        console.log(response.statusText);
+            console.log("Status:", response.status);  // عرض حالة الاستجابة (مثل 200)
+    console.log("Status:", response?.length);  // عرض حالة الاستجابة (مثل 200)
+        
+      }
 
 async function getProductCategory(idCategory, page, pageSize, language) {
   try {
@@ -122,6 +137,16 @@ export default function DataContextProvider({ children }) {
     queryFn: () => getCurrency(language),
   });
 
+
+useEffect(() => {
+  if (userToken) {
+    getAddressList(userToken);
+  } else {
+    console.error("User token is not available");
+  }
+}, [userToken]);
+
+
   let currencyData = settings?.data?.currency.currency_icon;
   let settings_domain = settings;
   let colorWebSite = settings_domain?.data.theme_color;
@@ -148,6 +173,7 @@ export default function DataContextProvider({ children }) {
         //   console.log("API Response:", response.data.data.customer); 
         const user = {
           name: response.data.data.customer.first_name,
+          last_name: response.data.data.customer.last_name,
           email: response.data.data.customer.email,
         };
         setUserData(user);
@@ -156,6 +182,7 @@ export default function DataContextProvider({ children }) {
         console.error("Failed to fetch user data:", error);
       });
   }
+// console.log(userData);
 
   // Fetch subcategories
   useEffect(() => {
@@ -213,7 +240,8 @@ export default function DataContextProvider({ children }) {
         setSelectedTownId,
         selectedTownId,
         colorWebSite,
-        nameWebSite
+        nameWebSite,
+        getAddressList
       }}
     >
       {children}

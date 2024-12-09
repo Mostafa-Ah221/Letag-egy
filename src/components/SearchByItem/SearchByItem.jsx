@@ -4,6 +4,10 @@ import { ContextData } from "../../context/ContextApis";
 import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "../../context/LanguageContextPro";
 import axios from "axios";
+import { IoEyeSharp } from 'react-icons/io5';
+import { IoIosHeart } from 'react-icons/io';
+import { CiHeart } from 'react-icons/ci';
+import { useCart } from '../../context/CartContext';
 import { useLocation } from 'react-router-dom';
 
 function SearchByItem() {
@@ -11,8 +15,12 @@ function SearchByItem() {
     const { subCategories, userData } = useContext(ContextData);
     const [searchData, setSearchData] = useState(null);
     const [searchData2, setSearchData2] = useState(null);
+      const [showModal, setShowModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
     const { language, toggleLanguage } = useLanguage();
     const { selectedTownId, setSelectedTownId } = useContext(ContextData);
+    const [quantity, setQuantity] = useState(1);
+  const { addToCart, handleAddToWish,wishList  } = useCart();
     let filteredSuggestions = [];
     let filteredSuggestionsProducts = [];
     let location = useLocation();
@@ -20,6 +28,14 @@ function SearchByItem() {
         queryKey: ["subCategory", language],
         queryFn: subCategories,
     });
+     const handleProductClick = (item) => {
+    setSelectedProduct(item);
+    setShowModal(true);
+  };
+//   const handleAddToCart = (product) => {
+//     addToCart(product, quantity); 
+//   };
+
     // useEffect(() => {
     //     console.log(location.pathname);
     //     const fetchData = async () => {
@@ -145,7 +161,42 @@ function SearchByItem() {
                 {searchData ? searchData?.map((s) => (
                     <Link to={`/categoryDetails/${s.id}`} key={s.id}>
                         <div className='flex flex-col'>
-                            <img src={s.photo} alt={s.title} className="w-18 h-18 block"></img>
+                            <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded-t-lg">
+                {s.photo && (
+                  <div className="group h-48 overflow-hidden">
+                    <img
+                      src={s?.photo}
+                      alt={s.name}
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <button className="z-20">
+                        <IoEyeSharp onClick={(e) => { e.preventDefault(); handleProductClick(s); }} className="text-white bg-primary p-2 rounded-full text-[2.4rem]" />
+                      </button>
+                      <button className="z-20">
+                        <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const isInWishList = wishList.some(
+                        (wishItem) => wishItem && wishItem.id === s.id
+                      );
+                      handleAddToWish(s, isInWishList, () => {});
+                    }}
+                    className="z-20"
+                  >
+                    {wishList.some(
+                      (wishItem) => wishItem && wishItem.id === s.id
+                    ) ? (
+                      <IoIosHeart className="text-primary text-[2.5rem]" />
+                    ) : (
+                      <CiHeart className="text-primary text-5xl" />
+                    )}
+                  </button>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
                             <p>{s.name}</p>
                         </div>
                     </Link>

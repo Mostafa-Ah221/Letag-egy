@@ -37,7 +37,7 @@ export default function PageMenu() {
   return (
     <div className="p-4 text-right">
       <h2 className="text-2xl font-bold mb-4">{page.title}</h2>
-      <div dangerouslySetInnerHTML={{ __html: page.content }} className="leading-relaxed text-gray-700" />
+      <div dangerouslySetInnerHTML={{ __html: page.content }} className="leading-relaxed px-20  text-gray-700" />
     </div>
   );
 }
