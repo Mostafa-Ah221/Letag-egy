@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 // import favicon from '../../../src/assets/images/favicon.png';
 import { ContextData } from '../../context/ContextApis';
@@ -11,20 +11,20 @@ function Stock() {
     const favicon = settings_domain?.data.logo
     const towns = settings_domain?.data?.locations || [];
 
-    useEffect(() => {
-        const fetchdata = async () => {
-            try {
-                const res = await fetch("https://tarshulah.com/api/domain/settings");
-                const resJson = await res.json();
-                const data = await resJson.data;
-                const resTowns = await data.locations;
-                setTowns(resTowns);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchdata();
-    }, []);
+    // useEffect(() => {
+    //     const fetchdata = async () => {
+    //         try {
+    //             const res = await fetch("https://tarshulah.com/api/domain/settings");
+    //             const resJson = await res.json();
+    //             const data = await resJson.data;
+    //             const resTowns = await data.locations;
+    //             setTowns(resTowns);
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     };
+    //     fetchdata();
+    // }, []);
 
     // console.log(settings_domain?.data.locations);
 
