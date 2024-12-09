@@ -21,6 +21,8 @@ function ConstantDetails() {
                 <hr></hr>
                 <Link><h3 className='hover:text-primary text-bold text-right hover:curosr-pointer py-4 px-2'>تفاصيل الحساب</h3></Link>
                 <hr></hr>
+                <Link to={"/AddAddress"}><h3 className='hover:text-primary text-bold text-right hover:curosr-pointer py-4 px-2'>اضافة عنوان</h3></Link>
+                <hr></hr>
                 <Link onClick={() => Logout()} ><h3 className='hover:text-primary text-bold text-right hover:curosr-pointer py-4 px-2'>تسجيل الخروج</h3></Link>
             </div>
         </>

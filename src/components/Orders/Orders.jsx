@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import { useLanguage } from "../../context/LanguageContextPro";
@@ -22,11 +23,12 @@ function Orders() {
                 } else {
                     setIsPointsSystem(false);
                 }
-                const res2 = await axios.get("http://tarshulah.com/api/customer/orders", {
+                const res2 = await fetch("http://tarshulah.com/api/customer/orders", {
                     headers: {
+                        'Access-Control-Allow-Origin': '*',
                         "Authorization": token,
                         "lang": language,
-                        "Accept": "application/json",
+                        'Accept': 'application/json',
                     }
                 });
                 const resData2 = await res2.data;
@@ -38,7 +40,7 @@ function Orders() {
     }, []);
     return (
         <>
-            <h2 className={`${isPointsSystem ? "block" : "hidden"}`}>النقاط المتاحة: {points}</h2>
+            <h2 className={`${isPointsSystem ? "block" : "hidden"} my-2`}>النقاط المتاحة: {points}</h2>
             <div className="relative overflow-x-auto">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

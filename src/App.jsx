@@ -25,6 +25,7 @@ import CategoryFilter from "./components/CategoryFilter/CategoryFilter";
 import PageMenu from "./components/PageMenu/PageMenu";
 import SearchByItem from "./components/SearchByItem/SearchByItem";
 import Orders from "./components/Orders/Orders";
+import AddAddress from "./components/AddAddress/AddAddress";
 
 
 
@@ -72,6 +73,7 @@ function App() {
         { path: "Orders", element: <Orders /> },
         { path: "pagemenu/:id", element: <PageMenu /> },
         { path: "cartpage", element: <CartPage /> },
+        { path: "AddAddress", element: <AddAddress /> },
         {
           path: "cartlayout",
           element: <CartLayout />,
