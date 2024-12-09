@@ -17,7 +17,6 @@ import { CartContextProvider } from "./context/CartContext";
 import { useEffect, useState } from "react";
 import Stock from "./components/Stock/Stock";
 import Profile from "./components/Profile/Profile";
-import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import { LanguageContextPro } from "./context/LanguageContextPro";
 import WishList from "./components/WishList/WishList";
 import CartPage from "./components/CartPage/CartPage";

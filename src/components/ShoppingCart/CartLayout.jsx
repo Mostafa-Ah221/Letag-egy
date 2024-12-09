@@ -50,7 +50,7 @@ export default function CartLayout() {
       ...prev,
       product_data: products, 
     }));
-    console.log("Updated product_data:", products);
+    // console.log("Updated product_data:", products);
   }, [cart]); 
 
   const updateData = (data) => setFormData((prev) => ({ ...prev, ...data }));

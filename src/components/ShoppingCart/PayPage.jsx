@@ -5,7 +5,7 @@ import { ContextData } from '../../context/ContextApis';
 export default function PayPage() {
   const { updateData, handleReviewSubmit } = useOutletContext();
   const { settings_domain } = useContext(ContextData);
-console.log(settings_domain?.data.getways);
+// console.log(settings_domain?.data.getways);
 
 
  
