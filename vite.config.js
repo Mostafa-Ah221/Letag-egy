@@ -7,7 +7,7 @@ export default defineConfig({
    server: {
     proxy: {
       '/api': {
-        target: 'https://demo.leetag.com',
+        target: 'http://tarshulah.com',
         changeOrigin: true,
         secure: false,
       },

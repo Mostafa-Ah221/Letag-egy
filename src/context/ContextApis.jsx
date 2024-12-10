@@ -86,21 +86,32 @@ async function getMenuPage() {
 
   return response.data;
 }
+//todo ================================================================(getAddressList)=============//
 const getAddressList = async (userToken) => {
-        const token = userToken.startsWith("bearer") ? userToken : `Bearer ${userToken}`;
+    const token = userToken.startsWith("bearer") ? userToken : `Bearer ${userToken}`;
 
+    try {
         const response = await fetch('https://tarshulah.com/api/customer/addresses', {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': token,
-          },
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Authorization': token,
+            },
         });
-        console.log(response.statusText);
-            console.log("Status:", response.status);  // عرض حالة الاستجابة (مثل 200)
-    console.log("Status:", response?.length);  // عرض حالة الاستجابة (مثل 200)
-        
-      }
+
+        if (response.ok) {
+            const data = await response.json();  
+            return data 
+        } else {
+            console.error('Error:', response.status); 
+        }
+    } catch (error) {
+        console.error('Request failed:', error);
+    }
+};
+
+
+
 
 async function getProductCategory(idCategory, page, pageSize, language) {
   try {
@@ -122,7 +133,6 @@ async function getProductCategory(idCategory, page, pageSize, language) {
 
 export default function DataContextProvider({ children }) {
   const { language } = useLanguage();
-
   const [userToken, setUserToken] = useState(() => {
     return localStorage.getItem("userToken") || null;
   });
@@ -136,7 +146,34 @@ export default function DataContextProvider({ children }) {
     queryKey: ["getcurrency", language],
     queryFn: () => getCurrency(language),
   });
+  //!================================================================(deleteAddress)=====================
+async function deleteAddress(id,userToken,language) {
+  const response = await axios.post(
+    `https://tarshulah.com/api/customer/address/delete/${id}`,
+    {},
+    {
+      headers: { lang: language, 
+        'Authorization': userToken
+      }
+      
+    }
+  );
+  return response.data;
+}
+  //todo================================================================(updateAddress)=====================
 
+async function updateAddress(id,userToken,updatedData) {
+  const response = await axios.post(
+    `https://tarshulah.com/api/customer/address/update/${id}`,
+    updatedData,
+    {
+      headers: { lang: language, 
+        'Authorization': userToken
+      }
+    }
+  );
+  return response.data;
+}
 
 useEffect(() => {
   if (userToken) {
@@ -223,6 +260,8 @@ useEffect(() => {
         getApiHome: () => getApiHome(language),
         getSlider: () => getSlider(language),
         getProdDetails: (id) => getProdDetails(id, language),
+        deleteAddress: (id) => deleteAddress(id, userToken, language),
+        updateAddress: (id) => updateAddress(id, userToken, language),
         getCategoriesDetails: (id) => getCategoriesDetails(id, language),
         getProductCategory: (idCategory, page, pageSize) =>
           getProductCategory(idCategory, page, pageSize, language),
@@ -241,7 +280,9 @@ useEffect(() => {
         selectedTownId,
         colorWebSite,
         nameWebSite,
-        getAddressList
+        getAddressList,
+        
+
       }}
     >
       {children}

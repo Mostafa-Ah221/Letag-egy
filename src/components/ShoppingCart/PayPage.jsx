@@ -44,8 +44,8 @@ export default function PayPage() {
         <input className="input-field w-full p-2 border rounded" type="text" name="shipping_company_id" placeholder="shipping_company_id" onChange={handleChange} />
 
         <input className="input-field w-full p-2 border rounded" type="text" name="address_id" placeholder="address_id" onChange={handleChange} />
-        
       </div>
+         <textarea className="input-field h-28" type="text" name="comment" placeholder="comment" onChange={handleChange} />
         <div>
           <button className="bg-primary text-white p-2" onClick={handleReviewSubmit}>إرسال الطلب</button>
         </div>
