@@ -15,16 +15,25 @@ export default function Address() {
   const [openAddress, setOpenAddress] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
 
-  useEffect(() => {
-    if (userData) {
-      const updatedData = {
-        first_name: userData.name || "",
-        last_name: userData.last_name || "",
-        email: userData.email || "",
-      };
+ useEffect(() => {
+  if (userData) {
+    const updatedData = {
+      first_name: userData.name || "",
+      last_name: userData.last_name || "",
+      email: userData.email || "",
+    };
+
+    // تحقق من التغيير قبل التحديث
+    if (
+      formData.first_name !== updatedData.first_name ||
+      formData.last_name !== updatedData.last_name ||
+      formData.email !== updatedData.email
+    ) {
       updateData(updatedData);
     }
-  }, [userData, updateData]);
+  }
+}, [userData, formData, updateData]);
+
 
   const handleAddressSelect = (address) => {
     setSelectedAddress(address);

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useMemo } from 'react';
 import { Outlet } from 'react-router-dom';
 import NavCart from './NavCart';
 import { useCart } from '../../context/CartContext'; 
@@ -28,16 +28,29 @@ export default function CartLayout() {
     floor_number: '',
   });
 
-  useEffect(() => {
-    const calculatedTotal = getTotalPrice().toFixed(2);
+  // Memoize total price
+  const totalPrice = useMemo(() => getTotalPrice().toFixed(2), [cart]);
 
-    setFormData((prev) => {
-      if (prev.total !== calculatedTotal) {
-        return { ...prev, total: calculatedTotal };
-      }
-      return prev;
-    });
-  }, [cart]); 
+  useEffect(() => {
+    if (formData.total !== totalPrice) {
+      setFormData((prev) => ({ ...prev, total: totalPrice }));
+    }
+  }, [totalPrice, formData.total]);
+
+  // Memoize product data
+  const products = useMemo(() => cart.map((item) => ({
+    id: item.id,
+    name: item.title,
+    price: item.price,
+    quantity: item.quantity,
+  })), [cart]);
+
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      product_data: products,
+    }));
+  }, [products]);
 
   useEffect(() => {
     if (userData) {
@@ -49,20 +62,6 @@ export default function CartLayout() {
       }));
     }
   }, [userData]);
-
-  useEffect(() => {
-    const products = cart.map((item) => ({
-      id: item.id,
-      name: item.title,
-      price: item.price,
-      quantity: item.quantity,
-    }));
-
-    setFormData((prev) => ({
-      ...prev,
-      product_data: products,
-    }));
-  }, [cart]);
 
   const updateData = (data) => {
     setFormData((prev) => ({
@@ -82,11 +81,8 @@ export default function CartLayout() {
     return true;
   };
 
-  // إرسال البيانات للـ API
   const handleReviewSubmit = async () => {
-    if (!validateFields()) {
-      return;
-    }
+    if (!validateFields()) return;
 
     console.log('Data to be sent:', formData);
 
