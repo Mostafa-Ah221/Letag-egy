@@ -7,7 +7,7 @@ import { useLanguage } from "../../context/LanguageContextPro";
 import { HiPlusSm } from "react-icons/hi";
 import CartOrder from "./CartOrder";
 
-export default function Address({ price }) {
+export default function Address() {
   const { updateData, handleReviewSubmit, formData } = useOutletContext();
   const { userData, getAddressList, userToken, settings_domain } = useContext(ContextData);
   const { language } = useLanguage();

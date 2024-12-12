@@ -61,7 +61,8 @@ export default function Login() {
         </div>
       )}
       <div className='grid grid-cols-12 gap-5'>
-        <form onSubmit={formik.handleSubmit} className="md:col-span-6 order-1 col-span-12">
+        <div  className="md:col-span-6 order-1 col-span-12">
+        <form onSubmit={formik.handleSubmit} >
                 <h2 className="text-2xl font-semibold text-center mb-7">Login Now</h2>
 
           <div className='grid grid-cols-12 gap-3'>
@@ -104,10 +105,14 @@ export default function Login() {
           <button type="submit" className="bg-primary hover:tracking-widest duration-300 block text-white font-bold py-2 px-4 rounded mt-5 m-auto">
             {loading ? <ClipLoader color="#36d7b7" size={15} /> : "Login"}
           </button>
-           <div className="ml-40 mt-5">
-        Don't have an account? <Link to="/register" className="text-primary font-semibold hover:underline">Register Now</Link>
-      </div>
+          
         </form>
+        <div className="flex justify-center items-center flex-col mt-5">
+            <p className="">Don't have an account? <Link to="/register" className="text-primary font-semibold hover:underline">Register Now</Link></p>
+             <p className="">Don't have an account? <Link to="/register" className="text-primary font-semibold hover:underline">Register Now</Link></p>
+      </div>
+        </div>
+        
         <div className="relative hidden md:block col-span-0 md:col-span-6 order-1 w-full h-96">
           <div className="absolute top-0 right-0 w-full h-full bg-primary opacity-40"></div>
           <img className="w-full h-full object-cover" src="https://khamato.com/themes/default/assets/images/login.png" alt="Login Illustration" />
