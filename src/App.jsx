@@ -11,7 +11,7 @@ import CategoryDetails from "./components/CategoryDetails/CategoryDetails";
 import ProductDetails from "./components/ProductDetails/ProductDetails";
 import CartLayout from "./components/ShoppingCart/CartLayout";
 import Address from "./components/ShoppingCart/Address";
-import PayPage from "./components/ShoppingCart/PayPage";
+// import PayPage from "./components/ShoppingCart/PayPage";
 import { CartContextProvider } from "./context/CartContext";
 import { useEffect, useState } from "react";
 import Stock from "./components/Stock/Stock";
@@ -78,7 +78,7 @@ function App() {
           element: <CartLayout />,
           children: [
             { index: true, element: <Address /> },
-            { path: "payment", element: <PayPage /> },
+            // { path: "payment", element: <PayPage /> },
            
           ],
         },

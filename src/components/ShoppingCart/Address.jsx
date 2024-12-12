@@ -5,6 +5,7 @@ import { useContext, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "../../context/LanguageContextPro";
 import { HiPlusSm } from "react-icons/hi";
+import CartOrder from "./CartOrder";
 
 export default function Address({ price }) {
   const { updateData, handleReviewSubmit } = useOutletContext();
@@ -75,9 +76,10 @@ export default function Address({ price }) {
   });
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className=" grid grid-cols-12">
+      <div className="flex flex-col gap-4 col-span-12 lg:col-span-7">
       {/* بيانات المستخدم */}
-      <div className="w-1/2 bg-white rounded p-4">
+      <div className=" bg-white rounded px-4">
         <h2 className="text-xl font-semibold mb-4">تفاصيل الطلب</h2>
         <input
           required
@@ -117,7 +119,7 @@ export default function Address({ price }) {
 
       {/* قائمة العناوين */}
       {userToken !== null ?  data?.data.addresses.map((address) => (
-          <div key={address.id} className="w-full p-2 bg-white flex gap-2 mb-2">
+          <div key={address.id} className=" p-2 bg-white flex gap-2 mb-2 border rounded-md mx-4">
             <input
               type="radio"
               name="address"
@@ -132,74 +134,8 @@ export default function Address({ price }) {
             </div>
           </div>
         ))
-      : ""
-      // <div className='container '>
-      //             {/* اختيار المحافظة */}
-      //             <h3 className='text-start font-bold text-2xl'>
-      //                 {language === 'ar' ? 'يرجى اختيار المحافظة' : 'Please select the city'}
-      //             </h3>
-      //             <div className='w-[70%]'>
-      //                 <select
-      //                     name='town'
-      //                     className='w-full h-10 border border-gray-400 outline-none'
-      //                     value={selectedTownId}
-      //                     onChange={handleTownChange}
-      //                 >
-      //                     <option value="" disabled>
-      //                         {language === 'ar' ? 'اختر المحافظة' : 'Select city'}
-      //                     </option>
-      //                     {towns.map((town) => (
-      //                         <option key={town.id} value={town.id}>
-      //                             {town.name}
-      //                         </option>
-      //                     ))}
-      //                 </select>
-      
-      //                 {/* اختيار المنطقة */}
-      //                 <h3 className='text-start font-bold text-2xl mt-4'>
-      //                     {language === 'ar' ? 'يرجى اختيار المنطقة' : 'Please select the region'}
-      //                 </h3>
-      //                 <select
-      //                     name='region'
-      //                     className='w-full h-10 border border-gray-400 outline-none'
-      //                     value={selectedRegionId}
-      //                      onChange={handleChange}
-      //                     disabled={!regions.length}
-      //                 >
-      //                     <option value="" disabled>
-      //                         {language === 'ar' ? 'اختر المنطقة' : 'Select region'}
-      //                     </option>
-      //                     {regions.map((region) => (
-      //                         <option key={region.id} value={region.id}>
-      //                             {region.name}
-      //                         </option>
-      //                     ))}
-      //                 </select>
-      
-      //                 {/* Building Number */}
-      //                 <h3 className='text-start font-bold text-2xl my-2'>
-      //                     {language === 'ar' ? 'رقم المبنى' : 'Building number'}
-      //                 </h3>
-      //                 <input
-      //                     placeholder={language === "ar" ? "من فضلك ادخل رقم المبنى" : "Please Enter Building Number"}
-      //                     className='w-full h-10 border border-gray-400'
-      //                    onChange={handleChange}
-
-      //                 />
-      
-      //                 {/* Floor Number */}
-      //                 <h3 className='text-start font-bold text-2xl my-2'>
-      //                     {language === 'ar' ? 'رقم الطابق' : 'Floor number'}
-      //                 </h3>
-      //                 <input
-      //                     placeholder={language === "ar" ? "من فضلك ادخل رقم الطابق" : "Please Enter Floor Number"}
-      //                     className='w-full h-10 border border-gray-400'
-      //                     onChange={handleChange}
-      //                 />
-      //             </div>
-      
-                 
-      //         </div> 
+      : 
+      ""
               }
      
 
@@ -216,7 +152,7 @@ export default function Address({ price }) {
                 </button>
 
                 {openAddress && (
-                  <div className="w-1/2 p-4">
+                  <div className=" p-4">
                     <AddAddress showAddress={false} />
                   </div>
                 )}
@@ -228,25 +164,11 @@ export default function Address({ price }) {
 
 
       {/* اختيار نظام الدفع */}
-      <div className="px-4 bg-white w-1/2 ">
-        <input className="input-field" type="text" name="delivery_address" placeholder="Delivery Address" onChange={handleChange} />
-        <h3 className="font-semibold mb-2">نظام الدفع</h3>
-        {settings_domain?.data.getways.map((getway) => (
-          <div key={getway.id} className="flex items-center mb-2">
-            <input
-              type="radio"
-              id={`payment-${getway.id}`}
-              name="payment_method"
-              value={getway.id}
-              onChange={handleChange}
-            />
-            <label htmlFor={`payment-${getway.id}`}>{getway.name}</label>
-          </div>
-        ))}
-      </div>
+     
 
       {/* إدخال كوبون وتعليق */}
-      <div className="p-4 bg-white w-1/2">
+      <div className="p-4 bg-white ">
+        <input className="input-field" type="text" name="delivery_address" placeholder="Delivery Address" onChange={handleChange} />
         <input
           className="input-field w-full p-2 border rounded mb-2"
           type="text"
@@ -260,10 +182,34 @@ export default function Address({ price }) {
           placeholder="Comment"
           onChange={handleChange}
         ></textarea>
-        <button className="bg-primary text-white p-2" onClick={handleReviewSubmit}>
-          إرسال الطلب
-        </button>
+        
       </div>
     </div>
+    <div className="col-span-12 lg:col-span-4">
+    <div >
+      <CartOrder/>
+    </div>
+      <div className="px-4 bg-white ">
+        <h3 className="font-semibold mb-2">نظام الدفع</h3>
+        <hr />
+        {settings_domain?.data.getways.map((getway) => (
+          <div key={getway.id} className="flex items-center my-5">
+            <input
+              type="radio"
+              id={`payment-${getway.id}`}
+              name="payment_method"
+              value={getway.id}
+              onChange={handleChange}
+            />
+            <label htmlFor={`payment-${getway.id}`}>{getway.name}</label>
+          </div>
+        ))}
+      </div>
+      <button className="bg-primary text-white p-2 block m-auto rounded-md w-11/12" onClick={handleReviewSubmit}>
+          إرسال الطلب
+        </button>
+    </div>
+    </div>
+    
   );
 }
