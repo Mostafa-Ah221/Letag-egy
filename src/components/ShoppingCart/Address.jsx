@@ -15,7 +15,6 @@ export default function Address({ price }) {
   const [openAddress, setOpenAddress] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
 
-  // تحديث بيانات الفورم ببيانات المستخدم عند التحميل
   useEffect(() => {
     if (userData) {
       const updatedData = {
@@ -27,7 +26,6 @@ export default function Address({ price }) {
     }
   }, [userData, updateData]);
 
-  // تحديد العنوان من القائمة
   const handleAddressSelect = (address) => {
     setSelectedAddress(address);
     const addressData = {
@@ -39,13 +37,11 @@ export default function Address({ price }) {
     updateData(addressData);
   };
 
-  // تحديث الحقول عند تغيير المدخلات
   const handleChange = (e) => {
     const { name, value } = e.target;
     updateData({ [name]: value });
   };
 
-  // جلب قائمة العناوين
   const { data, isLoading, isError } = useQuery({
     queryKey: ["getAddressList", language],
     queryFn: () => getAddressList(userToken),
