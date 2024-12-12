@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLanguage } from "../../context/LanguageContextPro";
 import { MapPin, Building2, Layers } from "lucide-react";
 
-export default function Address() {
+export default function Address({address=true}) {
   const { language } = useLanguage();
     const queryClient = useQueryClient(); 
   const { getAddressList, userToken,deleteAddress,updateAddress } = useContext(ContextData);
@@ -70,7 +70,8 @@ export default function Address() {
 
   // Main Component
   return (
-    <div className="container mx-auto px-4 py-6">
+    <>
+    {address &&  ( <div className="container mx-auto px-4 py-6 mt-20">
       <h1 className="text-3xl font-extrabold text-center text-gray-800 mb-8">
         {language === 'ar' ? 'العناوين المحفوظة' : 'Saved Addresses'}
       </h1>
@@ -97,12 +98,13 @@ export default function Address() {
                     <span className="font-medium">{address.building_number}</span>
                   </p>
                 </div>
-                
                 <div className="flex items-center">
                   <Layers className="w-5 h-5 mr-3 text-purple-500" />
                   <p>
                     {language === 'ar' ? 'رقم الطابق:' : 'Floor Number:'} {' '}
                     <span className="font-medium">{address.floor_number}</span>
+                   
+
                   </p>
                 </div>
                 
@@ -136,6 +138,9 @@ export default function Address() {
           </div>
         ))}
       </div>
-    </div>
+    </div>)}
+    </>
+    
+  
   );
 }

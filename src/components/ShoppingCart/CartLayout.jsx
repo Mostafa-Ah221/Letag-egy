@@ -1,21 +1,36 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 import NavCart from './NavCart';
-import { useCart } from '../../context/CartContext'; // استدعاء useCart للوصول إلى cart
+import { useCart } from '../../context/CartContext'; 
+import { ContextData } from '../../context/ContextApis';
 
 export default function CartLayout() {
   const { cart, getTotalPrice } = useCart(); 
+    const { userToken,userData} = useContext(ContextData);
+  
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const calculatedTotal = getTotalPrice().toFixed(2);
     setTotal(calculatedTotal);
-    // تحديث formData بقيمة total عند التغيير
+   
     setFormData(prev => ({
       ...prev,
       total: calculatedTotal
     }));
-  }, [getTotalPrice, cart]); // عند تغير cart أو getTotalPrice
+  }, [getTotalPrice, cart]); 
+// عند تحميل بيانات المستخدم، حدث formData
+useEffect(() => {
+  if (userData) {
+    setFormData((prev) => ({
+      ...prev,
+      first_name: userData.name || '',
+      last_name: userData.last_name || '',
+      email: userData.email || '',
+      phone: userData.phone || '',
+    }));
+  }
+}, [userData]);
 
   const [formData, setFormData] = useState({
     first_name: '',
@@ -50,14 +65,12 @@ export default function CartLayout() {
       ...prev,
       product_data: products, 
     }));
-    // console.log("Updated product_data:", products);
-  }, [cart]); 
+  }, [cart]);
 
   const updateData = (data) => setFormData((prev) => ({ ...prev, ...data }));
 
-  // دالة للتحقق من الحقول المطلوبة
   const validateFields = () => {
-    const requiredFields = ['first_name', 'email', 'phone', 'delivery_address','payment_method','address_id']; // حدد الحقول المطلوبة
+    const requiredFields = ['first_name','last_name', 'email', 'phone', 'delivery_address'];
     for (let field of requiredFields) {
       if (!formData[field]) {
         alert(`حقل ${field} مطلوب.`);
@@ -67,35 +80,38 @@ export default function CartLayout() {
     return true; 
   };
 
-  const handleReviewSubmit = async () => {
-    if (!validateFields()) {
-      return; // التوقف عن المتابعة إذا كان هناك حقل فارغ
-    }
+ const handleReviewSubmit = async () => {
+  if (!validateFields()) {
+    return; 
+  }
 
-    try {
-      const response = await fetch('https://demo.leetag.com/api/order/save', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('userToken')}`,
-        },
-        body: JSON.stringify(formData),
-      });
+  console.log("Data to be sent:", formData);
 
-      if (response.ok) {
-        alert('تم إرسال الطلب بنجاح');
-      } else {
-        console.error('حدث خطأ أثناء إرسال الطلب');
-      }
-    } catch (error) {
-      console.error('خطأ في الشبكة:', error);
+  try {
+    const response = await fetch('https://demo.leetag.com/api/order/save', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': userToken,
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      alert('تم إرسال الطلب بنجاح');
+    } else {
+      console.error('حدث خطأ أثناء إرسال الطلب');
     }
-  };
+  } catch (error) {
+    console.error('خطأ في الشبكة:', error);
+  }
+};
+
 
   return (
     <div>
       <NavCart />
-      <Outlet context={{ updateData, handleReviewSubmit }} />
+      <Outlet context={{ updateData, handleReviewSubmit,formData }} />
     </div>
   );
 }

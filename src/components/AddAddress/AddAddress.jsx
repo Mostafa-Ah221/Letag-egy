@@ -4,7 +4,7 @@ import { ContextData } from '../../context/ContextApis';
 import axios from 'axios';
 import Address from '../Address/Address';
 
-function AddAddress() {
+function AddAddress({ showAddress = true }) {
     const { settings_domain, userToken } = useContext(ContextData);
     const { language } = useLanguage();
     const towns = settings_domain?.data?.locations || [];
@@ -12,18 +12,19 @@ function AddAddress() {
     const token = userToken.startsWith("bearer") ? userToken : `Bearer ${userToken}`;
 
     // States
-    const [selectedTownId, setSelectedTownId] = useState(''); 
-    const [regions, setRegions] = useState([]); 
-    const [selectedRegionId, setSelectedRegionId] = useState(''); 
+    const [selectedTownId, setSelectedTownId] = useState('');
+    const [regions, setRegions] = useState([]);
+    const [selectedRegionId, setSelectedRegionId] = useState('');
     const [selectedBuilding, setSelectedBuilding] = useState('');
     const [selectedFloor, setSelectedFloor] = useState('');
     const [address, setAddress] = useState('');
+    const [shippingPrice, setShippingPrice] = useState(''); // New state for shipping price
 
     // Handle Building and Floor input changes
     const handleBuildingChange = (event) => setSelectedBuilding(event.target.value);
     const handleFloorChange = (event) => setSelectedFloor(event.target.value);
 
-    // عند اختيار المحافظة
+    // Handle Town Change
     const handleTownChange = (event) => {
         const townId = event.target.value;
         setSelectedTownId(townId); // تحديد المحافظة المختارة
@@ -32,21 +33,27 @@ function AddAddress() {
         const selectedTown = towns.find(town => String(town.id) === String(townId));
         setRegions(selectedTown?.regions || []);
 
-        // إعادة تعيين المنطقة والعنوان
+        // إعادة تعيين المنطقة والعنوان والشحن
         setSelectedRegionId('');
         setAddress('');
+        setShippingPrice('');
     };
 
-    // عند اختيار المنطقة
+    // Handle Region Change
     const handleRegionChange = (event) => {
         const selectedRegion = regions.find(region => String(region.id) === String(event.target.value));
         setSelectedRegionId(selectedRegion?.id || '');
 
-        // تحويل المحافظة إلى عنوان (region_name = اسم المنطقة, address = اسم المحافظة)
+        // استخراج shipping_price من المنطقة المختارة
+        const price = selectedRegion?.shipping_price || '0'; // تأكد من القيمة
+        setShippingPrice(price);
+            console.log("Shipping Price:", price);
+
+        // دمج اسم المنطقة مع اسم المحافظة
         const townName = towns.find(town => String(town.id) === String(selectedTownId))?.name || '';
-        const regionName = selectedRegion?.name || '';  // المنطقة
-        const combinedAddress = `${regionName} - ${townName}`;  // دمج اسم المنطقة مع اسم المحافظة
-        setAddress(combinedAddress); // تعيين العنوان
+        const regionName = selectedRegion?.name || '';
+        const combinedAddress = `${regionName} - ${townName}`;
+        setAddress(combinedAddress);
     };
 
     // Handle Submit
@@ -64,7 +71,7 @@ function AddAddress() {
         const formData = new FormData();
         formData.append("location_id", selectedTownId);
         formData.append("region_id", selectedRegionId);
-        formData.append("address", address); // العنوان الذي تم تغييره
+        formData.append("address", address);
         formData.append("building_number", selectedBuilding);
         formData.append("floor_number", selectedFloor);
 
@@ -73,6 +80,8 @@ function AddAddress() {
                 headers: { "Authorization": token },
             });
             console.log('Success:', res.data);
+            console.log('Success:', res.data?.data.address.location_id);
+            console.log('Success:', res.data?.data.address.region_id);
             alert(language === 'ar' ? 'تم إضافة العنوان بنجاح' : 'Address added successfully');
         } catch (error) {
             console.error('Error:', error.response || error.message);
@@ -81,12 +90,12 @@ function AddAddress() {
     };
 
     return (
-        <div className='container mb-[9.3rem]'>
+        <div className='container '>
             {/* اختيار المحافظة */}
-            <h3 className='text-start font-bold text-2xl '>
+            <h3 className='text-start font-bold text-2xl'>
                 {language === 'ar' ? 'يرجى اختيار المحافظة' : 'Please select the city'}
             </h3>
-            <div className=' w-[70%]'>
+            <div className='w-[70%]'>
                 <select
                     name='town'
                     className='w-full h-10 border border-gray-400 outline-none'
@@ -112,7 +121,7 @@ function AddAddress() {
                     className='w-full h-10 border border-gray-400 outline-none'
                     value={selectedRegionId}
                     onChange={handleRegionChange}
-                    disabled={!regions.length} // تعطيل القائمة إذا لم تكن هناك مناطق
+                    disabled={!regions.length}
                 >
                     <option value="" disabled>
                         {language === 'ar' ? 'اختر المنطقة' : 'Select region'}
@@ -123,6 +132,13 @@ function AddAddress() {
                         </option>
                     ))}
                 </select>
+
+                {/* عرض سعر الشحن */}
+                {/* {shippingPrice && (
+                    <p className='text-start font-bold text-xl mt-4'>
+                        {language === 'ar' ? `سعر الشحن: ${shippingPrice}` : `Shipping Price: ${shippingPrice}`}
+                    </p>
+                )} */}
 
                 {/* Building Number */}
                 <h3 className='text-start font-bold text-2xl my-2'>
@@ -144,6 +160,7 @@ function AddAddress() {
                     onChange={handleFloorChange}
                 />
             </div>
+
             {/* Submit Button */}
             <div className='mt-10 w-fit mx-auto'>
                 <button
@@ -153,7 +170,7 @@ function AddAddress() {
                     {language === 'ar' ? 'اضافة عنوان' : 'Add Address'}
                 </button>
             </div>
-            <Address />
+             {showAddress && <Address />}
         </div>
     );
 }
