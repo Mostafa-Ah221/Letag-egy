@@ -88,26 +88,26 @@ async function getMenuPage() {
 }
 //todo ================================================================(getAddressList)=============//
 const getAddressList = async (userToken) => {
-    const token = userToken.startsWith("bearer") ? userToken : `Bearer ${userToken}`;
+  const token = userToken.startsWith("bearer") ? userToken : `Bearer ${userToken}`;
 
-    try {
-        const response = await fetch('https://tarshulah.com/api/customer/addresses', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': token,
-            },
-        });
+  try {
+    const response = await fetch('https://tarshulah.com/api/customer/addresses', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': token,
+      },
+    });
 
-        if (response.ok) {
-            const data = await response.json();  
-            return data 
-        } else {
-            console.error('Error:', response.status); 
-        }
-    } catch (error) {
-        console.error('Request failed:', error);
+    if (response.ok) {
+      const data = await response.json();
+      return data
+    } else {
+      console.error('Error:', response.status);
     }
+  } catch (error) {
+    console.error('Request failed:', error);
+  }
 };
 
 
@@ -147,41 +147,43 @@ export default function DataContextProvider({ children }) {
     queryFn: () => getCurrency(language),
   });
   //!================================================================(deleteAddress)=====================
-async function deleteAddress(id,userToken,language) {
-  const response = await axios.post(
-    `https://tarshulah.com/api/customer/address/delete/${id}`,
-    {},
-    {
-      headers: { lang: language, 
-        'Authorization': userToken
+  async function deleteAddress(id, userToken, language) {
+    const response = await axios.post(
+      `https://tarshulah.com/api/customer/address/delete/${id}`,
+      {},
+      {
+        headers: {
+          lang: language,
+          'Authorization': userToken
+        }
+
       }
-      
-    }
-  );
-  return response.data;
-}
+    );
+    return response.data;
+  }
   //todo================================================================(updateAddress)=====================
 
-async function updateAddress(id,userToken,updatedData) {
-  const response = await axios.post(
-    `https://tarshulah.com/api/customer/address/update/${id}`,
-    updatedData,
-    {
-      headers: { lang: language, 
-        'Authorization': userToken
+  async function updateAddress(id, userToken, updatedData) {
+    const response = await axios.post(
+      `https://tarshulah.com/api/customer/address/update/${id}`,
+      updatedData,
+      {
+        headers: {
+          "Accept": "application/json",
+          'Authorization': userToken
+        }
       }
-    }
-  );
-  return response.data;
-}
-
-useEffect(() => {
-  if (userToken) {
-    getAddressList(userToken);
-  } else {
-    console.error("User token is not available");
+    );
+    return response.data;
   }
-}, [userToken]);
+
+  useEffect(() => {
+    if (userToken) {
+      getAddressList(userToken);
+    } else {
+      console.error("User token is not available");
+    }
+  }, [userToken]);
 
 
   let currencyData = settings?.data?.currency.currency_icon;
@@ -219,7 +221,7 @@ useEffect(() => {
         console.error("Failed to fetch user data:", error);
       });
   }
-// console.log(userData);
+  // console.log(userData);
 
   // Fetch subcategories
   useEffect(() => {
@@ -281,7 +283,7 @@ useEffect(() => {
         colorWebSite,
         nameWebSite,
         getAddressList,
-        
+
 
       }}
     >
