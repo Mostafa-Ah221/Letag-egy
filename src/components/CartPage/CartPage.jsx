@@ -24,98 +24,117 @@ export default function CartPage() {
       </div>
     );
   }
-  if (isError) return <div>{language === "ar" ? "حدث خطأ أثناء تحميل البيانات." : "An error occurred while loading the data."}</div>;
+  if (isError)
+    return (
+      <div>
+        {language === "ar"
+          ? "حدث خطأ أثناء تحميل البيانات."
+          : "An error occurred while loading the data."}
+      </div>
+    );
 
   return (
-    <div className="w-full relative">
-      <div className="my-9">
-        <h1 className="font-bold text-3xl text-center md:text-start">
-          {language === "ar" ? "تحقق من عربة التسوق الخاص بك" : "Check Your Cart"}
-        </h1>
-      </div>
-      {cart.length > 0 && productsData ? (
-        <div className="grid grid-cols-12 gap-7 px-5">
-          <div className="space-y-4 col-span-12 md:col-span-8 ">
-            {productsData.map((productData, index) => {
-              const product = productData.data.products;
-              const cartItem = cart.find((item) => item.id === product.id);
+    <div className="w-full px-5 my-10">
+      {/* العنوان */}
+      <h1 className="font-bold text-3xl text-center mb-8">
+        {language === "ar" ? "عربة التسوق" : "Your Shopping Cart"}
+      </h1>
 
-              return (
-                <div
-                  key={product.id}
-                  className="flex gap-4 items-center border p-4 hover:shadow-md transition-shadow duration-300"
-                >
-                  <div className="w-20 h-20 flex-shrink-0">
-                    <img
-                      src={product.photos[0].url}
-                      alt={product.title}
-                      className="w-full h-full object-cover rounded-md"
-                    />
-                  </div>
-                  <div className="flex flex-col flex-grow">
-                   <h3 className="text-lg font-medium break-words">{product.title}</h3>
-                    <span className="text-primary text-lg font-semibold">
-                      {product.price} {currencyData}
-                    </span>
-                    <div className="flex items-center gap-4 mt-2">
-                      {/* حقل التحكم في الكمية */}
+      {/* جدول السلة */}
+      <div className="grid grid-cols-12 gap-8">
+        <div className="col-span-12 md:col-span-8">
+          <table className="w-full border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="border border-gray-300 p-3 text-center">{language === "ar" ? "المنتج" : "Product"}</th>
+                <th className="border border-gray-300 p-3 text-center">{language === "ar" ? "العدد" : "Quantity"}</th>
+                <th className="border border-gray-300 p-3 text-center">{language === "ar" ? "السعر" : "Price"}</th>
+                <th className="border border-gray-300 p-3 text-center">{language === "ar" ? "الإجمالي" : "Total"}</th>
+                <th className="border border-gray-300 p-3 text-center">{language === "ar" ? "حذف" : "Remove"}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {productsData.map((productData) => {
+                const product = productData.data.products;
+                const cartItem = cart.find((item) => item.id === product.id);
+
+                return (
+                  <tr key={product.id} className="text-center hover:bg-gray-100">
+                    {/* صورة المنتج */}
+                    <td className="border border-gray-300 p-3 flex items-center justify-center">
+                      <img
+                        src={product.photos[0].url}
+                        alt={product.title}
+                        className="w-20 h-20 object-cover rounded-md"
+                      />
+                      <span className="ml-4">{product.title}</span>
+                    </td>
+
+                    {/* الكمية */}
+                    <td className="border border-gray-300 p-3">
                       <input
                         type="number"
-                        value={cartItem.quantity} // عرض الكمية الحالية
+                        value={cartItem.quantity}
                         onChange={(e) => {
                           const newQuantity = Math.max(1, parseInt(e.target.value, 10) || 1);
-                          updateQuantity(product.id, newQuantity); // تحديث الكمية للمنتج الحالي
+                          updateQuantity(product.id, newQuantity);
                         }}
                         min={1}
-                        className="w-16 text-center py-1 px-2 border border-gray-300 rounded-md shadow-sm"
+                        className="w-16 text-center border rounded-md"
                       />
+                    </td>
+
+                    {/* السعر */}
+                    <td className="border border-gray-300 p-3">
+                      {product.price} {currencyData}
+                    </td>
+
+                    {/* الإجمالي */}
+                    <td className="border border-gray-300 p-3 font-semibold">
+                      {(product.price * cartItem.quantity).toFixed(2)} {currencyData}
+                    </td>
+
+                    {/* زر الحذف */}
+                    <td className="border border-gray-300 p-3">
                       <button
-                        className="text-red-500 hover:text-red-600 text-sm font-medium"
+                        className="text-red-500 hover:text-red-700 font-medium"
                         onClick={() => removeFromCart(product.id)}
                       >
                         {language === "ar" ? "حذف" : "Remove"}
                       </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div className="col-span-12 md:col-span-4 border p-4 hover:shadow-md transition-shadow duration-300 h-fit">
-            <h2 className="text-center text-[1.1rem]">
-              {language === "ar" ? "معلومات الطلب" : "Order Information"}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        {/* معلومات الطلب */}
+        <div className="col-span-12 md:col-span-4">
+          <div className="bg-black text-white p-5 rounded-md shadow-lg">
+            <h2 className="text-xl font-bold mb-4 text-center">
+              {language === "ar" ? "إجمالي السلة" : "Cart Summary"}
             </h2>
-            <div className="flex justify-between items-center gap-2 my-5">
-              <h3>{language === "ar" ? "الاجمالي الفرعي :" : "Subtotal :"}</h3>
-              <span>
-                {getTotalPrice().toFixed(2)} {currencyData}
-              </span>
+            <div className="flex justify-between mb-3">
+              <span>{language === "ar" ? "المجموع الفرعي" : "Subtotal"}:</span>
+              <span>{getTotalPrice().toFixed(2)} {currencyData}</span>
             </div>
-            <hr />
-            <div className="flex justify-between items-center gap-2 my-3">
-              <h3 className="text-2xl font-bold">
-                {language === "ar" ? "المجموع الكلي :" : "Total :"}
-              </h3>
-              <span>
-                {getTotalPrice().toFixed(2)} {currencyData}
-              </span>
+            <div className="flex justify-between mb-3">
+              <span>{language === "ar" ? "الضرائب" : "Taxes"}:</span>
+              <span>0.00 {currencyData}</span>
             </div>
+            <hr className="my-3 border-gray-500" />
+            <div className="flex justify-between text-lg font-bold">
+              <span>{language === "ar" ? "الإجمالي" : "Total"}:</span>
+              <span>{getTotalPrice().toFixed(2)} {currencyData}</span>
+            </div>
+            <button className="w-full bg-primary text-white py-2 rounded-md mt-5 hover:bg-primary-dark">
+              {language === "ar" ? "الإنتقال لعملية الدفع" : "Proceed to Checkout"}
+            </button>
           </div>
         </div>
-      ) : (
-        <div className="text-center mt-8">
-          <p className="text-gray-600 text-lg mb-4">
-            {language === "ar"
-              ? "عربتك فارغة. يبدو أنك لم تقم بإضافة أي منتج بعد."
-              : "Your cart is empty. It looks like you haven't added any products yet."}
-          </p>
-          <img
-            src="https://img.freepik.com/free-vector/shopping-supermarket-cart-with-grocery-pictogram_1284-11697.jpg?ga=GA1.1.812912771.1724576833&semt=ais_hybrid"
-            alt="Cart Empty"
-            className="w-48 mx-auto"
-          />
-        </div>
-      )}
+      </div>
     </div>
   );
 }

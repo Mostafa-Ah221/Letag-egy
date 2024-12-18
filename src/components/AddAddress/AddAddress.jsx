@@ -10,6 +10,7 @@ function AddAddress({ showAddress = true }) {
     const towns = settings_domain?.data?.locations || [];
 
     const token = userToken.startsWith("bearer") ? userToken : `Bearer ${userToken}`;
+console.log(userToken);
 
     // States
     const [selectedTownId, setSelectedTownId] = useState('');
@@ -44,12 +45,8 @@ function AddAddress({ showAddress = true }) {
         const selectedRegion = regions.find(region => String(region.id) === String(event.target.value));
         setSelectedRegionId(selectedRegion?.id || '');
 
-        // استخراج shipping_price من المنطقة المختارة
-        const price = selectedRegion?.shipping_price || '0'; // تأكد من القيمة
-        setShippingPrice(price);
-            console.log("Shipping Price:", price);
+      
 
-        // دمج اسم المنطقة مع اسم المحافظة
         const townName = towns.find(town => String(town.id) === String(selectedTownId))?.name || '';
         const regionName = selectedRegion?.name || '';
         const combinedAddress = `${regionName} - ${townName}`;
@@ -132,13 +129,6 @@ function AddAddress({ showAddress = true }) {
                         </option>
                     ))}
                 </select>
-
-                {/* عرض سعر الشحن */}
-                {/* {shippingPrice && (
-                    <p className='text-start font-bold text-xl mt-4'>
-                        {language === 'ar' ? `سعر الشحن: ${shippingPrice}` : `Shipping Price: ${shippingPrice}`}
-                    </p>
-                )} */}
 
                 {/* Building Number */}
                 <h3 className='text-start font-bold text-2xl my-2'>

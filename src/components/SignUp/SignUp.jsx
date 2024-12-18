@@ -24,8 +24,8 @@ export default function SignUp() {
     axios.post(`https://demo.leetag.com/api/customer/register`, values)
       .then((apiResponse) => {
         setLoading(false);
-        navigate('/register');
-        console.log(apiResponse.data);
+        navigate('/login');
+        alert(apiResponse.data.message);
       })
       .catch((apiResponse) => {
         setLoading(false);
@@ -162,7 +162,7 @@ export default function SignUp() {
               )}
             </div>
           </div>
-          <button type="submit" className="bg-primary m-auto block  hover:tracking-widest duration-300 text-white font-bold py-2 px-4 rounded mt-5">    {loading?<ClipLoader color="#36d7b7" size={15} />:"Register"}</button>
+          <button type="submit" className="bg-primary m-auto block  hover:tracking-widest duration-300 text-white font-bold py-2 px-4 rounded mt-5"> {loading?<ClipLoader color="#36d7b7" size={15} />:"Register"}</button>
            <div className="ml-40 mt-5">
             Do you have an account? <Link to="/login" className="text-primary font-semibold hover:underline">Login</Link>
            </div>

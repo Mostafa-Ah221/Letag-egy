@@ -27,7 +27,7 @@ function Orders() {
 
         const ordersJson = await ordersRes.json();
         console.log("Data In API:", ordersJson);
-        setOrders(ordersJson.data.orders);
+        setOrders(ordersJson.data?.orders || []);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -44,48 +44,50 @@ function Orders() {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
               <th className="px-6 py-3">رقم الطلب</th>
-              <th className="px-6 py-3">تاريخ الطلب</th>
               <th className="px-6 py-3">الحالة</th>
               <th className="px-6 py-3">طريقة الدفع</th>
               <th className="px-6 py-3">الإجمالي</th>
-              <th className="px-6 py-3">المنتجات</th>
-              <th className="px-6 py-3">معلومات الشحن</th>
-              <th className="px-6 py-3">محتوى الطلب</th>
+              {/* <th className="px-6 py-3">المنتجات</th> */}
+              {/* <th className="px-6 py-3">معلومات الشحن</th> */}
+              {/* <th className="px-6 py-3">محتوى الطلب</th> */}
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
-              <tr key={order.id} className="bg-white border-b">
-                <td className="px-6 py-4">{order.order_no}</td>
-                <td className="px-6 py-4">{order.created_at}</td>
-                <td className="px-6 py-4">{order.order_status}</td>
-                <td className="px-6 py-4">{order.payment_method}</td>
-                <td className="px-6 py-4">{order.total}</td>
+            {orders?.map((order) => (
+              <tr key={order?.id} className="bg-white border-b">
+                <td className="px-6 py-4">{order?.order_no || "N/A"}</td>
+                <td className="px-6 py-4">{order?.order_status || "N/A"}</td>
+                <td className="px-6 py-4">{order?.payment_method || "N/A"}</td>
+                <td className="px-6 py-4">{order?.total }</td>
 
-                <td className="px-6 py-4">
-                  {order.order_items.map((item) => (
-                    <div key={item.id}>
-                      <span>المنتج: {item.term.title_ar}</span> <br />
-                      <span>الكمية: {item.qty}</span> <br />
-                      <span>السعر: {item.amount}</span>
-                    </div>
-                  ))}
-                </td>
+                {/* <td className="px-6 py-4">
+                  {order?.order_items?.length > 0 ? (
+                    order.order_items.map((item) => (
+                      <div key={item?.id || Math.random()}>
+                        <span>المنتج: {item?.term?.title_ar || "N/A"}</span> <br />
+                        <span>الكمية: {item?.qty || "N/A"}</span> <br />
+                        <span>السعر: {item?.amount || "N/A"}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <span>لا توجد منتجات</span>
+                  )}
+                </td> */}
 
-                <td className="px-6 py-4">
+                {/* <td className="px-6 py-4">
                   <div>
-                    <span>المدينة: {order.shipping_info.city.name}</span> <br />
-                    <span>طريقة الشحن: {order.shipping_info.shipping_method.name}</span>
+                    <span>المدينة: {order?.shipping_info?.city?.name || "N/A"}</span> <br />
+                    <span>طريقة الشحن: {order?.shipping_info?.shipping_method?.name || "N/A"}</span>
                   </div>
-                </td>
+                </td> */}
 
-                <td className="px-6 py-4">
+                {/* <td className="px-6 py-4">
                   <div>
-                    <span>الاسم: {order.order_content.name}</span> <br />
-                    <span>الهاتف: {order.order_content.phone}</span> <br />
-                    <span>العنوان: {order.order_content.address}</span>
+                    <span>الاسم: {order?.order_content?.name || "N/A"}</span> <br />
+                    <span>الهاتف: {order?.order_content?.phone || "N/A"}</span> <br />
+                    <span>العنوان: {order?.order_content?.address || "N/A"}</span>
                   </div>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>

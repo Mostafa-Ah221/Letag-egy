@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { useCart } from "../../context/CartContext";
+import { useLanguage } from "../../context/LanguageContextPro";
 
 export default function CartOrder() {
   const { cart, getTotalPrice, currencyData } = useCart();
   const [total, setTotal] = useState(0);
+  const { language } = useLanguage();
 
   useEffect(() => {
     const calculatedTotal = getTotalPrice().toFixed(2);
@@ -16,9 +18,9 @@ export default function CartOrder() {
       <table className="w-full table-auto border-collapse">
         <thead>
           <tr>
-            <th className="border px-4 py-2 ">المنتج</th>
-            <th className="border px-4 py-2 ">الكمية</th>
-            <th className="border px-4 py-2 ">الاجمالي</th>
+            <th className="border px-4 py-2 ">{language === "ar" ? "المنتج ":"Product"}</th>
+            <th className="border px-4 py-2 ">{language === "ar" ? "الكمية ":"Quantity"}</th>
+            <th className="border px-4 py-2 ">{language === "ar" ? "الاجمالي":"Total"}</th>
           </tr>
         </thead>
         <tbody>
@@ -30,7 +32,7 @@ export default function CartOrder() {
             </tr>
           ))}
           <tr>
-            <td colSpan="2" className="border px-4 py-2 font-semibold text-right">المبلغ الاجمالي</td>
+            <td colSpan="2" className="border px-4 py-2 font-semibold">{language === "ar" ? "المبلغ الاجمالي":"Total Amount"}</td>
             <td className="border px-4 py-2 font-semibold">{total}{currencyData}</td>
           </tr>
         </tbody>

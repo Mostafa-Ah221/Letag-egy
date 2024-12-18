@@ -38,7 +38,7 @@ export default function Navbar() {
   // console.log(logo);
 
   const handleOpenMenu = () => {
-    if (isOpen) {
+    if (isOpen && searchData2 && searchData) {
       document.body.style.overflow = "auto";
       document.documentElement.style.overflow = "auto";
       setIsOpen(false);
@@ -316,7 +316,7 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-        <div className="flex justify-center items-center ml-[9.7rem]">
+        <div className="flex justify-center items-center ml-[9.7rem] ">
        <div
         className={`${
         searchData || searchData2 ? "flex" : "hidden"
