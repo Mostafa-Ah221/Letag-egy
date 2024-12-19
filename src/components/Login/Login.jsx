@@ -10,9 +10,8 @@ import { useLanguage } from "../../context/LanguageContextPro";
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const [errorMas, setErrorMas] = useState("");
-  const [openSection, setOpenSection] = useState(null);
   const { setUserToken } = useContext(ContextData);
-  const { language } = useLanguage(); // استرجاع اللغة من السياق
+  const { language } = useLanguage(); 
   
   let navigate = useNavigate();
 
@@ -21,71 +20,93 @@ export default function Login() {
       .email(language === "ar" ? "الايمال غير صالح" : "Email is invalid")
       .required(language === "ar" ? "الايمال مطلوب" : "Email is required"),
     password: Yup.string()
-      .matches(/^[A-Z].*$/, language === "ar" ? "يجب أن تبدأ كلمة السر بحرف كبير" : "Password must start with an uppercase letter")
+      .matches(/$/ , language === "ar" ? "يجب أن تبدأ كلمة السر بحرف كبير" : "Password must start with an uppercase letter")
       .required(language === "ar" ? "كلمة السر مطلوبة" : "Password is required"),
   });
 
-  function handleRegister(values) {
-    setLoading(true);
-    const formData = new FormData();
-    formData.append('email', values.email);
-    formData.append('password', values.password);
+ function handleRegister(values) {
+  setLoading(true);
+  console.log("Login Attempt:", values); // تتبع البيانات المرسلة
 
-    axios.post(`https://demo.leetag.com/api/customer/login`, formData)
-      .then((apiResponse) => {
-        const tokenUser = apiResponse?.data?.data.user.original.access_token;
-        localStorage.setItem("userToken", tokenUser);
-        setUserToken(tokenUser);
-        setLoading(false);
-        navigate('/');
-      })
-      .catch((error) => {
-        setLoading(false);
-        const errorMessage = error.response?.data?.message || error.message || (language === "ar" ? "حدث خطأ غير متوقع" : "An unexpected error occurred");
-        if (errorMessage.includes("email") || errorMessage.includes("password")) {
-          setErrorMas(language === "ar" ? "الايمال أو كلمة السر غير صحيحة" : "Email or Password is incorrect");
-        } else {
-          setErrorMas(errorMessage);
-        }
-        console.error("Error details:", error);
-      });
-  }
-
-  async function handleForgotPassword(values) {
-    setLoading(true);
-    console.log("Sending email:", values.email);
-
-    try {
-      const response = await axios.post(`https://tarshulah.com/api/customer/forgot-password`, {
-        email: values.email
-      });
-
-      if (!response.data.status) {
-        setErrorMas(language === "ar" 
-          ? "هذا البريد الإلكتروني غير مُسجل. الرجاء التأكد من صحة البريد." 
-          : "We can't find a user with that email address.");
-      } else {
-        setErrorMas(language === "ar" 
-          ? "تم إرسال رابط إعادة تعيين كلمة المرور بنجاح." 
-          : "Password reset link sent successfully.");
-      }
-      
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      console.error("Error fetching products:", error);
-
-      if (error.response?.data?.message) {
-        setErrorMas(language === "ar" 
-          ? "هذا البريد الإلكتروني غير مُسجل. الرجاء التأكد من صحة البريد." 
-          : error.response.data.message);
-      } else {
-        setErrorMas(language === "ar" 
-          ? "حدث خطأ غير متوقع. الرجاء المحاولة مرة أخرى لاحقاً." 
-          : "An unexpected error occurred. Please try again later.");
-      }
+  axios.post(`https://demo.leetag.com/api/customer/login`, {
+    email: values.email,
+    password: values.password
+  }, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
     }
-  }
+  })
+  .then((apiResponse) => {
+    console.log("Full API Response:", apiResponse);
+    
+    // محاولة استخراج التوكن بطرق مختلفة
+    const tokenUser = 
+      apiResponse.data?.data?.user?.original?.access_token ||
+      apiResponse.data?.access_token ||
+      apiResponse.data?.token;
+
+    if (tokenUser) {
+      localStorage.setItem("userToken", tokenUser);
+      setUserToken(tokenUser);
+      navigate('/');
+    } else {
+      console.error("No token found in response");
+      setErrorMas(language === "ar" ? "خطأ في استخراج التوكن" : "Error extracting token");
+    }
+    
+    setLoading(false);
+  })
+  .catch((error) => {
+    setLoading(false);
+    console.error("Complete Error Object:", error);
+    console.error("Error Response:", error.response);
+    console.error("Error Request:", error.request);
+
+    const errorMessage = 
+      error.response?.data?.message || 
+      error.message || 
+      (language === "ar" ? "حدث خطأ غير متوقع" : "An unexpected error occurred");
+
+    setErrorMas(errorMessage);
+  });
+}
+
+  // async function handleForgotPassword(values) {
+  //   setLoading(true);
+  //   console.log("Sending email:", values.email);
+
+  //   try {
+  //     const response = await axios.post(`https://tarshulah.com/api/customer/forgot-password`, {
+  //       email: values.email
+  //     });
+
+  //     if (!response.data.status) {
+  //       setErrorMas(language === "ar" 
+  //         ? "هذا البريد الإلكتروني غير مُسجل. الرجاء التأكد من صحة البريد." 
+  //         : "We can't find a user with that email address.");
+  //     } else {
+  //       setErrorMas(language === "ar" 
+  //         ? "تم إرسال رابط إعادة تعيين كلمة المرور بنجاح." 
+  //         : "Password reset link sent successfully.");
+  //     }
+      
+  //     setLoading(false);
+  //   } catch (error) {
+  //     setLoading(false);
+  //     console.error("Error fetching products:", error);
+
+  //     if (error.response?.data?.message) {
+  //       setErrorMas(language === "ar" 
+  //         ? "هذا البريد الإلكتروني غير مُسجل. الرجاء التأكد من صحة البريد." 
+  //         : error.response.data.message);
+  //     } else {
+  //       setErrorMas(language === "ar" 
+  //         ? "حدث خطأ غير متوقع. الرجاء المحاولة مرة أخرى لاحقاً." 
+  //         : "An unexpected error occurred. Please try again later.");
+  //     }
+  //   }
+  // }
 
   const formik = useFormik({
     initialValues: {
@@ -105,7 +126,7 @@ export default function Login() {
       )}
       <div className='grid grid-cols-12 gap-5'>
         {/* Form Section for Login */}
-        {openSection !== "Forgot" && (
+      
           <div className="md:col-span-6 order-1 col-span-12">
             <form onSubmit={formik.handleSubmit}>
               <h2 className="text-2xl font-semibold text-center mb-7">{language === "ar" ? "تسجيل الدخول الآن" : "Login Now"}</h2>
@@ -137,19 +158,34 @@ export default function Login() {
               </div>
               <div className="inline-flex items-center">
                 <p className="mr-2">{language === "ar" ? "هل نسيت كلمة السر؟" : "Forgot Password?"}</p>
-                <p onClick={() => setOpenSection("Forgot")} className="text-primary font-semibold hover:underline cursor-pointer">
+                <Link to={'/forgetpassword'}  className="text-primary font-semibold hover:underline cursor-pointer">
                   {language === "ar" ? "انقر هنا" : "Click Here"}
-                </p>
+                </Link>
               </div>
               <button type="submit" className="bg-primary hover:tracking-widest duration-300 block text-white font-bold py-2 px-4 rounded mt-5 m-auto">
                 {loading ? <ClipLoader color="#36d7b7" size={15} /> : (language === "ar" ? "تسجيل الدخول" : "Login")}
               </button>
+              <div className="flex justify-center mt-7">
+                {language === "ar" 
+                  ? <>
+                      ليس لديك حساب؟{" "}
+                      <Link to="/register" className="text-primary font-semibold hover:underline">
+                        سجل الآن
+                      </Link>
+                    </>: <>
+                      Don't have an account?{" "}
+                      <Link to="/register" className="text-primary font-semibold hover:underline">
+                        Register Now
+                      </Link>
+                    </>
+                }
+              </div>
+
             </form>
           </div>
-        )}
 
         {/* Forgot Password Section */}
-        {openSection === "Forgot" && (
+        {/* {openSection === "Forgot" && (
           <div className="md:col-span-6 order-1 col-span-12">
             <h2 className="text-2xl font-semibold text-center mb-7">{language === "ar" ? "إعادة تعيين كلمة السر" : "Reset Your Password"}</h2>
             <form>
@@ -174,7 +210,7 @@ export default function Login() {
               </div>
             </form>
           </div>
-        )}
+        )} */}
         <div className="relative hidden md:block col-span-0 md:col-span-6 order-1 w-full h-96">
           <div className="absolute top-0 right-0 w-full h-full bg-primary opacity-40"></div>
           <img className="w-full h-full object-cover" src="https://khamato.com/themes/default/assets/images/login.png" alt="Login Illustration" />

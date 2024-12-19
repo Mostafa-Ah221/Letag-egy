@@ -56,6 +56,14 @@ async function getApiHome(language) {
   });
   return response.data;
 }
+async function getOffers(language) {
+  const response = await axios.get(`https://demo.leetag.com/api/offers`, {
+     headers: { lang: language },
+  });
+  console.log(response.data);
+  
+  return response.data;
+}
 
 async function getProdDetails(id, language) {
   const response = await axios.get(
@@ -260,6 +268,7 @@ export default function DataContextProvider({ children }) {
         subCategories: () => subCategories(language),
         getBrands: () => getBrands(language),
         getApiHome: () => getApiHome(language),
+        getOffers: () => getOffers(language),
         getSlider: () => getSlider(language),
         getProdDetails: (id) => getProdDetails(id, language),
         deleteAddress: (id) => deleteAddress(id, userToken, language),
@@ -283,7 +292,7 @@ export default function DataContextProvider({ children }) {
         colorWebSite,
         nameWebSite,
         getAddressList,
-
+         
 
       }}
     >

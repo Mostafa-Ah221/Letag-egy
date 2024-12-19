@@ -14,6 +14,8 @@ export default function Footer() {
  
   });
   const logo = settings_domain?.data.logo
+  const socials = settings_domain?.data.socials
+console.log(socials);
 
   const menuItems = data?.data.menu || [];
   const firstFourItems = menuItems.slice(0, 4); 
@@ -34,8 +36,20 @@ export default function Footer() {
                 ? "إمتلك متجر الكتروني الأن كل الأدوات الممكنة في متناول يدك لإنشاء متجر الكتروني إحترافي مع لي تاج، بخطوات بسیطة وبدون أي خبرة تقنیة والبدء في البيع على الفور"
                 : "Own an online store now! All the tools you need are at your fingertips to create a professional online store with Leetag. With simple steps and no technical expertise required, you can start selling immediately!"}
             </p>
+           <div>
+              <ul className='flex gap-4 mt-4'>
+                {Array.isArray(socials) && socials.length > 0 ? (
+                  socials.map((social, index) => <li className="w-9 h-9 rounded-full" key={index}>{social.icon}</li>)
+                ) : (
 
-           
+                  [1, 2, 3, 4].map((num, index) => (
+                    <li key={index} className="w-9 h-9 rounded-full bg-gray-300"></li>
+                  ))
+                )}
+              </ul>
+            </div>
+
+            
           </div>
           {/* Logo and About Section */}
           <div className=" text-center">

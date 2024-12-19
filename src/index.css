@@ -1,10 +1,9 @@
+@import "slick-carousel/slick/slick.css";
+@import "slick-carousel/slick/slick-theme.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-
-@import "slick-carousel/slick/slick.css";
-@import "slick-carousel/slick/slick-theme.css";
 
 :root {
   --primary-color: #f0852a;
@@ -19,7 +18,8 @@ html[lang="en"] {
   direction: ltr;
   text-align: left;
 }
- /* input-field */
+
+/* input-field */
 .input-field {
   display: block;
   width: 100%;
@@ -43,6 +43,7 @@ html[lang="en"] {
 html, body, #root {
     overflow-x: hidden;
 }
+
 .pagination .active {
     @apply bg-primary text-white rounded-lg;
 }

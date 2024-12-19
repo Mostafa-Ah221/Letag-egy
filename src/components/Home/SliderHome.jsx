@@ -7,7 +7,7 @@ import { useContext } from "react";
 
 export default function SliderHome() {
     const { getApiHome } = useContext(ContextData);
-
+    
   const settings = {
     dots: true,
     infinite: true,
@@ -52,7 +52,8 @@ export default function SliderHome() {
   if (isError) return <p>Error occurred while fetching data.</p>;
 
   return (
-    <div className="relative">
+    <div>
+        <div className="relative">
       <Slider {...settings}>
         {data?.data?.sliders.map((item) => (
           <div key={item.id} className="relative">
@@ -96,6 +97,9 @@ export default function SliderHome() {
           }
         `}
       </style>
+        </div>
+        
     </div>
+   
   );
 }

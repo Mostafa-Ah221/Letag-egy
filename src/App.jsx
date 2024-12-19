@@ -25,6 +25,7 @@ import PageMenu from "./components/PageMenu/PageMenu";
 import SearchByItem from "./components/SearchByItem/SearchByItem";
 import Orders from "./components/Orders/Orders";
 import AddAddress from "./components/AddAddress/AddAddress";
+import ForgetPassword from "./components/ForgetPassword/ForgetPassword";
 
 
 
@@ -63,6 +64,7 @@ function App() {
         { path: "contactUs", element: <Contact /> },
         { path: "login", element: <Login /> },
         { path: "register", element: <SignUp /> },
+        { path: "forgetpassword", element: <ForgetPassword /> },
         { path: "pageBrand", element: <PageBrands /> },
         { path: "wishlist", element: <WishList /> },
         { path: "SearchByItem/:id", element: <SearchByItem /> },

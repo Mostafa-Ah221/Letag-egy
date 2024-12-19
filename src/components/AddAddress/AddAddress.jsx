@@ -28,13 +28,11 @@ console.log(userToken);
     // Handle Town Change
     const handleTownChange = (event) => {
         const townId = event.target.value;
-        setSelectedTownId(townId); // تحديد المحافظة المختارة
+        setSelectedTownId(townId); 
 
-        // استخراج المناطق من المحافظة المختارة
         const selectedTown = towns.find(town => String(town.id) === String(townId));
         setRegions(selectedTown?.regions || []);
 
-        // إعادة تعيين المنطقة والعنوان والشحن
         setSelectedRegionId('');
         setAddress('');
         setShippingPrice('');
@@ -87,9 +85,9 @@ console.log(userToken);
     };
 
     return (
-        <div className='container '>
+        <div className='container mt-11'>
             {/* اختيار المحافظة */}
-            <h3 className='text-start font-bold text-2xl'>
+            <h3 className='text-start font-bold text-2xl mb-3'>
                 {language === 'ar' ? 'يرجى اختيار المحافظة' : 'Please select the city'}
             </h3>
             <div className='w-[70%]'>

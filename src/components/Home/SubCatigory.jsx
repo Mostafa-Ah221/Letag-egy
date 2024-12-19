@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom";
 import { useLanguage } from '../../context/LanguageContextPro'; 
+import Offers from './Offers';
 
 export default function SubCategory() {
   const { subCategories } = useContext(ContextData);
@@ -101,7 +102,8 @@ export default function SubCategory() {
   if (isError) return <div>Error loading categories</div>;
 
   return (
-    <div className="relative py-7">
+    <div>
+        <div className="relative py-7">
       <h2 className=' pb-4 text-xl text-secondary'>{language === "ar"? "الفئات الرئيسية ": "Main Categories"}</h2>
       <Slider ref={sliderRef} {...settings}>
         {filteredCategory.map((category, index) => (
@@ -125,5 +127,8 @@ export default function SubCategory() {
       <PrevArrow />
       <NextArrow />
     </div>
+    <Offers />
+    </div>
+   
   );
 }
