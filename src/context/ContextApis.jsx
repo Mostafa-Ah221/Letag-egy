@@ -148,6 +148,7 @@ export default function DataContextProvider({ children }) {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
+  const [addresses, setAddresses] = useState();
   const [selectedTownId, setSelectedTownId] = useState(null); // TODO for Stock
 
   const { data: settings } = useQuery({
@@ -169,29 +170,23 @@ export default function DataContextProvider({ children }) {
     );
     return response.data;
   }
-  //todo================================================================(updateAddress)=====================
-
-  async function updateAddress(id, userToken, updatedData) {
-    const response = await axios.post(
-      `https://tarshulah.com/api/customer/address/update/${id}`,
-      updatedData,
-      {
-        headers: {
-          "Accept": "application/json",
-          'Authorization': userToken
-        }
+ 
+useEffect(() => {
+  if (userToken) {
+    getAddressList(userToken).then((data) => {
+      if (data && data.data && Array.isArray(data.data.addresses)) {
+        setAddresses(data.data.addresses); // تحديث الحالة
+      } else {
+        console.error("No addresses found in the response:", data);
       }
-    );
-    return response.data;
+    }).catch(error => {
+      console.error("Error fetching address list:", error);
+    });
+  } else {
+    console.error("User token is not available");
   }
+}, [userToken]);
 
-  useEffect(() => {
-    if (userToken) {
-      getAddressList(userToken);
-    } else {
-      console.error("User token is not available");
-    }
-  }, [userToken]);
 
 
   let currencyData = settings?.data?.currency.currency_icon;
@@ -272,7 +267,6 @@ export default function DataContextProvider({ children }) {
         getSlider: () => getSlider(language),
         getProdDetails: (id) => getProdDetails(id, language),
         deleteAddress: (id) => deleteAddress(id, userToken, language),
-        updateAddress: (id) => updateAddress(id, userToken, language),
         getCategoriesDetails: (id) => getCategoriesDetails(id, language),
         getProductCategory: (idCategory, page, pageSize) =>
           getProductCategory(idCategory, page, pageSize, language),
@@ -291,8 +285,8 @@ export default function DataContextProvider({ children }) {
         selectedTownId,
         colorWebSite,
         nameWebSite,
-        getAddressList,
-         
+         setAddresses,
+         addresses
 
       }}
     >

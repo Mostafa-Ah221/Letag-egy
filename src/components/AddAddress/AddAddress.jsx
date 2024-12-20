@@ -5,7 +5,7 @@ import axios from 'axios';
 import Address from '../Address/Address';
 
 function AddAddress({ showAddress = true }) {
-    const { settings_domain, userToken } = useContext(ContextData);
+    const { settings_domain, userToken,setAddresses } = useContext(ContextData);
     const { language } = useLanguage();
     const towns = settings_domain?.data?.locations || [];
 
@@ -74,10 +74,9 @@ console.log(userToken);
             const res = await axios.post("https://tarshulah.com/api/customer/address/store", formData, {
                 headers: { "Authorization": token },
             });
-            console.log('Success:', res.data);
-            console.log('Success:', res.data?.data.address.location_id);
-            console.log('Success:', res.data?.data.address.region_id);
+          
             alert(language === 'ar' ? 'تم إضافة العنوان بنجاح' : 'Address added successfully');
+                   setAddresses(prevAddresses => [...prevAddresses, res.data.data.address]);
         } catch (error) {
             console.error('Error:', error.response || error.message);
             alert(language === 'ar' ? 'حدث خطأ أثناء الإضافة: ' + error.response?.data?.message : 'An error occurred while adding: ' + error.response?.data?.message);

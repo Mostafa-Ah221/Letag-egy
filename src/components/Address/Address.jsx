@@ -1,21 +1,21 @@
 import { useContext, useState } from "react";
 import { ContextData } from "../../context/ContextApis";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {  useQueryClient } from "@tanstack/react-query";
 import { useLanguage } from "../../context/LanguageContextPro";
 import { MapPin, Building2, Layers } from "lucide-react";
 import { MdCancel } from "react-icons/md";
 import axios from 'axios';
 
-export default function Address({ address = true }) {
+export default function Address({ address = true}) {
   const { language } = useLanguage();
   const queryClient = useQueryClient();
-  const { getAddressList, userToken, deleteAddress, updateAddress, settings_domain } = useContext(ContextData);
+  const {  userToken, deleteAddress, settings_domain,addresses } = useContext(ContextData);
 
-  const { data, isError, isLoading } = useQuery({
-    queryKey: ['getAddressList', language],
-    queryFn: () => getAddressList(userToken),
-  });
-  console.log(userToken);
+  // const { data, isError, isLoading } = useQuery({
+  //   queryKey: ['getAddressList', language],
+  //   queryFn: () => addresses(userToken),
+  // });
+
   const towns = settings_domain?.data?.locations || [];
   const [isShown, setIsShown] = useState(false);
   const [regions, setRegions] = useState([]);
@@ -37,37 +37,10 @@ export default function Address({ address = true }) {
     }
   };
   // Loading State
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-[300px]">
-        <div className="animate-pulse flex flex-col items-center space-y-4">
-          <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
-          <span className="text-lg text-gray-500">
-            {language === 'ar' ? 'جاري تحميل العناوين...' : 'Loading addresses...'}
-          </span>
-        </div>
-      </div>
-    );
-  }
 
-  // Error State
-  if (isError) {
-    return (
-      <div className="flex justify-center items-center min-h-[300px] bg-red-50">
-        <div className="text-center">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-red-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <span className="text-lg text-red-600">
-            {language === 'ar' ? 'حدث خطأ أثناء تحميل العناوين' : 'An error occurred while loading addresses'}
-          </span>
-        </div>
-      </div>
-    );
-  }
-
+ 
   // Empty State
-  if (!data?.data.addresses || data.data.addresses.length === 0) {
+  if (!addresses || addresses.length === 0) {
     return (
       <div className="flex justify-center items-center min-h-[300px] bg-gray-50">
         <div className="text-center">
@@ -169,9 +142,9 @@ export default function Address({ address = true }) {
         }
       );
       queryClient.invalidateQueries(["getAddressList", language]);
-      console.log('Success:', res.data);
-      console.log('Success:', res.data?.data.address.location_id);
-      console.log('Success:', res.data?.data.address.region_id);
+      // console.log('Success:', res.data);
+      // console.log('Success:', res.data?.data.address.location_id);
+      // console.log('Success:', res.data?.data.address.region_id);
       alert(language === 'ar' ? 'تم تعديل العنوان بنجاح' : 'Address updated successfully');
       if (isShown == true) {
         setIsShown(false);
@@ -195,7 +168,7 @@ export default function Address({ address = true }) {
         </h1>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data.data.addresses.map(address => (
+          {addresses.map(address => (
             <div
               key={address.id}
               className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-2 border border-gray-100"
