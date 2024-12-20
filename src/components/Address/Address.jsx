@@ -15,15 +15,13 @@ export default function Address({ address = true }) {
     queryKey: ['getAddressList', language],
     queryFn: () => getAddressList(userToken),
   });
-
+  console.log(userToken);
   const towns = settings_domain?.data?.locations || [];
   const [isShown, setIsShown] = useState(false);
   const [regions, setRegions] = useState([]);
   const [selectedRegionId, setSelectedRegionId] = useState('');
   const [selectedBuilding, setSelectedBuilding] = useState('');
   const [selectedFloor, setSelectedFloor] = useState('');
-  const [City, setCity] = useState("");
-  const [Region, setRegion] = useState("");
   const [building, setBuilding] = useState("");
   const [floor, setFloor] = useState("");
   const [selectedTownId, setSelectedTownId] = useState('');
@@ -85,27 +83,20 @@ export default function Address({ address = true }) {
     );
   }
 
- const handleUpdate = (address) => {
-  if (!isShown) {
-    setIsShown(true);
-  }
-
-  const { location_name, building_number, floor_number, region_name, id } = address;
-
-  const selectedTown = towns.find(town => String(town.name) === String(location_name));
-
-  setRegions(selectedTown?.regions || []);
-  setCity(location_name);
-  setBuilding(building_number);
-  setFloor(floor_number);
-  setRegion(region_name);
-  setSelectedBuilding(building_number);
-  setSelectedFloor(floor_number);
-  setAddressId(id);
-
-  console.log(address);
-};
-
+  const handleUpdate = (e, id) => {
+    if (isShown == false) {
+      setIsShown(true);
+    }
+    const parent = e.target.parentElement.parentElement.parentElement;
+    const childrenOfparent = parent.children;
+    const buildingNumber = childrenOfparent[1].children[0].children[1].textContent.split(":")[1];
+    const floorNumber = childrenOfparent[1].children[1].children[1].textContent.split(":")[1];
+    setBuilding(buildingNumber);
+    setFloor(floorNumber);
+    setSelectedBuilding(buildingNumber);
+    setSelectedFloor(floorNumber);
+    setAddressId(id);
+  };
 
   const handleBuildingChange = (event) => setSelectedBuilding(event.target.value);
   const handleFloorChange = (event) => setSelectedFloor(event.target.value);
@@ -178,9 +169,9 @@ export default function Address({ address = true }) {
         }
       );
       queryClient.invalidateQueries(["getAddressList", language]);
-      // console.log('Success:', res.data);
-      // console.log('Success:', res.data?.data.address.location_id);
-      // console.log('Success:', res.data?.data.address.region_id);
+      console.log('Success:', res.data);
+      console.log('Success:', res.data?.data.address.location_id);
+      console.log('Success:', res.data?.data.address.region_id);
       alert(language === 'ar' ? 'تم تعديل العنوان بنجاح' : 'Address updated successfully');
       if (isShown == true) {
         setIsShown(false);
@@ -196,8 +187,6 @@ export default function Address({ address = true }) {
     }
   };
   // Main Component
- 
-
   return (
     <>
       {address && (<div className="container mx-auto px-4 py-6 mt-20">
@@ -256,7 +245,7 @@ export default function Address({ address = true }) {
 
                     <button
                       className="w-full px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 transition-all duration-300 ease-in-out"
-                       onClick={() => handleUpdate(address)}
+                      onClick={() => handleUpdate(event, address.id)}
                     >
                       {language === 'ar' ? 'تعديل' : 'Update'}
                     </button>
@@ -267,21 +256,19 @@ export default function Address({ address = true }) {
             </div>
           ))}
           {isShown ? <>
-            <div className="fixed bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-2 border border-gray-100  top-[10%] right-[25%] 
-             w-[50%] ">
+            <div className="fixed bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-2 border border-gray-100 bg-white h-96 top-[10%] right-[25%] z-500 w-[50%] h-[80%]">
               <button className="absolute left-4 top-4" onClick={handleCancel}>
                 <MdCancel className="w-6 h-6" />
               </button>
               <h1 className={`font-bold text-2xl text-center mb-4 mt-2`}>{language === "ar" ? "تعديل العنوان" : "Address Update"}</h1>
-              <h3 className='text-center font-bold text-xl pt-2 pr-2'>
+              <h3 className='text-center font-bold text-2xl pt-2 pr-2'>
                 {language === 'ar' ? 'يرجى اختيار المحافظة' : 'Please select the city'}
               </h3>
               <div className='w-[70%] pt-2 pr-2 mx-auto'>
                 <select
                   name='town'
-                  className='w-full p-2 border border-gray-400 outline-none'
-                  onChange={handleTownChange}
-                  value={selectedTownId}
+                  className='w-full h-10 border border-gray-400 outline-none'
+                  onChange={() => handleTownChange(event)}
                 >
                   <option value="" disabled>
                     {language === 'ar' ? 'اختر المحافظة' : 'Select city'}
@@ -294,15 +281,14 @@ export default function Address({ address = true }) {
                 </select>
 
                 {/* اختيار المنطقة */}
-                <h3 className='text-center font-bold text-xl pt-2'>
+                <h3 className='text-center font-bold text-2xl pt-2'>
                   {language === 'ar' ? 'يرجى اختيار المنطقة' : 'Please select the region'}
                 </h3>
                 <div className="pt-2">
                   <select
                     name='region'
-                    className='w-full p-2 border border-gray-400 outline-none'
-                    value={selectedRegionId}
-                    onChange={handleRegionChange}
+                    className='w-full h-10 border border-gray-400 outline-none'
+                    onChange={() => handleRegionChange(event)}
                     disabled={!regions.length}
                   >
                     <option value="" disabled>
@@ -317,39 +303,33 @@ export default function Address({ address = true }) {
                 </div>
 
                 {/* Building Number */}
-                <h3 className='text-center font-bold text-xl my-2'>
+                <h3 className='text-center font-bold text-2xl my-2'>
                   {language === 'ar' ? 'رقم المبنى' : 'Building number'}
                 </h3>
                 <input
                   placeholder={language === "ar" ? "من فضلك ادخل رقم المبنى" : "Please Enter Building Number"}
-                  className='w-full p-2 border border-gray-400'
+                  className='w-full h-10 border border-gray-400'
                   onChange={() => handleBuildingChange(event)}
                   defaultValue={building}
                 />
 
                 {/* Floor Number */}
-                <h3 className='text-center font-bold text-xl my-2'>
+                <h3 className='text-center font-bold text-2xl my-2'>
                   {language === 'ar' ? 'رقم الطابق' : 'Floor number'}
                 </h3>
                 <input
                   placeholder={language === "ar" ? "من فضلك ادخل رقم الطابق" : "Please Enter Floor Number"}
-                  className='w-full p-2 border border-gray-400 mb-6'
+                  className='w-full h-10 border border-gray-400 mb-6'
                   onChange={() => handleFloorChange(event)}
                   defaultValue={floor}
                 />
               </div>
-              <div className="w-[30%] mx-auto flex gap-7">
+              <div className="w-[30%] mx-auto">
                 <button
-                  className="px-7 py-2 mb-4 text-center text-white bg-blue-500 rounded-md hover:bg-blue-600 transition-all duration-300 ease-in-out"
+                  className="w-[100%] h-12 mb-4  text-center text-white bg-blue-500 rounded-md hover:bg-blue-600 transition-all duration-300 ease-in-out"
                   onClick={() => handleConfirm(addressId)}
                 >
                   {language === 'ar' ? 'تم' : 'Confirm'}
-                </button>
-                <button
-                  className="mb-4 px-7 py-2 text-center text-white bg-gray-400 rounded-md transition-all duration-300 ease-in-out"
-                  onClick={() => handleCancel()}
-                >
-                  {language === 'ar' ? 'إلغاء' : 'Cancel'}
                 </button>
               </div>
             </div></> : <></>}

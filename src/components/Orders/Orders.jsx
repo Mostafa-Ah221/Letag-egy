@@ -3,10 +3,10 @@ import { useLanguage } from "../../context/LanguageContextPro";
 import { ContextData } from "../../context/ContextApis";
 
 function Orders() {
-  const [orders, setOrders] = useState([]); 
+  const [orders, setOrders] = useState([]);
   const { language } = useLanguage();
   const { userToken } = useContext(ContextData);
-
+  const [isPointsSystem, setIsPointsSystem] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -31,6 +31,19 @@ function Orders() {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
+      try {
+        const res = await fetch("https://tarshulah.com/api/domain/settings");
+        const resJson = await res.json();
+        const isPoints = await resJson.data.points_system;
+        if (isPoints == 1) {
+          setIsPointsSystem(true);
+        }
+        else {
+          setIsPointsSystem(false);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     fetchData();
@@ -38,7 +51,7 @@ function Orders() {
 
   return (
     <>
-      <h2 className="my-2 text-lg font-semibold">طلبات العملاء</h2>
+      {isPointsSystem ? <h2 className="my-2 text-lg font-semibold">النقاط المتاحة: </h2> : <></>}
       <div className="relative overflow-x-auto">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
@@ -58,7 +71,7 @@ function Orders() {
                 <td className="px-6 py-4">{order?.order_no || "N/A"}</td>
                 <td className="px-6 py-4">{order?.order_status || "N/A"}</td>
                 <td className="px-6 py-4">{order?.payment_method || "N/A"}</td>
-                <td className="px-6 py-4">{order?.total }</td>
+                <td className="px-6 py-4">{order?.total}</td>
 
                 {/* <td className="px-6 py-4">
                   {order?.order_items?.length > 0 ? (
