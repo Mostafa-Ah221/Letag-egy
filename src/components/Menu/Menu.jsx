@@ -28,7 +28,7 @@ function Menu() {
                 {userToken !== null ? (
                     <>
                         <NavLink
-                            to={'/profile'}
+                            to={'/user'}
                             className="flex flex-col items-center hover:cursor-pointer my-1 group duration-300 hover:bg-primary w-full p-2"
                         >
                             <div className="flex items-center justify-center">

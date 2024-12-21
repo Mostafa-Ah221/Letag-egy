@@ -26,6 +26,8 @@ import SearchByItem from "./components/SearchByItem/SearchByItem";
 import Orders from "./components/Orders/Orders";
 import AddAddress from "./components/AddAddress/AddAddress";
 import ForgetPassword from "./components/ForgetPassword/ForgetPassword";
+import UpDateProfile from "./components/Profile/UpDateProfile";
+import User from "./components/User/User";
 
 
 
@@ -71,7 +73,6 @@ function App() {
         { path: "categoryDetails/:id", element: <CategoryDetails /> },
         { path: "productDetails/:id", element: <ProductDetails /> },
         { path: "categoryFilter/:id", element: <CategoryFilter /> },
-        { path: "Orders", element: <Orders /> },
         { path: "pagemenu/:id", element: <PageMenu /> },
         { path: "cartpage", element: <CartPage /> },
         { path: "AddAddress", element: <AddAddress /> },
@@ -84,7 +85,14 @@ function App() {
            
           ],
         },
-        { path: "profile", element: <Profile /> }
+        { path: "user", element: <User />,
+          children: [
+            { path: "", element: <Profile /> },
+            { path: "updateProfile", element: <UpDateProfile /> },
+            { path: "addAddress", element: <AddAddress /> },
+            { path: "orders", element: <Orders /> },
+          ]
+         },
       ],
     },
   ]);

@@ -50,13 +50,14 @@ const handleRegionChange = (event) => {
         first_name: userData.name || "",
         last_name: userData.last_name || "",
         email: userData.email || "",
-       
+       phone: userData.phone || "",
       };
        
       if (
         formData.first_name !== updatedData.first_name ||
         formData.last_name !== updatedData.last_name ||
-        formData.email !== updatedData.email
+        formData.email !== updatedData.email,
+        formData.phone !== updatedData.phone
       ) {
         updateData(updatedData);
       }
