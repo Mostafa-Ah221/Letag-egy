@@ -134,6 +134,7 @@ const handleAddToWish = (product, isInWishList, setIsInWishList) => {
         clearWishList,
         wishList,
         handleAddToWish,
+        showToast
       }}
     >
       {children}

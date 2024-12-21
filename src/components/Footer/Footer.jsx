@@ -15,7 +15,7 @@ export default function Footer() {
   });
   const logo = settings_domain?.data.logo
   const socials = settings_domain?.data.socials
-console.log(socials);
+// console.log(socials);
 
   const menuItems = data?.data.menu || [];
   const firstFourItems = menuItems.slice(0, 4); 

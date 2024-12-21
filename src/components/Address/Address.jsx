@@ -5,16 +5,13 @@ import { useLanguage } from "../../context/LanguageContextPro";
 import { MapPin, Building2, Layers } from "lucide-react";
 import { MdCancel } from "react-icons/md";
 import axios from 'axios';
+import { useCart } from "../../context/CartContext";
 
 export default function Address({ address = true}) {
   const { language } = useLanguage();
-  const queryClient = useQueryClient();
-  const {  userToken, deleteAddress, settings_domain,addresses } = useContext(ContextData);
-
-  // const { data, isError, isLoading } = useQuery({
-  //   queryKey: ['getAddressList', language],
-  //   queryFn: () => addresses(userToken),
-  // });
+  const queryClient = useQueryClient()
+      const { showToast } = useCart();
+  const {  userToken, deleteAddress, settings_domain,getAddressList ,addresses,setAddresses} = useContext(ContextData);
 
   const towns = settings_domain?.data?.locations || [];
   const [isShown, setIsShown] = useState(false);
@@ -40,6 +37,7 @@ export default function Address({ address = true}) {
 
  
   // Empty State
+  // if (!data?.data.addresses || data?.data.addresses.length === 0) {
   if (!addresses || addresses.length === 0) {
     return (
       <div className="flex justify-center items-center min-h-[300px] bg-gray-50">
@@ -94,12 +92,6 @@ export default function Address({ address = true}) {
     const selectedRegion = regions.find(region => String(region.id) === String(event.target.value));
     setSelectedRegionId(selectedRegion?.id || '');
 
-    // استخراج shipping_price من المنطقة المختارة
-    const price = selectedRegion?.shipping_price || '0'; // تأكد من القيمة
-    setShippingPrice(price);
-    console.log("Shipping Price:", price);
-
-    // دمج اسم المنطقة مع اسم المحافظة
     const townName = towns.find(town => String(town.id) === String(selectedTownId))?.name || '';
     const regionName = selectedRegion?.name || '';
     const combinedAddress = `${regionName} - ${townName}`;
@@ -107,11 +99,7 @@ export default function Address({ address = true}) {
   };
 
   const handleConfirm = async (id) => {
-    console.log(id);
-    console.log(selectedTownId.toString());
-    console.log(selectedAddress.toString(), selectedRegionId.toString());
-    console.log(selectedBuilding.toString());
-    console.log(selectedFloor.toString());
+ 
     if (!userToken) {
       alert(language === 'ar' ? 'التوكن غير موجود. قم بتسجيل الدخول مرة أخرى.' : 'Token not found. Please log in again.');
       return;
@@ -141,11 +129,12 @@ export default function Address({ address = true}) {
           }
         }
       );
+      getAddressList(userToken).then((data) => {
+      setAddresses(data.data.addresses);
+    });
       queryClient.invalidateQueries(["getAddressList", language]);
-      // console.log('Success:', res.data);
-      // console.log('Success:', res.data?.data.address.location_id);
-      // console.log('Success:', res.data?.data.address.region_id);
-      alert(language === 'ar' ? 'تم تعديل العنوان بنجاح' : 'Address updated successfully');
+   
+      showToast(language === 'ar' ? 'تم تعديل العنوان بنجاح' : 'Address updated successfully');
       if (isShown == true) {
         setIsShown(false);
       }
@@ -168,7 +157,7 @@ export default function Address({ address = true}) {
         </h1>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {addresses.map(address => (
+          {addresses.map(address => address?.location_name && (
             <div
               key={address.id}
               className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-2 border border-gray-100"
@@ -228,8 +217,10 @@ export default function Address({ address = true}) {
               </div>
             </div>
           ))}
-          {isShown ? <>
-            <div className="fixed bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-2 border border-gray-100 bg-white h-96 top-[10%] right-[25%] z-500 w-[50%] h-[80%]">
+          {isShown ?
+           <>
+       <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" >
+            <div className="fixed rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-2 border border-gray-100 bg-white h-96 top-[10%] right-[25%] z-500 w-[50%] h-[80%]">
               <button className="absolute left-4 top-4" onClick={handleCancel}>
                 <MdCancel className="w-6 h-6" />
               </button>
@@ -241,8 +232,7 @@ export default function Address({ address = true}) {
                 <select
                   name='town'
                   className='w-full h-10 border border-gray-400 outline-none'
-                  onChange={() => handleTownChange(event)}
-                >
+                  onChange={() => handleTownChange(event)}>
                   <option value="" disabled>
                     {language === 'ar' ? 'اختر المحافظة' : 'Select city'}
                   </option>
@@ -305,7 +295,10 @@ export default function Address({ address = true}) {
                   {language === 'ar' ? 'تم' : 'Confirm'}
                 </button>
               </div>
-            </div></> : <></>}
+            </div>
+        </div>
+            </> :""
+            }
         </div>
       </div >)
       }

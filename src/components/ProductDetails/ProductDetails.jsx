@@ -23,6 +23,7 @@ export default function ProductDetails() {
   const [showModal, setShowModal] = useState(false);
   const [activeModal, setActiveModal] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
+    // const [review, setReview] = useState([]);
   const { language } = useLanguage();
   const { addToCart, handleAddToWish, wishList } = useCart();
   const { id } = useParams();
@@ -35,7 +36,10 @@ export default function ProductDetails() {
   const { data: reviews } = useQuery({
     queryKey: ['getReviews', id, language],
     queryFn: () => getReviews(id),
-    enabled: !!id
+    enabled: !!id,
+    //    onSuccess: (reviews) => {
+    //   setReview(reviews?.review || []); 
+    // },
   });
   const product = data?.data?.products;
   const related = data?.data?.related;

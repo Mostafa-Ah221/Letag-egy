@@ -3,14 +3,15 @@ import { useLanguage } from '../../context/LanguageContextPro';
 import { ContextData } from '../../context/ContextApis';
 import axios from 'axios';
 import Address from '../Address/Address';
+import { useCart } from '../../context/CartContext';
 
 function AddAddress({ showAddress = true }) {
-    const { settings_domain, userToken,setAddresses } = useContext(ContextData);
+    const { settings_domain, userToken,getAddressList,setAddresses } = useContext(ContextData);
+    const { showToast } = useCart();
     const { language } = useLanguage();
     const towns = settings_domain?.data?.locations || [];
 
     const token = userToken.startsWith("bearer") ? userToken : `Bearer ${userToken}`;
-console.log(userToken);
 
     // States
     const [selectedTownId, setSelectedTownId] = useState('');
@@ -74,18 +75,26 @@ console.log(userToken);
             const res = await axios.post("https://tarshulah.com/api/customer/address/store", formData, {
                 headers: { "Authorization": token },
             });
-          
-            alert(language === 'ar' ? 'تم إضافة العنوان بنجاح' : 'Address added successfully');
-                   setAddresses(prevAddresses => [...prevAddresses, res.data.data.address]);
+           
+            showToast(language === 'ar' ? 'تم إضافة العنوان بنجاح' : 'Address added successfully');
+           getAddressList(userToken).then((data) => {
+           setAddresses(data.data.addresses);
+           setSelectedTownId("")
+           setSelectedRegionId("")
+           setSelectedBuilding("")
+           setSelectedFloor("")
+           setAddress("")
+  });
         } catch (error) {
             console.error('Error:', error.response || error.message);
-            alert(language === 'ar' ? 'حدث خطأ أثناء الإضافة: ' + error.response?.data?.message : 'An error occurred while adding: ' + error.response?.data?.message);
+            showToast(language === 'ar' ? 'حدث خطأ أثناء الإضافة: ' + error.response?.data?.message : 'An error occurred while adding: ' + error.response?.data?.message);
         }
     };
 
     return (
+        <div className='flex flex-col'>
+           
         <div className='container mt-11'>
-            {/* اختيار المحافظة */}
             <h3 className='text-start font-bold text-2xl mb-3'>
                 {language === 'ar' ? 'يرجى اختيار المحافظة' : 'Please select the city'}
             </h3>
@@ -134,6 +143,7 @@ console.log(userToken);
                 <input
                     placeholder={language === "ar" ? "من فضلك ادخل رقم المبنى" : "Please Enter Building Number"}
                     className='w-full h-10 border border-gray-400'
+                    value={selectedBuilding}
                     onChange={handleBuildingChange}
                 />
 
@@ -144,6 +154,7 @@ console.log(userToken);
                 <input
                     placeholder={language === "ar" ? "من فضلك ادخل رقم الطابق" : "Please Enter Floor Number"}
                     className='w-full h-10 border border-gray-400'
+                    value={selectedFloor}
                     onChange={handleFloorChange}
                 />
             </div>
@@ -159,6 +170,7 @@ console.log(userToken);
             </div>
              {showAddress && <Address />}
         </div>
+            </div>
     );
 }
 

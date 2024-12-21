@@ -80,6 +80,7 @@ const [required, setRequired] = useState({});
         first_name: userData.name || '',
         last_name: userData.last_name || '',
         email: userData.email || '',
+        phone: userData.phone ||''
       }));
     }
   }, [userData]);

@@ -50,11 +50,11 @@ function Orders() {
   }, [userToken, language]);
 
   return (
-    <>
+    <div className="mt-10">
       {isPointsSystem ? <h2 className="my-2 text-lg font-semibold">النقاط المتاحة: </h2> : <></>}
-      <div className="relative overflow-x-auto">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+      <div className="relative ">
+        <table className="w-full text-gray-500">
+          <thead className=" text-gray-700 uppercase bg-gray-50">
             <tr>
               <th className="px-6 py-3">رقم الطلب</th>
               <th className="px-6 py-3">الحالة</th>
@@ -106,7 +106,7 @@ function Orders() {
           </tbody>
         </table>
       </div>
-    </>
+    </div>
   );
 }
 

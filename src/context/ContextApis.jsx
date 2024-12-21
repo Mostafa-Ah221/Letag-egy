@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useLanguage } from "./LanguageContextPro";
 import { useQuery } from "@tanstack/react-query";
+import { useCart } from "./CartContext";
 
 export const ContextData = createContext();
 
@@ -95,7 +96,7 @@ async function getMenuPage() {
   return response.data;
 }
 //todo ================================================================(getAddressList)=============//
-const getAddressList = async (userToken) => {
+const getAddressList = async (userToken,language) => {
   const token = userToken.startsWith("bearer") ? userToken : `Bearer ${userToken}`;
 
   try {
@@ -104,6 +105,7 @@ const getAddressList = async (userToken) => {
       headers: {
         'Accept': 'application/json',
         'Authorization': token,
+         lang: language 
       },
     });
 
@@ -141,6 +143,7 @@ async function getProductCategory(idCategory, page, pageSize, language) {
 
 export default function DataContextProvider({ children }) {
   const { language } = useLanguage();
+      const { showToast } = useCart();
   const [userToken, setUserToken] = useState(() => {
     return localStorage.getItem("userToken") || null;
   });
@@ -156,26 +159,35 @@ export default function DataContextProvider({ children }) {
     queryFn: () => getCurrency(language),
   });
   //!================================================================(deleteAddress)=====================
-  async function deleteAddress(id, userToken, language) {
+ async function deleteAddress(id, userToken, language) {
+  try {
     const response = await axios.post(
       `https://tarshulah.com/api/customer/address/delete/${id}`,
       {},
       {
         headers: {
           lang: language,
-          'Authorization': userToken
-        }
-
+          Authorization: userToken,
+        },
       }
     );
+    
+    // تحديث السياق
+    setAddresses((prevAddresses) => prevAddresses.filter((address) => address.id !== id));
+    showToast(language === 'ar' ? 'تم حذف العنوان بنجاح' : 'Address removed successfully');
+    
     return response.data;
+  } catch (error) {
+    console.error("Error deleting address:", error);
+    throw new Error(error.response?.data?.message || "Failed to delete address");
   }
- 
-useEffect(() => {
+}
+
+ useEffect(() => {
   if (userToken) {
-    getAddressList(userToken).then((data) => {
-      if (data && data.data && Array.isArray(data.data.addresses)) {
-        setAddresses(data.data.addresses); // تحديث الحالة
+    getAddressList(userToken,language).then((data) => {
+      if (data && data.data && Array.isArray(data?.data.addresses)) {
+        setAddresses(data?.data?.addresses); 
       } else {
         console.error("No addresses found in the response:", data);
       }
@@ -185,7 +197,7 @@ useEffect(() => {
   } else {
     console.error("User token is not available");
   }
-}, [userToken]);
+}, [userToken,language]);
 
 
 
@@ -212,19 +224,21 @@ useEffect(() => {
         headers: { Authorization: `${userToken}` },
       })
       .then((response) => {
-        //   console.log("API Response:", response.data.data.customer); 
         const user = {
           name: response.data.data.customer.first_name,
           last_name: response.data.data.customer.last_name,
           email: response.data.data.customer.email,
+          phone: response.data.data.customer.phone,
+          points: response.data.data.customer.avaliable_points
         };
+        
         setUserData(user);
       })
       .catch((error) => {
         console.error("Failed to fetch user data:", error);
       });
   }
-  // console.log(userData);
+  
 
   // Fetch subcategories
   useEffect(() => {
@@ -246,6 +260,7 @@ useEffect(() => {
   // Fetch user data when userToken changes
   useEffect(() => {
     fetchUserData();
+    
   }, [userToken]);
 
   const handleSetUserToken = (token) => {
@@ -285,6 +300,7 @@ useEffect(() => {
         selectedTownId,
         colorWebSite,
         nameWebSite,
+        getAddressList,
          setAddresses,
          addresses
 
