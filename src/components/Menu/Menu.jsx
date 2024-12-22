@@ -13,7 +13,6 @@ function Menu() {
     let { userToken, setUserToken,userData } = useContext(ContextData);
     const { language, toggleLanguage } = useLanguage();
   const {wishList } = useCart(); 
-console.log(userData.phone);
 
     return (
         <div className="hidden lg:flex bg-Neutral h-[95%] fixed z-50 top-4 flex-col items-center mr-4 ml-3">
