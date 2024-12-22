@@ -12,9 +12,12 @@ export default function User() {
           <Link className='text-primary'>لوحة التحكم بالنظام</Link>
         </div>
         </div>
-    <div className="flex gap-11">
+    <div className="grid grid-cols-12 gap-11 w-full">
+     <div className="col-span-12 lg:col-span-5 mx-5">
         <ConstantDetails/>
-        <div className="w-[50%]">
+     </div>
+      
+        <div className="col-span-12 lg:col-span-7">
          <Outlet />
         </div>
     </div>

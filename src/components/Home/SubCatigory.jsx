@@ -33,7 +33,7 @@ export default function SubCategory() {
       className="absolute top-1/2 -right-4 transform -translate-y-1/2 cursor-pointer z-10"
       onClick={() => sliderRef.current?.slickNext()}
     >
-      <div className="bg-white shadow-[0_0_8px_2px_rgba(249,115,22,0.4)] rounded-full w-9 h-9 flex items-center justify-center hover:bg-primary transition-all duration-300 border border-primary">
+      <div className="bg-white rounded-full w-9 h-9 flex items-center justify-center hover:bg-primary transition-all duration-300 border border-primary">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 hover:text-white text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
         </svg>
@@ -46,7 +46,7 @@ export default function SubCategory() {
       className="absolute top-1/2 -left-4 transform -translate-y-1/2 cursor-pointer z-10"
       onClick={() => sliderRef.current?.slickPrev()}
     >
-      <div className="bg-white shadow-[0_0_8px_2px_rgba(249,115,22,0.4)] rounded-full w-9 h-9 flex items-center justify-center hover:bg-primary transition-all duration-300 border border-primary">
+      <div className="bg-white  rounded-full w-9 h-9 flex items-center justify-center hover:bg-primary transition-all duration-300 border border-primary">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 hover:text-white text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
         </svg>
@@ -116,7 +116,7 @@ export default function SubCategory() {
                   alt={category.name} 
                   loading="lazy"
                 />
-                <h3 className='text-center py-2 text-sm font-medium text-secondary group-hover:text-orange-500 transition-all duration-300'>
+                <h3 className='text-center py-2 text-sm font-medium text-secondary group-hover:text-primary transition-all duration-300'>
                   {category.name.split(" ").slice(0,3).join(' ')}
                 </h3>
               </div>

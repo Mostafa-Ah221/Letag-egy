@@ -13,15 +13,15 @@ export default function Profile() {
         <div className='flex flex-col lg:flex-row'>
 
        
-          <div className='flex flex-col justify-center item-center mx-12'>
+          <div className='flex flex-col justify-center item-center w-64'>
             <div>
               <p className=''> مرحبا <span className='font-semibold text-primary'>{userData?.name}</span></p>
             </div>
             <div>
               <p className=''> <span><Link className='hover:underline hover:text-primary'>تسجيل الخروج</Link></span></p>
             </div>
-            <div>
-              <p className=''>من لوحة معلومات حسابك ، يمكنك عرض <span><Link className='hover:text-primary'>الطلبات السابقة</Link></span> و <span><Link className='hover:text-primary'>تعديل كلمة المرور وتفاصيل الحساب.</Link></span></p>
+            <div className='w-full'>
+              <p className='w-full'>من لوحة معلومات حسابك ، يمكنك عرض <span><Link className='hover:text-primary'>الطلبات السابقة</Link></span> و <span><Link className='hover:text-primary'>تعديل كلمة المرور وتفاصيل الحساب.</Link></span></p>
             </div>
           </div>
         </div>

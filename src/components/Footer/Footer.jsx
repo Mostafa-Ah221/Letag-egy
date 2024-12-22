@@ -7,7 +7,8 @@ import { useLanguage } from '../../context/LanguageContextPro';
 export default function Footer() {
   const { nameWebSite, getMenuPage,settings_domain } = useContext(ContextData);
   const { language } = useLanguage();
-
+ 
+ 
   const { data } = useQuery({
     queryKey: ['getMenuPage'],
     queryFn: getMenuPage,
@@ -42,7 +43,7 @@ export default function Footer() {
                   socials.map((social, index) => <li className="w-9 h-9 rounded-full" key={index}>{social.icon}</li>)
                 ) : (
 
-                  [1, 2, 3, 4].map((num, index) => (
+                  [1, 2, 3, 4].map((_, index) => (
                     <li key={index} className="w-9 h-9 rounded-full bg-gray-300"></li>
                   ))
                 )}

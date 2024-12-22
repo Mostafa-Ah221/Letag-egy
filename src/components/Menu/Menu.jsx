@@ -10,9 +10,10 @@ import { useLanguage } from "../../context/LanguageContextPro";
 import { useCart } from '../../context/CartContext';
 
 function Menu() {
-    let { userToken, setUserToken } = useContext(ContextData);
+    let { userToken, setUserToken,userData } = useContext(ContextData);
     const { language, toggleLanguage } = useLanguage();
   const {wishList } = useCart(); 
+console.log(userData.phone);
 
     return (
         <div className="hidden lg:flex bg-Neutral h-[95%] fixed z-50 top-4 flex-col items-center mr-4 ml-3">
@@ -91,7 +92,7 @@ function Menu() {
             {/* Main Icons Section */}
             <div className="flex flex-col items-center justify-end flex-grow w-full">
                 {/* Togary Icon */}
-                <div className="hover:cursor-pointer group duration-300 hover:bg-primary w-full p-2">
+                {/* <div className="hover:cursor-pointer group duration-300 hover:bg-primary w-full p-2">
                     <div className="flex items-center justify-center">
                         <FontAwesomeIcon
                             icon={faBuilding}
@@ -101,7 +102,7 @@ function Menu() {
                     <p className="text-black text-center group-hover:text-white text-xs">
                         {language === "ar" ? "تجاري" : "Business"}
                     </p>
-                </div>
+                </div> */}
 
                 <hr className="w-full border-neutral-400" />
 
@@ -125,17 +126,30 @@ function Menu() {
                 <hr className="w-full border-neutral-400" />
 
                 {/* Contact Us Icon */}
-                <div className="mt-2 group hover:cursor-pointer hover:bg-primary p-1 mb-4">
-                    <div className="flex items-center justify-center">
-                        <FontAwesomeIcon
-                            icon={faPhone}
-                            className="text-black text-[1.2rem] group-hover:text-white"
-                        />
-                    </div>
-                    <p className="text-black text-center group-hover:text-white text-[0.8rem] mb-2">
-                        {language === "ar" ? "تواصل معنا" : "Contact Us"}
-                    </p>
+                  <div className="mt-2 group hover:cursor-pointer hover:bg-primary p-1 mb-4 relative">
+                <div className="flex items-center justify-center">
+                    <FontAwesomeIcon
+                        icon={faPhone}
+                        className="text-black text-[1.2rem] group-hover:text-white"
+                    />
                 </div>
+                <p className="text-black text-center group-hover:text-white text-[0.8rem] mb-2">
+                    {language === "ar" ? "تواصل معنا" : "Contact Us"}
+                </p>
+                
+                {/* Phone Number Popup */}
+                <div className="absolute opacity-0 group-hover:opacity-100 bg-primary shadow-lg  py-4 px-2 right-full top-1/2 -translate-y-1/2 mr-1 transition-opacity duration-300 whitespace-nowrap">
+                    <div className="relative">
+                        {/* السهم */}
+                        {/* <div className="absolute w-2 h-2 bg-white rotate-45 -right-1 top-1/2 -translate-y-1/2"></div> */}
+                        
+                        {/* رقم الهاتف */}
+                        <p className=" text-sm text-white">
+                            {userData?.phone || "Not available"}
+                        </p>
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
     );

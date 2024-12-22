@@ -1,11 +1,57 @@
 import { useQuery } from "@tanstack/react-query";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { ContextData } from "../../context/ContextApis";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import Slider from "react-slick";
+import { ChevronRight, ChevronLeft } from "lucide-react";
+
+const NextArrow = ({ onClick }) => (
+  <button
+    onClick={onClick}
+    className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white/80 p-2 rounded-full shadow-md hover:bg-white"
+  >
+    <ChevronRight className="w-6 h-6 text-gray-800" />
+  </button>
+);
+
+const PrevArrow = ({ onClick }) => (
+  <button
+    onClick={onClick}
+    className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white/80 p-2 rounded-full shadow-md hover:bg-white"
+  >
+    <ChevronLeft className="w-6 h-6 text-gray-800" />
+  </button>
+);
+
+// إعدادات السلايدر
+const sliderSettings = {
+  dots: false,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 3,
+  slidesToScroll: 1,
+  nextArrow: <NextArrow />,
+  prevArrow: <PrevArrow />,
+  rtl: true, 
+  responsive: [
+    {
+      breakpoint: 1024, 
+      settings: {
+        slidesToShow: 2, 
+        slidesToScroll: 1,
+      },
+    },
+    {
+      breakpoint: 640, 
+      settings: {
+        slidesToShow: 1, 
+        slidesToScroll: 1,
+      },
+    },
+  ],
+};
 
 export default function Offers() {
   const { getOffers } = useContext(ContextData);
-  const [scrollPosition, setScrollPosition] = useState(0);
   
   const { data: offers } = useQuery({
     queryKey: ['getOffers'],
@@ -14,49 +60,19 @@ export default function Offers() {
     cacheTime: 1000 * 60 * 40,
   });
 
-  const handleScroll = (direction) => {
-    const container = document.getElementById('slider-container');
-    const scrollAmount = direction === 'left' ? -420 : 420;
-    container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    setScrollPosition(container.scrollLeft + scrollAmount);
-  };
-
   return (
-    <div className="relative overflow-hidden mb-3">
-      {/* Left Arrow */}
-      <button 
-        onClick={() => handleScroll('left')}
-        className="group absolute duration-200 left-2 top-1/2 -translate-y-1/2 z-10 bg-white/80 p-2 rounded-full shadow-md hover:bg-primary"
-      >
-        <ChevronLeft className="w-6 h-6 group-hover:text-white" />
-      </button>
-
-      {/* Right Arrow */}
-      <button 
-        onClick={() => handleScroll('right')}
-        className="group absolute duration-200 right-2 top-1/2 -translate-y-1/2 z-10 bg-white/80 p-2 rounded-full shadow-md hover:bg-primary"
-      >
-        <ChevronRight className="w-6 h-6 group-hover:text-white" />
-      </button>
-
-      {/* Slider Container */}
-      <div 
-        id="slider-container"
-        className="flex gap-4 overflow-x-hidden scroll-smooth"
-      >
+    <div className="relative px-8 mb-3">
+      <Slider {...sliderSettings}>
         {offers?.data.offer_ads.map((offer) => (
-          <div
-            key={offer.id}
-            className="w-1/3 flex-shrink-0 h-40"
-          >
+          <div key={offer.id} className="px-2"> 
             <img
               src={offer.photo}
               alt="offers"
-              className="w-full h-full object-cover rounded-md"
+              className="w-full h-40 object-cover object-center rounded-md"
             />
           </div>
         ))}
-      </div>
+      </Slider>
     </div>
   );
 }

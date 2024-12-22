@@ -14,7 +14,7 @@ export default function SignUp() {
     first_name: Yup.string().min(3, "name minimum length is 3").max(10, "name maximum length is 10").required("name is required"),
     last_name: Yup.string().min(3, "name minimum length is 3").max(10, "name maximum length is 10").required("name is required"),
     email: Yup.string().email("email is invalid").required("email is required"),
-    phone: Yup.string().matches(/^01[0125][0-9]{8}$/, "phone must be valid Egyptian number").required("phone is required"),
+    phone: Yup.string().matches(/^01[0125][0-9]{8}$/, "phone must be valid number").required("phone is required"),
     password: Yup.string().matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/,"Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.").required("Password is required"),
     password_confirmation: Yup.string().oneOf([Yup.ref('password')], "password and confirm password must be the same").required("password confirmation is required"),
   });

@@ -15,7 +15,7 @@ function ConstantDetails() {
     }
 
     return (
-        <div className='container  flex flex-col w-96 bg-white shadow-lg rounded-lg mt-12 text-right ml-12'>
+        <div className='container  flex flex-col w-96 bg-white shadow-lg rounded-lg mt-12  ml-12'>
             <NavLink 
                 to="" 
                 className={({ isActive }) => isActive ? "text-primary font-bold py-4 px-2" : "hover:text-primary text-bold py-4 px-2"}>

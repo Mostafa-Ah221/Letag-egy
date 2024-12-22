@@ -3,10 +3,10 @@ import { User, Mail, Lock, Save } from 'lucide-react';
 
 export default function UpdateProfile() {
   return (
-    <div className="min-h-screen bg-gray-50/50 p-8">
-      <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg">
+    <div className="min-h-screen ">
+      <div className=" bg-white rounded-xl shadow-lg">
         {/* Header Section */}
-        <div className="p-6 border-b">
+        <div className="p-6 border-b ">
           <h2 className="text-2xl font-bold text-center text-gray-900">
             تحديث الملف الشخصي
           </h2>
@@ -17,16 +17,16 @@ export default function UpdateProfile() {
 
         {/* Form Content */}
         <div className="p-6">
-          <form className="space-y-6">
+          <form className="">
             {/* Basic Information Section */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-4">
+            <div className="">
+              <div className="flex items-center gap-4 w-full">
                 <User className="w-5 h-5 text-gray-400" />
                 <h3 className="text-lg font-medium text-gray-900">المعلومات الأساسية</h3>
               </div>
               
               <div className="grid gap-4">
-                <div className="space-y-2">
+                <div className="">
                   <label htmlFor="name" className="text-right block text-sm font-medium text-gray-700">
                     الاسم <span className="text-red-500">*</span>
                   </label>
@@ -37,7 +37,7 @@ export default function UpdateProfile() {
                   />
                 </div>
 
-                <div className="space-y-2">
+                <div className="">
                   <label htmlFor="email" className="text-right block text-sm font-medium text-gray-700">
                     البريد الإلكتروني <span className="text-red-500">*</span>
                   </label>
@@ -58,27 +58,16 @@ export default function UpdateProfile() {
             <div className="h-px bg-gray-200 my-6"></div>
 
             {/* Password Section */}
-            <div className="space-y-4">
+            <div className="">
               <div className="flex items-center gap-4">
                 <Lock className="w-5 h-5 text-gray-400" />
                 <h3 className="text-lg font-medium text-gray-900">تغيير كلمة المرور</h3>
               </div>
 
               <div className="grid gap-4">
-                <div className="space-y-2">
-                  <label htmlFor="current-password" className=" block text-sm font-medium text-gray-700">
-                    كلمة المرور الحالية
-                  </label>
-                  <input
-                    id="current-password"
-                    type="password"
-                    className="w-full  px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                    placeholder=""
-                  />
-                </div>
-
+               
                 <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-2">
+                  <div className="">
                     <label htmlFor="new-password" className=" block text-sm font-medium text-gray-700">
                       كلمة المرور الجديدة
                     </label>
@@ -90,7 +79,7 @@ export default function UpdateProfile() {
                     />
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="">
                     <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
                       تأكيد كلمة المرور
                     </label>

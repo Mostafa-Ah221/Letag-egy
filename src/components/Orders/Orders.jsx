@@ -50,16 +50,16 @@ function Orders() {
   }, [userToken, language]);
 
   return (
-    <div className="mt-10">
-      {isPointsSystem ? <h2 className="my-2 text-lg font-semibold">النقاط المتاحة: </h2> : <></>}
+    <div className="mt-10 w-full">
+      {isPointsSystem ? <h2 className="my-2 font-semibold">النقاط المتاحة: </h2> : <></>}
       <div className="relative ">
-        <table className="w-full text-gray-500">
+        <table className="w-3/4 md:w-full text-gray-500 text-[0.6rem]">
           <thead className=" text-gray-700 uppercase bg-gray-50">
             <tr>
-              <th className="px-6 py-3">رقم الطلب</th>
-              <th className="px-6 py-3">الحالة</th>
-              <th className="px-6 py-3">طريقة الدفع</th>
-              <th className="px-6 py-3">الإجمالي</th>
+              <th className="px-1 md:px-6 py-3">رقم الطلب</th>
+              <th className="px-1 md:px-6 py-3">الحالة</th>
+              <th className="px-1 md:px-6 py-3">طريقة الدفع</th>
+              <th className="px-1 md:px-6 py-3">الإجمالي</th>
               {/* <th className="px-6 py-3">المنتجات</th> */}
               {/* <th className="px-6 py-3">معلومات الشحن</th> */}
               {/* <th className="px-6 py-3">محتوى الطلب</th> */}
@@ -68,10 +68,10 @@ function Orders() {
           <tbody>
             {orders?.map((order) => (
               <tr key={order?.id} className="bg-white border-b">
-                <td className="px-6 py-4">{order?.order_no || "N/A"}</td>
-                <td className="px-6 py-4">{order?.order_status || "N/A"}</td>
-                <td className="px-6 py-4">{order?.payment_method || "N/A"}</td>
-                <td className="px-6 py-4">{order?.total}</td>
+                <td className="px-1 md:px-6 py-4">{order?.order_no || "N/A"}</td>
+                <td className="px-1 md:px-6 py-4">{order?.order_status || "N/A"}</td>
+                <td className="px-1 md:px-6 py-4">{order?.payment_method || "N/A"}</td>
+                <td className="px-1 md:px-6 py-4">{order?.total}</td>
 
                 {/* <td className="px-6 py-4">
                   {order?.order_items?.length > 0 ? (

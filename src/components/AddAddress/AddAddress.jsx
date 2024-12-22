@@ -92,7 +92,7 @@ function AddAddress({ showAddress = true }) {
     };
 
     return (
-        <div className='flex flex-col'>
+        <div className='flex flex-col w-64 md:w-4/5'>
            
         <div className=' mt-11 w-full'>
             <h3 className='text-start font-bold text-2xl mb-3'>
