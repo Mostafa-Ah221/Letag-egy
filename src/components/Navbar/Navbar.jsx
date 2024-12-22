@@ -30,7 +30,7 @@ export default function Navbar() {
   let location = useLocation();
   // const [query2, setQuery2] = useState("");
 
- 
+
   let filteredSuggestions = [];
   let filteredSuggestionsProducts = [];
 
@@ -317,73 +317,72 @@ export default function Navbar() {
           </div>
         </div>
         <div className="flex justify-center items-center ml-[9.7rem] ">
-       <div
-        className={`${
-        searchData || searchData2 ? "flex" : "hidden"
-        } lg:w-[32%] h-[50%] md:w-[25em] bg-white flex-col z-50 fixed top-14 rounded-md shadow-lg border border-gray-200 overflow-auto`}>
-        
+          <div
+            className={`${searchData || searchData2 ? "flex" : "hidden"
+              }  bg-white flex-col z-50 absolute top-14 lg:w-[32%] h-96 md:w-[25em] rounded-md shadow-lg border border-gray-200 overflow-auto`}>
+
             <p
               className={`text-gray-600 text-sm px-4 py-2 `}>
               {language === "ar" ? "المنتجات" : "Products"}
             </p>
-        {searchData2 && (
-          <>
-            {searchData2.map((product, index) => (
-              <Link
-                key={index}
-                to={`/productDetails/${product.id}`}
-                className={`flex items-center gap-2 px-4 py-2 hover:bg-gray-100 `}
-                onClick={() => {
-                  setSearchData(null);
-                  setQuery("");
-                  setSearchData2(null);
-                }}>
-                <img
-                  src={product.photo}
-                  alt={product.title}
-                  className="w-10 h-10 object-cover rounded-md border border-gray-300"
-                />
-                <p className="text-gray-800 hover:text-primary text-sm">
-                  {product.title}
-                </p>
-              </Link>
-            ))}
-            <hr className="my-2" />
-          </>
-        )}
+            {searchData2 && (
+              <>
+                {searchData2.map((product, index) => (
+                  <Link
+                    key={index}
+                    to={`/productDetails/${product.id}`}
+                    className={`flex items-center gap-2 px-4 py-2 hover:bg-gray-100 `}
+                    onClick={() => {
+                      setSearchData(null);
+                      setQuery("");
+                      setSearchData2(null);
+                    }}>
+                    <img
+                      src={product.photo}
+                      alt={product.title}
+                      className="w-10 h-10 object-cover rounded-md border border-gray-300"
+                    />
+                    <p className="text-gray-800 hover:text-primary text-sm">
+                      {product.title}
+                    </p>
+                  </Link>
+                ))}
+                <hr className="my-2" />
+              </>
+            )}
 
             <p
               className={`text-gray-600 text-sm px-4 py-2 `}>
               {language === "ar" ? "الفئات" : "Categories"}
             </p>
-        {searchData && (
-          <>
-            {searchData.map((category, index) => (
-              <Link
-                key={index}
-                to={`/categoryDetails/${category.id}`}
-                className={`flex items-center gap-2 px-4 py-2 hover:bg-gray-100 `}
-                onClick={() => {
-                  setSearchData(null);
-                  setQuery("");
-                  setSearchData2(null);
-                }}>
-                <img
-                  src={category.photo}
-                  alt={category.name}
-                  className="w-10 h-10 object-cover rounded-md border border-gray-300"
-                />
-                <p className="text-gray-800 hover:text-primary text-sm">
-                  {category.name}
-                </p>
-              </Link>
-            ))}
-            <hr className="my-2" />
-          </>
-        )}
+            {searchData && (
+              <>
+                {searchData.map((category, index) => (
+                  <Link
+                    key={index}
+                    to={`/categoryDetails/${category.id}`}
+                    className={`flex items-center gap-2 px-4 py-2 hover:bg-gray-100 `}
+                    onClick={() => {
+                      setSearchData(null);
+                      setQuery("");
+                      setSearchData2(null);
+                    }}>
+                    <img
+                      src={category.photo}
+                      alt={category.name}
+                      className="w-10 h-10 object-cover rounded-md border border-gray-300"
+                    />
+                    <p className="text-gray-800 hover:text-primary text-sm">
+                      {category.name}
+                    </p>
+                  </Link>
+                ))}
+                <hr className="my-2" />
+              </>
+            )}
 
-                  <Link to={`/SearchByItem/${query}`} className={`bg-white rounded-xl w-48 border-black border-2 hover:border-primary ${language === "ar" ? "mr-auto" : "ml-auto"}`}><button onClick={() => { setSearchData(null); setQuery(""); setSearchData2(null); }}><p className="px-4 py-1">{language === "ar" ? "عرض جميع المنتجات" : "View All Products"}</p></button></Link>
-      </div>
+            <Link to={`/SearchByItem/${query}`} className={`bg-white rounded-xl w-48 border-black border-2 hover:border-primary ${language === "ar" ? "mr-auto" : "ml-auto"}`}><button onClick={() => { setSearchData(null); setQuery(""); setSearchData2(null); }}><p className="px-4 py-1">{language === "ar" ? "عرض جميع المنتجات" : "View All Products"}</p></button></Link>
+          </div>
         </div>
 
       </nav>
