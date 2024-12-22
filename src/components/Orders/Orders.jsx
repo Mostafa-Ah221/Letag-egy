@@ -1,12 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { useLanguage } from "../../context/LanguageContextPro";
 import { ContextData } from "../../context/ContextApis";
+import axios from 'axios';
 
 function Orders() {
   const [orders, setOrders] = useState([]);
   const { language } = useLanguage();
   const { userToken } = useContext(ContextData);
+  const { userData } = useContext(ContextData);
   const [isPointsSystem, setIsPointsSystem] = useState(false);
+  const [pointsData, setPointsData] = useState(0);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -33,6 +36,7 @@ function Orders() {
       }
       try {
         const res = await fetch("https://tarshulah.com/api/domain/settings");
+        const data2 = await userData.points;
         const resJson = await res.json();
         const isPoints = await resJson.data.points_system;
         if (isPoints == 1) {
@@ -41,6 +45,7 @@ function Orders() {
         else {
           setIsPointsSystem(false);
         }
+        setPointsData(data2);
       } catch (error) {
         console.log(error);
       }
@@ -50,11 +55,11 @@ function Orders() {
   }, [userToken, language]);
 
   return (
-    <div className="mt-10">
-      {isPointsSystem ? <h2 className="my-2 text-lg font-semibold">النقاط المتاحة: </h2> : <></>}
-      <div className="relative ">
-        <table className="w-full text-gray-500">
-          <thead className=" text-gray-700 uppercase bg-gray-50">
+    <>
+      {isPointsSystem ? <h2 className="my-2 text-lg font-semibold">النقاط المتاحة: {pointsData}</h2> : <></>}
+      <div className="relative overflow-x-auto">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
               <th className="px-6 py-3">رقم الطلب</th>
               <th className="px-6 py-3">الحالة</th>
@@ -106,7 +111,7 @@ function Orders() {
           </tbody>
         </table>
       </div>
-    </div>
+    </>
   );
 }
 
