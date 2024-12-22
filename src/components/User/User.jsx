@@ -14,7 +14,9 @@ export default function User() {
         </div>
     <div className="flex gap-11">
         <ConstantDetails/>
+        <div className="w-[50%]">
          <Outlet />
+        </div>
     </div>
     </div>
   )

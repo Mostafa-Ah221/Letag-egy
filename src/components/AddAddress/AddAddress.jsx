@@ -94,11 +94,11 @@ function AddAddress({ showAddress = true }) {
     return (
         <div className='flex flex-col'>
            
-        <div className='container mt-11'>
+        <div className=' mt-11 w-full'>
             <h3 className='text-start font-bold text-2xl mb-3'>
                 {language === 'ar' ? 'يرجى اختيار المحافظة' : 'Please select the city'}
             </h3>
-            <div className='w-[70%]'>
+            <div className='w-full'>
                 <select
                     name='town'
                     className='w-full h-10 border border-gray-400 outline-none'
