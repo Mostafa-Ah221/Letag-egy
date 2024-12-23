@@ -9,13 +9,12 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function ShoppingCart() {
   const [isCartOpen, setIsCartOpen] = useState(false);
-   const { cart, removeFromCart, updateQuantity, getTotalPrice } = useCart();
+  const { cart, removeFromCart, updateQuantity, getTotalPrice } = useCart();
   const { currencyData, getProdDetails } = useContext(ContextData);
-    const [disableTransition, setDisableTransition] = useState(false);
+  const [disableTransition, setDisableTransition] = useState(false);
   const { language } = useLanguage();
 
-
- const ids = cart.map((item) => item.id);
+  const ids = cart.map((item) => item.id);
 
   const { data: productsData, isError, isLoading } = useQuery({
     queryKey: ["getProdDetails", ids, language],
@@ -23,19 +22,15 @@ export default function ShoppingCart() {
     enabled: ids.length > 0,
   });
 
-
- 
-
-
   const toggleCart = () => {
     setIsCartOpen(!isCartOpen);
   };
 
-    useEffect(() => {
+  useEffect(() => {
     setDisableTransition(true);
     const timeout = setTimeout(() => {
-      setDisableTransition(false); 
-    }, 50); 
+      setDisableTransition(false);
+    }, 50);
 
     return () => clearTimeout(timeout);
   }, [language]);
@@ -64,16 +59,15 @@ export default function ShoppingCart() {
         ></div>
       )}
 
-      {/* النافذة الجانبية */}
-        <div
+      <div
         className={`fixed top-0 ${language === "ar" ? "left-0" : "right-0"} h-full bg-white shadow-2xl transform ${
           isCartOpen ? "translate-x-0" : `${language === "ar" ? "-translate-x-full" : "translate-x-full"}`
         } ${disableTransition ? "transition-none" : "transition-transform duration-300 ease-in-out"} z-50`}
-        style={{ width: "50vw" }}
+        style={{ width: "45vw" }}
       >
         <div className="p-6 relative h-full overflow-y-auto">
           <div className="flex justify-between items-center mb-4 border-b pb-3">
-            <h2 className="text-3xl font-semibold">{language === "ar" ? " السلة" :" Cart"}</h2>
+            <h2 className="text-3xl font-semibold">{language === "ar" ? " السلة" : " Cart"}</h2>
             <button
               className="text-gray-600 hover:text-gray-800"
               onClick={toggleCart}
@@ -82,64 +76,65 @@ export default function ShoppingCart() {
             </button>
           </div>
 
-          {/* عرض المنتجات في العربة */}
           {cart.length > 0 && productsData ? (
             <div className="space-y-4 h-72 overflow-auto">
-              {productsData.map((productData, index) =>  {
+              {productsData.map((productData, index) => {
+                const product = productData.data.products;
+                const cartItem = cart.find((item) => item.id === product.id);
 
-                 const product = productData.data.products;
-                 const cartItem = cart.find((item) => item.id === product.id);
-
-              return(
-                <div
-                  key={product.id}
-                  className="flex gap-4 items-center border p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
-                >
-                  <div className="w-20 h-20 flex-shrink-0">
-                    <img
-                      src={product.photos[0].url}
-                      alt={product.name}
-                      className="w-full h-full object-cover rounded-md"
-                    />
-                  </div>
-                  <div className="flex flex-col flex-grow">
-                    <h3 className="text-lg font-medium truncate">{product.title}</h3>
-                    <span className="text-primary text-lg font-semibold">
-                      {product.price} {currencyData}
-                    </span>
-                    <div className="flex items-center gap-4 mt-2">
-                      <input
-                        type="number"
-                        value={cartItem.quantity}
-                        onChange={(e) => {
-                          const newQuantity = Math.max(
-                            1,
-                            parseInt(e.target.value, 10) || 1
-                          );
-                          updateQuantity(product.id, newQuantity); 
-                        }}
-                        min={1}
-                        className="w-16 text-center py-1 px-2 border border-gray-300 rounded-md shadow-sm"
+                return (
+                  <div
+                    key={product.id}
+                    className="flex gap-4 items-center border p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
+                  >
+                    <div className="w-20 h-20 flex-shrink-0">
+                      <img
+                        src={product.photos[0].url}
+                        alt={product.name}
+                        className="w-full h-full object-cover rounded-md"
                       />
-                      <button
-                        className="text-red-500 hover:text-red-600 text-sm font-medium"
-                        onClick={() => removeFromCart(product.id)}
-                      >
-                        {language === "ar" ? "حذف" :" Delete"}
-                        
-                      </button>
+                    </div>
+                    <div className="flex flex-col flex-grow">
+                      <h3 className="text-lg font-medium truncate">{product.title}</h3>
+                      <span className="text-primary text-lg font-semibold">
+                        {product.price} {currencyData}
+                      </span>
+                      <div className="flex items-center mt-2 gap-2 ">
+                        <div className="flex border">
+                        <button
+                          onClick={() => updateQuantity(product.id, Math.max(cartItem.quantity - 1, 1))}
+                          className="bg-gray-200 px-2  text-lg font-bold  hover:bg-gray-300"
+                        >
+                          -
+                        </button>
+                        <p className=" px-6 text-[1rem]  ">
+                          {cartItem.quantity}
+                        </p>
+                        <button
+                          onClick={() => updateQuantity(product.id, cartItem.quantity + 1)}
+                          className="bg-gray-200 px-2 text-lg font-bold  hover:bg-gray-300"
+                        >
+                          +
+                        </button>
+                        </div>
+                        <button
+                          className="text-red-500 hover:text-red-600 text-sm font-medium ml-4"
+                          onClick={() => removeFromCart(product.id)}
+                        >
+                          {language === "ar" ? "حذف" : " Delete"}
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-                )
-})}
+                );
+              })}
             </div>
           ) : (
             <div className="text-center mt-8">
               <p className="text-gray-600 text-lg mb-4">
-                
-               
-                {language === "ar" ? "عربتك فارغة. يبدو أنك لم تقم بإضافة أي منتج بعد." :"  Your cart is empty. It seems you haven't added any products yet"}
+                {language === "ar"
+                  ? "عربتك فارغة. يبدو أنك لم تقم بإضافة أي منتج بعد."
+                  : "  Your cart is empty. It seems you haven't added any products yet"}
               </p>
               <img
                 src="https://img.freepik.com/free-vector/shopping-supermarket-cart-with-grocery-pictogram_1284-11697.jpg?ga=GA1.1.812912771.1724576833&semt=ais_hybrid"
@@ -148,42 +143,44 @@ export default function ShoppingCart() {
               />
             </div>
           )}
-           <div>
+          <div>
             <div className="flex justify-between items-center gap-2 my-5">
-              <h3> {language === "ar" ?" الاجمالي الفرعي"  : "Subtotal"}:</h3>
-              <span>{getTotalPrice().toFixed(2)} {currencyData}</span>
+              <h3>{language === "ar" ? " الاجمالي الفرعي" : "Subtotal"}:</h3>
+              <span>
+                {getTotalPrice().toFixed(2)} {currencyData}
+              </span>
             </div>
             <div className="flex justify-between items-center gap-2">
-              <h3> {language === "ar" ?" الاجمالي "  : "Total"}:</h3>
-              <span>{getTotalPrice().toFixed(2)} {currencyData}</span>
+              <h3>{language === "ar" ? " الاجمالي " : "Total"}:</h3>
+              <span>
+                {getTotalPrice().toFixed(2)} {currencyData}
+              </span>
             </div>
-           </div>
+          </div>
           {cart.length > 0 && (
             <>
-            <Link
-              to={"/cartpage"}
-              onClick={() => {
-              toggleCart(); 
-            }}
-              className="block text-center mt-6 py-2 text-white bg-primary rounded-md shadow hover:bg-primary/90 transition-colors"
-            >
-              {language === "ar" ? " إلى السلة":" To Cart"}
-            </Link>
-            <Link
-              to={"/CartLayout"}
+              <Link
+                to={"/cartpage"}
                 onClick={() => {
-              toggleCart(); 
-            }}
-              className="block text-center mt-6 py-2 text-white bg-primary rounded-md shadow hover:bg-primary/90 transition-colors"
-            >
-              {language === "ar" ? " متابعة الدفع" :" Payment Tracking"}
-            </Link>
+                  toggleCart();
+                }}
+                className="block text-center mt-6 py-2 text-white bg-primary rounded-md shadow hover:bg-primary/90 transition-colors"
+              >
+                {language === "ar" ? " إلى السلة" : " To Cart"}
+              </Link>
+              <Link
+                to={"/CartLayout"}
+                onClick={() => {
+                  toggleCart();
+                }}
+                className="block text-center mt-6 py-2 text-white bg-primary rounded-md shadow hover:bg-primary/90 transition-colors"
+              >
+                {language === "ar" ? " متابعة الدفع" : " Payment Tracking"}
+              </Link>
             </>
           )}
         </div>
       </div>
     </div>
-        
   );
-
 }

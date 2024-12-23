@@ -26,7 +26,7 @@ export default function Login() {
 
  function handleRegister(values) {
   setLoading(true);
-  console.log("Login Attempt:", values); // تتبع البيانات المرسلة
+  // console.log("Login Attempt:", values); // تتبع البيانات المرسلة
 
   axios.post(`https://demo.leetag.com/api/customer/login`, {
     email: values.email,
@@ -38,7 +38,7 @@ export default function Login() {
     }
   })
   .then((apiResponse) => {
-    console.log("Full API Response:", apiResponse);
+    // console.log("Full API Response:", apiResponse);
     
     // محاولة استخراج التوكن بطرق مختلفة
     const tokenUser = 

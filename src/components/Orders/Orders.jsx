@@ -1,15 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { useLanguage } from "../../context/LanguageContextPro";
 import { ContextData } from "../../context/ContextApis";
-import axios from 'axios';
 
 function Orders() {
   const [orders, setOrders] = useState([]);
   const { language } = useLanguage();
   const { userToken } = useContext(ContextData);
-  const { userData } = useContext(ContextData);
   const [isPointsSystem, setIsPointsSystem] = useState(false);
-  const [pointsData, setPointsData] = useState(0);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -36,7 +33,6 @@ function Orders() {
       }
       try {
         const res = await fetch("https://tarshulah.com/api/domain/settings");
-        const data2 = await userData.points;
         const resJson = await res.json();
         const isPoints = await resJson.data.points_system;
         if (isPoints == 1) {
@@ -45,7 +41,6 @@ function Orders() {
         else {
           setIsPointsSystem(false);
         }
-        setPointsData(data2);
       } catch (error) {
         console.log(error);
       }
@@ -56,10 +51,10 @@ function Orders() {
 
   return (
     <div className="mt-10 w-full">
-      {isPointsSystem ? <h2 className="my-2 font-semibold">النقاط المتاحة: {pointsData}</h2> : <></>}
-      <div className="relative overflow-x-auto">
-        <table className="w-full text-sm md:text-lg text-left rtl:text-right text-gray-500">
-          <thead className="w-3/4 md:w-full text-gray-500 text-sm md:text-lg">
+      {isPointsSystem ? <h2 className="my-2 font-semibold">النقاط المتاحة: </h2> : <></>}
+      <div className="relative ">
+        <table className="w-3/4 md:w-full text-gray-500 text-[0.6rem]">
+          <thead className=" text-gray-700 uppercase bg-gray-50">
             <tr>
               <th className="px-1 md:px-6 py-3">رقم الطلب</th>
               <th className="px-1 md:px-6 py-3">الحالة</th>

@@ -14,7 +14,6 @@ export default {
         white: "#ffffff",
         primary700: "#c2410c",
         primary400: "#f0851f",
-        red: "#FF0000",
         black: "#000000",
       },
       keyframes: {

@@ -4,10 +4,13 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import * as Yup from 'yup';
+import { useCart } from "../../context/CartContext";
 
 export default function SignUp() {
   const [loading, setLoading] = useState(false);
   const [errorMas, setErrorMas] = useState("");
+    const { showToast } = useCart();
+  
   let navigate = useNavigate();
 
   const validationSchema = Yup.object().shape({
@@ -25,11 +28,12 @@ export default function SignUp() {
       .then((apiResponse) => {
         setLoading(false);
         navigate('/login');
-        alert(apiResponse.data.message);
+        showToast(apiResponse.data.message);
       })
       .catch((apiResponse) => {
         setLoading(false);
-        setErrorMas(apiResponse.response.data.message);
+        setErrorMas(apiResponse.response.data.message); 
+        showToast(apiResponse.response.data.errors)
       });
   }
 
@@ -53,7 +57,7 @@ export default function SignUp() {
       </div>}
       <div className='grid grid-cols-12 gap-5'>
         <form onSubmit={formik.handleSubmit} className="md:col-span-6 order-2 col-span-12">
-          <h2 className="text-2xl font-semibold text-center mb-7">Register Now</h2>
+            <h2 className="text-2xl font-semibold text-center mb-7">Register Now</h2>
           <div className='grid grid-cols-12 gap-3'>
             <div className="mb-5 col-span-12 md:col-span-6">
               <label htmlFor="first_name" className="block mb-2 text-sm">First Name*</label>
@@ -162,12 +166,12 @@ export default function SignUp() {
               )}
             </div>
           </div>
-          <button type="submit" className="bg-primary m-auto block  hover:tracking-widest duration-300 text-white font-bold py-2 px-4 rounded mt-5"> {loading ? <ClipLoader color="#36d7b7" size={15} /> : "Register"}</button>
-          <div className="ml-40 mt-5">
+          <button type="submit" className="bg-primary m-auto block  hover:tracking-widest duration-300 text-white font-bold py-2 px-4 rounded mt-5"> {loading?<ClipLoader color="#36d7b7" size={15} />:"Register"}</button>
+           <div className="ml-40 mt-5">
             Do you have an account? <Link to="/login" className="text-primary font-semibold hover:underline">Login</Link>
-          </div>
+           </div>
         </form>
-        <div className="relative hidden md:block col-span-0 md:col-span-6 order-1 w-full h-96">
+         <div className="relative hidden md:block col-span-0 md:col-span-6 order-1 w-full h-96">
           <div className="absolute top-0 right-0 w-full h-full bg-primary opacity-40"></div>
           <img className="w-full h-full object-cover" src="https://khamato.com/themes/default/assets/images/login.png" alt="Login Illustration" />
         </div>

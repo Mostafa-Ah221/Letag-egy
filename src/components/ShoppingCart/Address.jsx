@@ -4,11 +4,10 @@ import { ContextData } from "../../context/ContextApis";
 import { useContext, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "../../context/LanguageContextPro";
-import { HiPlusSm } from "react-icons/hi";
 import CartOrder from "./CartOrder";
 
 export default function Address() {
-  const { updateData, handleReviewSubmit, formData ,handleCoponeButton,handlePointsButton,required} = useOutletContext();
+  const { updateData, handleReviewSubmit, formData ,handleCouponButton,handlePointsButton,required} = useOutletContext();
   const { userData, getAddressList, userToken, settings_domain } = useContext(ContextData);
   const { language } = useLanguage();
 
@@ -222,52 +221,75 @@ useEffect(() => {
           ))}
           {required.payment_method && <span className="text-red-500 block">{required.payment_method}</span>} 
           <div>
-           <div>
-              <p className="my-2">
-                {language === "ar" ? (
-                  <>
-                    هل لديك كوبون خصم ؟ 
-                    <span
-                      onClick={() => setOpenSection(openSection === "coupon" ? null : "coupon")}
-                      className="text-primary cursor-pointer"> اضغط هنا للإضافة 
-                    </span>
-                  </>
-                ) : (
-                  <>
-                     Do you have a coupon code? 
-                    <span
-                      onClick={() => setOpenSection(openSection === "coupon" ? null : "coupon")}
-                      className="text-primary cursor-pointer">
-                       Click here to apply 
-                    </span>
-                  </>
-                )}
-              </p>
+          <div>
+  {/* كود الخصم */}
+  {/* كود الخصم */}
+<p className="my-2">
+  {language === "ar" ? (
+    <>
+      هل لديك كوبون خصم؟
+      <span
+        onClick={() => setOpenSection(openSection === "coupon" ? null : "coupon")}
+        className="text-primary cursor-pointer"
+      >
+        اضغط هنا للإضافة
+      </span>
+    </>
+  ) : (
+    <>
+      Do you have a coupon code?
+      <span
+        onClick={() => setOpenSection(openSection === "coupon" ? null : "coupon")}
+        className="text-primary cursor-pointer"
+      >
+        Click here to apply
+      </span>
+    </>
+  )}
+</p>
+{openSection === "coupon" && (
+  <div className="flex items-center gap-2 mt-2">
+    <input
+      className="border p-2 flex-1"
+      type="text"
+      name="coupon_discount"
+      // value={formData.coupon_discount || ""}
+      onChange={(e) => updateData({ coupon_discount: e.target.value })}
+      placeholder={language === "ar" ? "أدخل الكوبون" : "Enter coupon"}
+    />
+    <button
+      className="border p-2 bg-primary text-white"
+      onClick={handleCouponButton}
+    >
+      {language === "ar" ? "ارسال" : "Apply"}
+    </button>
+  </div>
+)}
 
-              <div>
-                  <p className="my-2">
-                    {language === "ar"
-                      ? "الدفع بالنقاط"
-                      : " Pay with points "}
-                    <span
-                      onClick={() => setOpenSection(openSection === "points" ? null : "points")}
-                      className="text-primary cursor-pointer">
-                      {language === "ar"? "إضغط هنا": " Click here "}
-                    </span>
-                  </p>
 
-                  <div
-                    className={`items-center justify-start ${
-                      openSection === "points" ? "flex" : "hidden"}`}
-                  >
-                    <button
-                      onClick={handlePointsButton}
-                      className="border p-2 bg-primary text-white" >
-                      {language === "ar"  ? "الدفع بالنقاط": "Pay with points"}
-                    </button>
-                  </div>
-                </div>
-            </div>
+
+  {/* الدفع بالنقاط */}
+  <p className="my-2">
+    {language === "ar" ? "الدفع بالنقاط" : "Pay with points"}
+    <span
+      onClick={() => setOpenSection(openSection === "points" ? null : "points")}
+      className="text-primary cursor-pointer"
+    >
+      {language === "ar" ? " إضغط هنا " : "Click here"}
+    </span>
+  </p>
+  {openSection === "points" && (
+    <div className="items-center justify-start flex">
+      <button
+        onClick={handlePointsButton}
+        className="border p-2 bg-primary text-white"
+      >
+        {language === "ar" ? "الدفع بالنقاط" : "Pay with points"}
+      </button>
+    </div>
+  )}
+</div>
+
           
           </div>
         </div>

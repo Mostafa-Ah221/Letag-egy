@@ -1,7 +1,18 @@
 import { CiHeart } from "react-icons/ci";
 import { IoIosHeart } from "react-icons/io";
 
-export default function Modal({ isOpen, onClose, product,setQuantity,quantity, handleAddToCart,handleAddToWish,wishList, language,currency }) {
+export default function Modal({
+  isOpen,
+  onClose,
+  product,
+  setQuantity,
+  quantity,
+  handleAddToCart,
+  handleAddToWish,
+  wishList,
+  language,
+  currency,
+}) {
   if (!isOpen || !product) return null;
 
   return (
@@ -22,7 +33,7 @@ export default function Modal({ isOpen, onClose, product,setQuantity,quantity, h
         </button>
 
         {/* محتوى المودال */}
-        <div className="mt-2 flex flex-col md:flex-row-reverse">
+        <div className="mt-2 flex gap-1 flex-col md:flex-row-reverse">
           {/* صورة المنتج */}
           <img
             src={product.photo}
@@ -39,35 +50,49 @@ export default function Modal({ isOpen, onClose, product,setQuantity,quantity, h
 
             <div className="flex md:block gap-3">
               {/* زر الإضافة إلى السلة */}
-               <div className='flex items-center justify-between'>
-                      <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        const isInWishList = wishList.some(
-                          (wishItem) => wishItem && wishItem.id === product.id
-                        );
-                        handleAddToWish(product, isInWishList, () => {});
-                      }}
-                      className="z-20"
-                    >
-                      {wishList.some(
-                        (wishItem) => wishItem && wishItem.id === product.id
-                      ) ? (
-                        <IoIosHeart className="text-primary text-[2.5rem]" />
-                      ) : (
-                        <CiHeart className="text-primary text-5xl" />
-                      )}
-                    </button>
-                    <input 
-                      type="number" 
-                      value={quantity} 
-                      onChange={(e) => setQuantity(Math.max(1, e.target.value))} 
-                      min={1} 
-                      className='rounded-md text-right text-primary border border-stone-500 w-28 py-2 px-2'
-                    />
-                  </div>
+              <div className="flex items-center justify-between mb-4">
+                {/* زر الإضافة إلى المفضلة */}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const isInWishList = wishList.some(
+                      (wishItem) => wishItem && wishItem.id === product.id
+                    );
+                    handleAddToWish(product, isInWishList, () => {});
+                  }}
+                  className="z-20"
+                >
+                  {wishList.some(
+                    (wishItem) => wishItem && wishItem.id === product.id
+                  ) ? (
+                    <IoIosHeart className="text-primary text-[2.5rem]" />
+                  ) : (
+                    <CiHeart className="text-primary text-5xl" />
+                  )}
+                </button>
+
+                {/* كمية المنتج */}
+                <div className="flex border">
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="bg-gray-200 px-2  text-lg font-bold  hover:bg-gray-300"
+                  >
+                    -
+                  </button>
+                  <span className="px-6 text-[1rem] ">
+                    {quantity}
+                  </span>
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="bg-gray-200 px-2 text-lg font-bold  hover:bg-gray-300"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
               <button
-                onClick={() => handleAddToCart(product)} 
+                onClick={() => handleAddToCart(product)}
                 className="px-2 w-full md:mt-10 py-2 bg-primary text-white hover:bg-primary/90 transition-colors"
               >
                 {language === "ar" ? "إضافة إلى السلة" : "Add To Cart"}

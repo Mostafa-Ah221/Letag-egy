@@ -152,7 +152,7 @@ const handleOpenMenu = () => {
   return (
     <>
       <div
-        className={`fixed top-0 left-0 w-full h-full bg-white z-40 overflow-y-auto ${isOpen ? "block" : "hidden"
+        className={`fixed top-0 left-0 w-full h-full  z-40 overflow-y-auto ${isOpen ? "block" : "hidden"
           } ${isOpen ? "animate-slideInRight" : ""}`}
       >
         <div className="p-6">
@@ -232,7 +232,7 @@ const handleOpenMenu = () => {
         ))}
       </div>
 
-      <nav className="border-gray-200 relative z-10">
+      <nav className="border-gray-200 relative z-10 bg-white">
         <div className="flex-row justify-start flex flex-wrap items-center lg:justify-around mx-auto p-4">
           <Link to={"/"} className={`flex items-center space-x-3 ${language === "ar" ? "ml-20" : "mr-20"}  md:ml-0 rtl:space-x-reverse`}>
             <img src={logo} className="h-10" alt="Logo" />
@@ -264,9 +264,9 @@ const handleOpenMenu = () => {
 
 
           <div className={`items-center  justify-between w-full lg:flex lg:w-auto md:order-2 ${isMenuOpen ? 'block' : 'hidden'}`} id="navbar-search">
-            <ul className="lg:flex font-medium lg:space-x-8 lg:bg-white hidden">
+            <ul className="lg:flex font-medium gap-5 hidden">
               <li>
-                <Link to={isStock ? "/home" : "/"} className="relative block py-2 px-3 ml-2 rounded md:p-0 group">
+                <Link to={isStock ? "/home" : "/"} className="relative block py-2 rounded md:p-0 group">
                   <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-primary transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
                   <span className="relative z-10">
                     {language === "ar" ? "الرئيسية" : "Home"}
@@ -274,15 +274,15 @@ const handleOpenMenu = () => {
                 </Link>
               </li>
               <li>
-                <Link to={"/about"} className="relative block py-2 px-3 rounded md:p-0 group">
-                  <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-primary transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
+                <Link to={"/about"} className="relative block py-2  rounded md:p-0 group">
+                <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-primary transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
                   <span className="relative z-10">
                     {language === "ar" ? "نبذة عنا" : "About"}
                   </span>
                 </Link>
               </li>
               <li>
-                <Link to={"/pageBrand"} className="relative block py-2 px-3 rounded md:p-0 group">
+                <Link to={"/pageBrand"} className="relative block py-2  rounded md:p-0 group">
                   <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-primary transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
                   <span className="relative z-10">
                     {language === "ar" ? "العلامات التجارية" : "Brands"}
@@ -298,11 +298,11 @@ const handleOpenMenu = () => {
                 <button className={`absolute inset-y-0 start-0 flex items-center ${language === "ar" ? "pr-2" : "pl-2"} z-100`} onClick={() => {
                   setSearchData(null); setQuery(""); setSearchData2(null);
                 }}>
-                  <button className="p-[7px] bg-primary hover:cursor-pointer">
+                  <p className="p-[7px] bg-primary hover:cursor-pointer">
                     <svg className="w-4 h-4 text-gray-100 hover:cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                     </svg>
-                  </button>
+                  </p>
                   <span className="sr-only">Search icon</span>
                 </button>
               </Link>

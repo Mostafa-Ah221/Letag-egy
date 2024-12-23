@@ -109,15 +109,15 @@ export default function SubCategory() {
         {filteredCategory.map((category, index) => (
           <div key={index} className='group px-2 cursor-pointer'>
             <Link to={`/categoryDetails/${category.id}`}>
-              <div className='overflow-hidden rounded-lg bg-white shadow-sm hover:shadow-md transition-all duration-300'>
+              <div className='overflow-hidden rounded-lg bg-Neutral shadow-sm hover:shadow-md transition-all duration-300'>
                 <img 
-                  className='h-36 w-full object-cover transform transition-all duration-300 group-hover:scale-110' 
+                  className='h-16 w-full object-contain transform transition-all duration-300 group-hover:scale-110' 
                   src={category.photo} 
                   alt={category.name} 
                   loading="lazy"
                 />
                 <h3 className='text-center py-2 text-sm font-medium text-secondary group-hover:text-primary transition-all duration-300'>
-                  {category.name.split(" ").slice(0,3).join(' ')}
+                  {category.name.split(" ").slice(0,2).join(' ')}
                 </h3>
               </div>
             </Link>

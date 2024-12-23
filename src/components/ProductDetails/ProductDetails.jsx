@@ -15,6 +15,7 @@ import toast from 'react-hot-toast';
 import Modal from '../Modal/Modal';
 import ReviewForm from './ReviewForm';
 import ReviewList from './ReviewList';
+import ProductCard from '../CartProduct/CartProduct';
 
 
 export default function ProductDetails() {
@@ -97,7 +98,7 @@ export default function ProductDetails() {
 
   const CustomArrow = ({ direction, onClick }) => (
     <button onClick={onClick} className={`absolute top-1/2 -translate-y-1/2 z-10
-      ${direction === 'next' ? '-right-6' : '-left-6'}
+      ${direction === 'next' ? '-right-1' : '-left-1'}
       bg-white w-10 h-10 hover:bg-primary rounded-full shadow-lg group
       flex items-center justify-center duration-300 transition-colors
       border border-gray-200`}>
@@ -124,29 +125,10 @@ export default function ProductDetails() {
     ],
   };
   return (
-    <div className="flex flex-col items-center mt-5">
+    <div className="flex flex-col items-center mt-5 mb-11">
       {product ? (
         <>
           <div className="flex flex-col md:flex-row-reverse md:items-start gap-6 mb-44">
-            <div className='w-full md:w-1/2 h-80'>
-           <img 
-                className="w-full h-full object-cover rounded-lg hover:scale-110 transition-transform duration-300" 
-              src={selectedImage} 
-              alt={product.title} 
-            />
-              <div className={`flex rounded-md mt-2 border-2 border-primary w-fit ${language === "ar"? "mr-auto":"ml-auto"}`}>
-              {product.photos.map((photo, index) => (
-                  <img key={index} 
-                  className="w-[4.5rem] h-[4.5rem] object-cover cursor-pointer"
-                  src={photo.url}
-                  alt={product.title}
-                  onClick={() => setSelectedImage(photo.url)}
-                />
-                
-              ))}
-              </div>
-            </div>
-
             <div className="p-4 text-right flex-1">
               <h2 className="text-3xl font-bold mb-2">{product.title}</h2>
               <div className="flex items-center justify-between mb-4">
@@ -244,6 +226,27 @@ export default function ProductDetails() {
                 </div>
               </div>
             </div>
+
+            <div className='w-full md:w-1/2 h-80'>
+           <img 
+                className="w-full h-full object-cover rounded-lg hover:scale-110 transition-transform duration-300" 
+              src={selectedImage} 
+              alt={product.title} 
+            />
+              <div className={`flex rounded-md mt-2 border-2 border-primary w-fit ${language === "ar"? "mr-auto":"ml-auto"}`}>
+              {product.photos.map((photo, index) => (
+                  <img key={index} 
+                  className="w-[4.5rem] h-[4.5rem] object-cover cursor-pointer"
+                  src={photo.url}
+                  alt={product.title}
+                  onClick={() => setSelectedImage(photo.url)}
+                />
+                
+              ))}
+              </div>
+            </div>
+
+            
           </div>
 
           {/* Review Section */}
@@ -310,73 +313,23 @@ export default function ProductDetails() {
       )}
       {/* Related Products Section */}
       <div className="w-full mt-8">
-        <h3 className=" text-2xl font-semibold mb-4"> {language === 'ar' ? 'منتجات ذات صلة' : 'Related Products'}</h3>
+        <h3 className=" text-2xl font-semibold mb-4 px-4"> {language === 'ar' ? 'منتجات ذات صلة' : 'Related Products'}</h3>
+        
         <Slider {...settings}>
           {related?.map((relatedProduct) => (
-            <div key={relatedProduct.id} className="px-2">
-              <Link
-                to={`/productDetails/${relatedProduct.id}`}
-                className="bg-white group rounded-lg shadow-md hover:shadow-lg transition-all duration-300 h-full flex flex-col p-2"
-              >
-                <div className="relative overflow-hidden rounded-t-lg">
-                  {relatedProduct.photo && (
-                    <div className="group h-48 overflow-hidden relative">
-                      <img
-                        src={relatedProduct.photo}
-                        alt={relatedProduct.name}
-                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
-                      />
-                      <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <button className="z-20">
-                          <IoEyeSharp
-                            className="text-white bg-primary p-2 rounded-full text-[2.4rem]"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleProductClick(relatedProduct);
-                            }}
-                          />
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            const isInWishList = wishList.some(
-                              (wishItem) => wishItem && wishItem.id === relatedProduct.id
-                            );
-                            handleAddToWish(relatedProduct, isInWishList, () => { });
-                          }}
-                          className="z-20"
-                        >
-                          {wishList.some(
-                            (wishItem) => wishItem && wishItem.id === relatedProduct.id
-                          ) ? (
-                            <IoIosHeart className="text-primary text-[2.5rem]" />
-                          ) : (
-                            <CiHeart className="text-primary text-5xl" />
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <h3 className="text-right text-sm mt-3 text-slate-800">
-                  {relatedProduct?.category[0]?.name}
-                </h3>
-                <div className="p-4 flex flex-col flex-grow">
-                  <h2 className="text-right text-lg font-medium mb-2 duration-300 line-clamp-1 min-h-[3.5rem] group-hover:text-primary">
-                    ...{relatedProduct.title.split(" ").slice(0, 4).join(" ")}
-                  </h2>
-                </div>
-                <div className="flex items-center flex-row-reverse justify-between">
-                  <p className="text-xl font-semibold">
-                    {relatedProduct.price} {currencyData}
-                  </p>
-                  <p className="text-gray-700">
-                    ({relatedProduct.reviews_count || 0})
-                    <FaStar className="text-yellow-500 inline-block ml-1" />
-                  </p>
-                </div>
-              </Link>
-            </div>
+            <>
+            <div className="mx-3">
+             <ProductCard
+            key={relatedProduct.id}
+            product={relatedProduct}
+            handleAddToCart={handleAddToCart}
+            handleProductClick={handleProductClick}
+            handleAddToWish={handleAddToWish}
+            wishList={wishList}
+            currencyData={currencyData}
+          />
+          </div>
+            </>
           ))}
         </Slider>
       </div>

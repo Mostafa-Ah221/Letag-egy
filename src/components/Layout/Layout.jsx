@@ -11,17 +11,19 @@ export default function Layout() {
       const { language } = useLanguage();
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col ">
        <ScrollToTop />
-      <div className="grid grid-cols-12 ">
+       
+      <div className="grid grid-cols-12">
+       
         <div className="col-span-1">
           <Menu />
         </div>
           <MenuMobile/>
-        <div className="col-span-11 flex flex-col">
+        <div className={`col-span-11 flex flex-col ${language === "ar" ? " ml-7":"mr-7"}`}>  
           <Navbar/>
           <SecondMenu/>
-        <div className={`container mb-24 flex-grow ${language === "ar" ? "pl-11 pr-0":"pl-4 pr-7"}`}>
+        <div className={` bg-Neutral  container flex-grow `}>
           <Outlet>
           </Outlet>
        </div>

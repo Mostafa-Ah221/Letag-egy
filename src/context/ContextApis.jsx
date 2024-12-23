@@ -2,10 +2,10 @@ import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useLanguage } from "./LanguageContextPro";
 import { useQuery } from "@tanstack/react-query";
-import { getDomain } from 'tldts';
+import { useCart } from "./CartContext";
 
 export const ContextData = createContext();
-const baseDomain = window.location.protocol + "//" + window.location.hostname;
+
 
 async function fetchProducts(filters, language) {
   const formData = new FormData();
@@ -57,6 +57,14 @@ async function getApiHome(language) {
   });
   return response.data;
 }
+async function getOffers(language) {
+  const response = await axios.get(`https://demo.leetag.com/api/offers`, {
+     headers: { lang: language },
+  });
+  console.log(response.data);
+  
+  return response.data;
+}
 
 async function getProdDetails(id, language) {
   const response = await axios.get(
@@ -88,7 +96,7 @@ async function getMenuPage() {
   return response.data;
 }
 //todo ================================================================(getAddressList)=============//
-const getAddressList = async (userToken) => {
+const getAddressList = async (userToken,language) => {
   const token = userToken.startsWith("bearer") ? userToken : `Bearer ${userToken}`;
 
   try {
@@ -97,6 +105,7 @@ const getAddressList = async (userToken) => {
       headers: {
         'Accept': 'application/json',
         'Authorization': token,
+         lang: language 
       },
     });
 
@@ -134,6 +143,7 @@ async function getProductCategory(idCategory, page, pageSize, language) {
 
 export default function DataContextProvider({ children }) {
   const { language } = useLanguage();
+      const { showToast } = useCart();
   const [userToken, setUserToken] = useState(() => {
     return localStorage.getItem("userToken") || null;
   });
@@ -141,6 +151,7 @@ export default function DataContextProvider({ children }) {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
+  const [addresses, setAddresses] = useState();
   const [selectedTownId, setSelectedTownId] = useState(null); // TODO for Stock
 
   const { data: settings } = useQuery({
@@ -148,46 +159,46 @@ export default function DataContextProvider({ children }) {
     queryFn: () => getCurrency(language),
   });
   //!================================================================(deleteAddress)=====================
-  async function deleteAddress(id, userToken, language) {
+ async function deleteAddress(id, userToken, language) {
+  try {
     const response = await axios.post(
       `https://tarshulah.com/api/customer/address/delete/${id}`,
       {},
       {
         headers: {
           lang: language,
-          'Authorization': userToken
-        }
-
+          Authorization: userToken,
+        },
       }
     );
+    
+    // تحديث السياق
+    setAddresses((prevAddresses) => prevAddresses.filter((address) => address.id !== id));
+    showToast(language === 'ar' ? 'تم حذف العنوان بنجاح' : 'Address removed successfully');
+    
     return response.data;
+  } catch (error) {
+    console.error("Error deleting address:", error);
+    throw new Error(error.response?.data?.message || "Failed to delete address");
   }
-  //todo================================================================(updateAddress)=====================
+}
 
-  async function updateAddress(id, userToken, updatedData) {
-    const response = await axios.post(
-      `https://tarshulah.com/api/customer/address/update/${id}`,
-      updatedData,
-      {
-        headers: {
-          "Accept": "application/json",
-          'Authorization': userToken
-        }
+ useEffect(() => {
+  if (userToken) {
+    getAddressList(userToken,language).then((data) => {
+      if (data && data.data && Array.isArray(data?.data.addresses)) {
+        setAddresses(data?.data?.addresses); 
+      } else {
+        console.error("No addresses found in the response:", data);
       }
-    );
-    return response.data;
-  }
-
-  useEffect(() => {
-    if (userToken) {
-      getAddressList(userToken);
-    } else {
-      console.error("User token is not available");
-    }
-  }, [userToken]);
+    }).catch(error => {
+      console.error("Error fetching address list:", error);
+    });
+  } 
+}, [userToken,language]);
 
 
-  console.log(baseDomain);
+
   let currencyData = settings?.data?.currency.currency_icon;
   let settings_domain = settings;
   let colorWebSite = settings_domain?.data.theme_color;
@@ -211,7 +222,6 @@ export default function DataContextProvider({ children }) {
         headers: { Authorization: `${userToken}` },
       })
       .then((response) => {
-        //   console.log("API Response:", response.data.data.customer); 
         const user = {
           name: response.data.data.customer.first_name,
           last_name: response.data.data.customer.last_name,
@@ -219,13 +229,14 @@ export default function DataContextProvider({ children }) {
           phone: response.data.data.customer.phone,
           points: response.data.data.customer.avaliable_points
         };
+        
         setUserData(user);
       })
       .catch((error) => {
         console.error("Failed to fetch user data:", error);
       });
   }
-  // console.log(userData);
+  
 
   // Fetch subcategories
   useEffect(() => {
@@ -247,6 +258,7 @@ export default function DataContextProvider({ children }) {
   // Fetch user data when userToken changes
   useEffect(() => {
     fetchUserData();
+    
   }, [userToken]);
 
   const handleSetUserToken = (token) => {
@@ -264,10 +276,10 @@ export default function DataContextProvider({ children }) {
         subCategories: () => subCategories(language),
         getBrands: () => getBrands(language),
         getApiHome: () => getApiHome(language),
+        getOffers: () => getOffers(language),
         getSlider: () => getSlider(language),
         getProdDetails: (id) => getProdDetails(id, language),
         deleteAddress: (id) => deleteAddress(id, userToken, language),
-        updateAddress: (id) => updateAddress(id, userToken, language),
         getCategoriesDetails: (id) => getCategoriesDetails(id, language),
         getProductCategory: (idCategory, page, pageSize) =>
           getProductCategory(idCategory, page, pageSize, language),
@@ -287,7 +299,8 @@ export default function DataContextProvider({ children }) {
         colorWebSite,
         nameWebSite,
         getAddressList,
-        baseDomain,
+         setAddresses,
+         addresses
 
       }}
     >

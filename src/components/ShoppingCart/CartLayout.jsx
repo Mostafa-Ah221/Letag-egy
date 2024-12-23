@@ -8,7 +8,7 @@ export default function CartLayout() {
   const { cart, getTotalPrice } = useCart();
   const { userToken, userData, settings_domain } = useContext(ContextData);
   const tax = settings_domain?.data.tax;
-  console.log(tax);
+  // console.log(tax);
 
   const showToast = (message, type = 'success') => {
   const getCSSVariable = (variableName) => {
@@ -39,8 +39,8 @@ export default function CartLayout() {
     location_id: '',
     delivery_address: '',
     payment_method: '',
-    total: '',
     product_data: [],
+    total: '',
     coupon_discount: '',
     comment: '',
     address_id: '',
@@ -103,7 +103,7 @@ const [required, setRequired] = useState({});
      const newErrors = {};
     for (let field of requiredFields) {
       if (!formData[field] || (Array.isArray(formData[field]) && formData[field].length === 0)) {
-           newErrors[field] = `حقل ${field} مطلوب.`; // حفظ رسالة الخطأ لكل حقل ناقص
+           newErrors[field] = `حقل ${field} مطلوب.`; 
       }
     }
     setRequired(newErrors); // تحديث حالة الأخطاء
@@ -148,41 +148,48 @@ const [required, setRequired] = useState({});
     }
   };
 
-  const handleCouponButton = async () => {
-    if (!formData.coupon_discount) {
-      showToast("يرجى إدخال رمز القسيمة.");
-      return;
+const handleCouponButton = async () => {
+  if (!formData.coupon_discount) {
+    showToast("يرجى إدخال رمز القسيمة.");
+    return;
+  }
+
+  try {
+    const response = await fetch("https://tarshulah.com/api/coupon/apply", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        code: formData.coupon_discount,
+        total_cart: formData.total,
+      }),
+    });
+
+    const responseData = await response.json();
+
+    if (responseData.status) {
+      const cartPrice = parseFloat(responseData.data.coupon.cart_price).toFixed(2);
+      const couponDiscount = responseData.data.coupon.precentage;
+
+      setFormData((prev) => ({
+        ...prev,
+        total: cartPrice, // تحديث إجمالي السعر
+        coupon_discount: couponDiscount, // تحديث قيمة الخصم
+      }));
+
+      showToast("تم تطبيق القسيمة بنجاح!");
+    } else {
+      alert(responseData.message || "تعذر تطبيق القسيمة.");
     }
+  } catch (error) {
+    console.error("Network Error:", error);
+    alert("خطأ في الشبكة. يرجى المحاولة مرة أخرى.");
+  }
+};
 
-    try {
-      const response = await fetch("https://tarshulah.com/api/coupon/apply", {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          code: formData.coupon_discount,
-          total_cart: formData.total,
-        }),
-      });
 
-      const responseData = await response.json();
 
-      if (responseData.status) {
-        const discountedTotal = (parseFloat(formData.total) - parseFloat(responseData.data.coupon)).toFixed(2);
-        setFormData((prev) => ({
-          ...prev,
-          total: discountedTotal,
-        }));
-        showToast('تم تطبيق القسيمة بنجاح!');
-      } else {
-        alert(responseData.message || 'تعذر تطبيق القسيمة.');
-      }
-    } catch (networkError) {
-      console.error('Network Error:', networkError);
-      alert('خطأ في الشبكة. يرجى المحاولة مرة أخرى.');
-    }
-  };
 const handlePointsButton = async () => {
   if (!formData.total) {
     showToast("يرجى التأكد من إجمالي السلة.");

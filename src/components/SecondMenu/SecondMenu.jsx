@@ -61,20 +61,19 @@ function SecondMenu() {
 
     return (
         <>
-            <div className=' relative hidden lg:flex'>
-                <div className='flex flex-row-reverse'>
-                    <button className="block bg-primary w-16 outline-none h-14  ml-auto z-30" onClick={handleOpenMenu}>
+            <div className=' relative hidden lg:flex bg-Neutral'>
+                <div className='flex flex-row-reverse overflow-hidden'>
+                    <button className={`absolute ${language === "ar" ? "left-0":"right-0"} bg-primary w-16 outline-none h-[3.8rem] ml-auto z-30`} onClick={handleOpenMenu}>
                         <FontAwesomeIcon icon={isOpen ? faCircleXmark : faBars} className="text-white text-[1.5rem]" />
                     </button>
-
                     {filteredCategory.slice(0, 10).map((category) => (
-                        <div key={category.id} className='w-28 '>
+                        <div key={category.id} className='w-[7.1rem] overflow-hidden'>
                             <Link to={`/categoryDetails/${category.id}`} onClick={() => setSelectedCategoryId(category.id)}>
                                 <div className={`overflow-hidden bg-white shadow-sm rounded- hover:shadow-md transition-all duration-300 ${selectedCategoryId === category.id ? 'border-2 border-primary' : ""}`}>
                                     <img className='h-7 w-full object-contain transform transition-all duration-300 group-hover:scale-110' 
                                          src={category.photo || defaultImage} 
                                          alt={category.name} loading="lazy" />
-                                    <h3 className='text-center py-2 text-[0.7rem] font-medium text-secondary group-hover:text-orange-500 transition-all duration-300'>
+                                    <h3 className='text-center line-clamp-1  py-2 text-[0.7rem] font-medium text-secondary group-hover:text-orange-500 transition-all duration-300'>
                                         {category.name.split(" ").slice(0, 2).join(' ')}
                                     </h3>
                                 </div>
@@ -83,7 +82,7 @@ function SecondMenu() {
                     ))}
                 </div>
                 <div className={`${isOpen ? "block" : "hidden"} bg-black bg-opacity-50 w-full h-full fixed z-20 overflow-auto`}>
-                    <div className={`bg-white flex ${language === "ar" ? "flex-row" : "flex-row mx-auto"} w-5/6 rounded-md relative z-10  mt-5 ml-11 border-2 border-primary`}>
+                    <div className={`bg-white flex ${language === "ar" ? "flex-row" : "flex-row mx-auto"} w-5/6 rounded-md relative z-10  mt-5 ${language === "ar"?"right-5" :"-left-20"} border-2 border-primary`}>
                         <div className="flex flex-col bg-white">
                             {categories.map((category) => (
                                 <div key={category.id} className="flex bg-white group hover:cursor-pointer w-60 relative z-50" onClick={() => handleClick(category.name)}>

@@ -17,7 +17,7 @@ export default function Home() {
   };
 
   return (
-    <div className="">
+    <div className="bg-Neutral">
       <SliderHome />
       <SubCatigory />
       <Brands />
