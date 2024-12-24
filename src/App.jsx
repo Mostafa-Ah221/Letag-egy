@@ -10,7 +10,6 @@ import PageBrands from "./components/Brands/pageBrands";
 import CategoryDetails from "./components/CategoryDetails/CategoryDetails";
 import ProductDetails from "./components/ProductDetails/ProductDetails";
 import CartLayout from "./components/ShoppingCart/CartLayout";
-import Address from "./components/ShoppingCart/Address";
 // import PayPage from "./components/ShoppingCart/PayPage";
 import { CartContextProvider } from "./context/CartContext";
 import { useEffect, useState } from "react";
@@ -28,6 +27,7 @@ import AddAddress from "./components/AddAddress/AddAddress";
 import ForgetPassword from "./components/ForgetPassword/ForgetPassword";
 import UpDateProfile from "./components/Profile/UpDateProfile";
 import User from "./components/User/User";
+import DataOrder from "./components/ShoppingCart/DataOrder";
 
 
 
@@ -80,7 +80,7 @@ function App() {
           path: "cartlayout",
           element: <CartLayout />,
           children: [
-            { index: true, element: <Address /> },
+            { index: true, element: <DataOrder /> },
             // { path: "payment", element: <PayPage /> },
            
           ],

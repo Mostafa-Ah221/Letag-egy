@@ -1,14 +1,16 @@
 import { useOutletContext } from "react-router-dom";
-// import AddAddress from "../AddAddress/AddAddress";
+// import Address from "../Address/Address";
 import { ContextData } from "../../context/ContextApis";
 import { useContext, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "../../context/LanguageContextPro";
 import CartOrder from "./CartOrder";
+import { HiPlusSm } from "react-icons/hi";
+import AddAddress from "../AddAddress/AddAddress";
 
-export default function Address() {
-  const { updateData, handleReviewSubmit, formData ,handleCouponButton,handlePointsButton,required} = useOutletContext();
-  const { userData, getAddressList, userToken, settings_domain } = useContext(ContextData);
+export default function DataOrder() {
+  const { updateData, handleReviewSubmit, formData ,handleCouponButton,handlePointsButton,required,updatedTotal} = useOutletContext();
+  const { userData, getAddressList, userToken, settings_domain,addresses } = useContext(ContextData);
   const { language } = useLanguage();
 
   // const [openAddress, setOpenAddress] = useState(false);
@@ -17,8 +19,10 @@ export default function Address() {
   const [selectedRegionId, setSelectedRegionId] = useState('');
   const [shiping, setShiping] = useState('');
 const [openSection, setOpenSection] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const towns = settings_domain?.data?.locations || [];
+console.log(updatedTotal);
 
   const handleTownChange = (event) => {
     const townId = event.target.value;
@@ -41,8 +45,6 @@ const handleRegionChange = (event) => {
   setShiping(selectedRegion?.shipping_price || 0);
 };
 
-
-  // تحديث بيانات المستخدم
   useEffect(() => {
     if (userData) {
       const updatedData = {
@@ -76,11 +78,20 @@ useEffect(() => {
     updateData({ [name]: value });
   };
 
-  // جلب قائمة العناوين
-  const { data: addressList, isLoading, isError } = useQuery({
-    queryKey: ["getAddressList", language],
-    queryFn: () => getAddressList(userToken),
+  const handleAddressSelection = (addressId) => {
+  const selectedAddress = addresses.find(address => address.id === addressId);
+  updateData({
+    location_id: selectedAddress.location_id,
+    shipping_id: selectedAddress.region_id,
+    delivery_address: selectedAddress.address,
+    building_number: selectedAddress.building_number,
+    floor_number: selectedAddress.floor_number,
+    shipping_price: selectedAddress.shipping_price,
+    address_id: addressId,
   });
+};
+
+
 
   return (
     <>
@@ -126,58 +137,153 @@ useEffect(() => {
           />
           {required.email && <span className="text-red-500">{required.email}</span>}
         </div>
+      {userToken ? (
+        <div className="bg-white p-4 rounded-md">
+          <div className=" mb-3">
+            <h2>{language === "ar"?"يُرجى اختيار أو إضافة عنوان التوصيل لهذه الطلبيه" :"Please choose or add a delivery address for this order"} </h2>
+          </div>
+        <div className="flex justify-end items-center mb-3">
+        <button
+          onClick={() => setShowModal(!showModal)}
+          className="text-primary hover:text-slate-700 font-bold duration-200"
+        >
+          <HiPlusSm className="inline-block text-3xl" />
+          {language === "ar" ? "اضف عنوان جديد لأستلام طلباتك" : "Add a new address to receive your orders"}
+        </button>
+      </div>
+
+      {showModal && (
+        <>
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+            onClick={() => setShowModal(false)} // هنا يجب أن تكون دالة
+          >
+            <div className="bg-white w-[40%] flex justify-center items-center pb-5 relative" 
+            onClick={(e) => e.stopPropagation()}>
+              <AddAddress showAddress={false}/>
+               <button
+               onClick={() => setShowModal(false)}
+              className={`absolute -top-3 ${language === 'ar' ? '-left-2' : 'right-2'} text-xl font-bold text-white bg-primary rounded-full w-8 h-8`} >
+               ✕
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+    <table className="table-auto w-full border-collapse border border-gray-300">
+      {/* Header Row */}
+      <thead className="bg-gray-100">
+        <tr>
+          <th className="border border-gray-300 px-4 py-2 text-center">اختيار</th>
+          <th className="border border-gray-300 px-4 py-2 text-center">المحافظة</th>
+          <th className="border border-gray-300 px-4 py-2 text-center">المنطقة</th>
+          <th className="border border-gray-300 px-4 py-2 text-center">تفاصيل العنوان</th>
+          <th className="border border-gray-300 px-4 py-2 text-center">رقم المبنى</th>
+          <th className="border border-gray-300 px-4 py-2 text-center">رقم الطابق</th>
+        </tr>
+      </thead>
+
+      {/* Address Rows */}
+      <tbody>
+        {addresses && addresses.length > 0 ? (
+          addresses.map((address) => (
+            <tr key={address.id} className="hover:bg-gray-50">
+              <td className="border border-gray-300 px-4 py-2 text-center">
+                <input
+                  className="appearance-none w-5 h-5 border-2 border-gray-300 rounded-full checked:bg-primary checked:border-gray-300 "
+                  type="radio"
+                  name="selectedAddress"
+                  value={address.id}
+                  onChange={() => handleAddressSelection(address.id)}
+                />
+              </td>
+              <td className="border border-gray-300 px-4 py-2 text-center">
+                {address.location_name}
+              </td>
+              <td className="border border-gray-300 px-4 py-2 text-center">
+                {address.region_name}
+              </td>
+              <td className="border border-gray-300 px-4 py-2 text-center">
+                {address.address}
+              </td>
+              <td className="border border-gray-300 px-4 py-2 text-center">
+                {address.building_number}
+              </td>
+              <td className="border border-gray-300 px-4 py-2 text-center">
+                {address.floor_number}
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="6" className="text-center py-4">
+              {language === "ar" ? "لا توجد عناوين متاحة" : "No addresses available"}
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  </div>
+) : (
+  <div className="px-4 bg-white rounded">
+    <select
+      name="town"
+      className={`w-full mt-2 input-field text-gray-400 ${
+        !formData.town ? "text-gray-400" : "text-black"
+      }`}
+      onChange={handleTownChange}
+    >
+      <option value="" disabled selected>
+        {language === "ar" ? "اختر المحافظة" : "Select Town"}
+      </option>
+      {towns?.map((town) => (
+        <option key={town.id} value={town.id}>
+          {town.name}
+        </option>
+      ))}
+    </select>
+    <select
+      name="region"
+      className={`w-full mt-2 input-field text-gray-400 ${
+        !formData.region ? "text-gray-400" : "text-black"
+      }`}
+      onChange={handleRegionChange}
+    >
+      <option value="" disabled selected>
+        {language === "ar" ? "اختر المنطقة" : "Select Region"}
+      </option>
+      {regions?.map((region) => (
+        <option key={region.id} value={region.id}>
+          {region.name}
+        </option>
+      ))}
+    </select>
+    <input
+      name="delivery_address"
+      placeholder={language === "ar" ? "عنوان التوصيل" : "Delivery Address"}
+      className="input-field w-full mt-2"
+      onChange={handleChange}
+    />
+    {required.delivery_address && <span className="text-red-500">{required.delivery_address}</span>}
+    <input
+      name="building_number"
+      placeholder={language === "ar" ? "رقم المبنى" : "Building Number"}
+      className="w-full mt-2 input-field"
+      onChange={handleChange}
+    />
+    <input
+      name="floor_number"
+      placeholder={language === "ar" ? "رقم الطابق" : "Floor Number"}
+      className="w-full mt-2 input-field"
+      onChange={handleChange}
+    />
+  </div>
+)}
+
 
         {/* إدخال العناوين */}
-        <div className="px-4 bg-white rounded">
-          <select
-            name="town"
-            className={`w-full mt-2 input-field text-gray-400 ${
-             !formData.town ? 'text-gray-400' : 'text-black'}`}
-            onChange={handleTownChange}
-          >
-            <option value="" disabled selected >
-              {language === "ar" ? "اختر المحافظة" : "Select Town"}
-            </option>
-            {towns.map((town) => (
-              <option key={town.id} value={town.id}>
-                {town.name}
-              </option>
-            ))}
-          </select>
-          <select
-            name="region"
-            className={`w-full mt-2 input-field text-gray-400 ${
-             !formData.town ? 'text-gray-400' : 'text-black'}`}
-            onChange={handleRegionChange}
-          >
-            <option value="" disabled selected>
-              {language === "ar" ? "اختر المنطقة" : "Select Region"}
-            </option>
-            {regions.map((region) => (
-              <option key={region.id} value={region.id}>
-                {region.name}
-              </option>
-            ))}
-          </select>
-           <input
-            name="delivery_address"
-            placeholder={language === "ar" ? "عنوان التوصيل" : "Delivery Address"}
-            className="input-field w-full mt-2"
-            onChange={handleChange}
-          />
-          {required.delivery_address && <span className="text-red-500">{required.delivery_address}</span>}
-          <input
-            name="building_number"
-            placeholder={language === "ar" ? "رقم المبنى" : "Building Number"}
-            className="w-full mt-2 input-field"
-            onChange={handleChange}
-          />
-          <input
-            name="floor_number"
-            placeholder={language === "ar" ? "رقم الطابق" : "Floor Number"}
-            className="w-full mt-2 input-field"
-            onChange={handleChange}
-          />
+       
+        <div className="px-4 bg-white rounded"> 
           <textarea
             name="comment"
             rows={5}
@@ -185,24 +291,12 @@ useEffect(() => {
             className="input-field w-full mt-2"
             onChange={handleChange}
           />
-        </div>
-
-        {/* تعليق وكود خصم */}
-        {/* <div className="bg-white px-4 py-4 rounded">
-{/*          
-          <input
-            name="coupon_discount"
-            placeholder={language === "ar" ? "كود الخصم" : "Coupon Code"}
-            className="input-field w-full mb-2"
-            onChange={handleChange}
-          /> */}
-          
-        {/* </div> */} 
+          </div>
       </div>
 
       {/* عمود ملخص الطلب */}
       <div className="col-span-12 lg:col-span-4">
-        <CartOrder />
+        <CartOrder updateTotal={updatedTotal}/>
         <div className="px-4 py-4 bg-white rounded">
           <h3 className="font-semibold mb-2">{language === "ar" ? "نظام الدفع" : "Payment Method"}</h3>
           {settings_domain?.data?.getways.map((getway) => (
@@ -303,6 +397,5 @@ useEffect(() => {
       </div>
     </div>
     </>
-  
   );
 }

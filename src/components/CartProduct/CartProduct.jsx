@@ -18,7 +18,7 @@ const ProductCard = ({
   );
 
   return (
-    <div key={product.id} className="group">
+    <div key={product.id} className="group ">
       <Link
         to={`/productDetails/${product.id}`}
         className="bg-white group-hover:translate-y-[-0.5rem] group-hover:shadow-lg transform transition-transform duration-300 rounded-lg shadow-md h-full flex flex-col"
