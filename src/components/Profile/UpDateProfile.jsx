@@ -1,7 +1,122 @@
-import React from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { User, Mail, Lock, Save } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContextPro';
+import { ContextData } from "../../context/ContextApis";
+import { MdCancel } from "react-icons/md";
+import axios from 'axios';
 
 export default function UpdateProfile() {
+  const [NameError, setNameError] = useState(false);
+  const [EmailError, setEmailError] = useState(false);
+  const [NewPassError, setNewPassError] = useState(false);
+  const [newPassword, setNewPassword] = useState(null);
+  const [Name, setName] = useState(null);
+  const [Email, setEmail] = useState(null);
+  const [ConfirmNewPass, setConfirmNewPass] = useState(null);
+  const [ConfrinNewPassError, setConfrinNewPassError] = useState(false);
+  const [isShown, setisShown] = useState(false);
+  const [Phone, setPhone] = useState(null);
+  const [user, setUser] = useState({});
+  const { userData } = useContext(ContextData);
+  const { language } = useLanguage();
+  const userToken = localStorage.getItem("userToken"); // تأكد من أخذ التوكن من المحفوظات
+  console.log(userToken);
+  const isValid = (pattern, text) => {
+    return new RegExp(pattern).test(text);
+  };
+
+  const handleCancel = () => {
+    setisShown(false);
+  };
+
+  const handleNameChange = (e) => {
+    const userName = e.target.value;
+    if (userName.length <= 3) {
+      setNameError(true);
+    } else {
+      setNameError(false);
+      setName(userName);
+    }
+  };
+
+  const handleEmailChange = (e) => {
+    const email = e.target.value;
+    const valid = isValid(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/, email);
+    if (email.length !== 0) {
+      if (valid) {
+        setEmailError(false);
+        setEmail(email);
+      } else {
+        setEmailError(true);
+      }
+    }
+  };
+
+  const handleNewPassChange = (e) => {
+    const newPass = e.target.value;
+    const valid = isValid(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/, newPass);
+    if (newPass.length !== 0) {
+      if (valid) {
+        setNewPassError(false);
+        setNewPassword(newPass);
+      } else {
+        setNewPassError(true);
+      }
+    }
+  };
+
+  const handleConfirmNewPassChange = (e) => {
+    const newConfirmPass = e.target.value;
+    if (newPassword != null) {
+      if (newConfirmPass === newPassword) {
+        setConfrinNewPassError(false);
+        setConfirmNewPass(newConfirmPass);
+      } else {
+        setConfrinNewPassError(true);
+      }
+    }
+  };
+
+  const handleSaveClick = async (e) => {
+    e.preventDefault(); // منع إعادة تحميل الصفحة
+
+    if (Name != null && Email != null && newPassword != null && ConfirmNewPass != null && Phone != null) {
+      const formData = new FormData();
+
+      formData.append("first_name", Name.split(" ")[0]);
+      formData.append("last_name", Name.split(" ")[1]);
+      formData.append("email", Email);
+      formData.append("password", newPassword);
+      formData.append("password_confirmation", ConfirmNewPass);
+      formData.append("phone", Phone);
+
+      try {
+        const res = await axios.post("https://demo.leetag.com/api/customer/profile/update", formData, {
+          headers: {
+            'Authorization': userToken,
+            "lang": language
+          }
+        });
+
+        if (res.status === 200) { // تأكد من أن النتيجة 200 تعني نجاح الطلب
+          setisShown(true);
+        } else {
+          setisShown(false);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      { language === "ar" ? alert("من فضلك ادخل البيانات جميعا و بشكل صحيح") : alert("Please enter all data correctly.") }
+    }
+  };
+
+  useEffect(() => {
+    setName(userData?.name);
+    setEmail(userData?.email);
+    setPhone(userData?.phone);
+  }, [userData]);
+
   return (
     <div className="min-h-screen ">
       <div className=" bg-white rounded-xl shadow-lg">
@@ -24,7 +139,7 @@ export default function UpdateProfile() {
                 <User className="w-5 h-5 text-gray-400" />
                 <h3 className="text-lg font-medium text-gray-900">المعلومات الأساسية</h3>
               </div>
-              
+
               <div className="grid gap-4">
                 <div className="">
                   <label htmlFor="name" className="text-right block text-sm font-medium text-gray-700">
@@ -34,7 +149,10 @@ export default function UpdateProfile() {
                     id="name"
                     placeholder="أدخل اسمك الكامل"
                     className="w-full text-right px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                    onChange={(e) => handleNameChange(e)}
+                    defaultValue={Name}
                   />
+                  {NameError ? <p className='my-2 text-red'>{language === "ar" ? "من فضلك لا يقل الاسم عن 3 عناصر" : "Please Name must be more than 3 characters"}</p> : <></>}
                 </div>
 
                 <div className="">
@@ -45,11 +163,14 @@ export default function UpdateProfile() {
                     <input
                       id="email"
                       type="email"
-                      placeholder=""
+                      placeholder="البريد الإلكتروني"
                       className="w-full text-right px-4 py-2 pl-10 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                      onChange={(e) => handleEmailChange(e)}
+                      defaultValue={Email}
                     />
                     <Mail className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
                   </div>
+                  {EmailError ? <p className='my-2 text-red'>{language === "ar" ? "البريد الالكترونى خاطئ" : "Wrong Email"}</p> : <></>}
                 </div>
               </div>
             </div>
@@ -65,7 +186,7 @@ export default function UpdateProfile() {
               </div>
 
               <div className="grid gap-4">
-               
+
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="">
                     <label htmlFor="new-password" className=" block text-sm font-medium text-gray-700">
@@ -75,8 +196,10 @@ export default function UpdateProfile() {
                       id="new-password"
                       type="password"
                       className="w-full text-right px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                      placeholder=""
+                      placeholder="كلمة المرور الجديدة"
+                      onChange={(e) => handleNewPassChange(e)}
                     />
+                    {NewPassError ? <p className='my-2 text-red'>{language === "ar" ? "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل، وحرف صغير واحد، ورقم واحد، وحرف خاص واحد." : "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."}</p> : <></>}
                   </div>
 
                   <div className="">
@@ -87,8 +210,10 @@ export default function UpdateProfile() {
                       id="confirm-password"
                       type="password"
                       className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                      placeholder=""
+                      placeholder="تأكيد كلمة المرور"
+                      onChange={(e) => handleConfirmNewPassChange(e)}
                     />
+                    {ConfrinNewPassError ? <p className='my-2 text-red'>{language === "ar" ? "كلمة المرور غير متطابقة" : "Passwords don't match"}</p> : <></>}
                   </div>
                 </div>
               </div>
@@ -96,8 +221,10 @@ export default function UpdateProfile() {
 
             {/* Submit Button */}
             <div className="pt-6">
-              <button 
-                type="submit" 
+              <button
+                type="submit"
+                onClick={handleSaveClick}
+                disabled={NameError || EmailError || NewPassError || ConfrinNewPassError}
                 className="w-full bg-primary text-white py-2 px-4 rounded-lg h-11 text-lg flex items-center justify-center gap-2 transition-colors"
               >
                 <Save className="w-5 h-5" />
@@ -107,6 +234,16 @@ export default function UpdateProfile() {
           </form>
         </div>
       </div>
+      {isShown ? <>
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex flex-col items-center justify-center" >
+          <div className="fixed rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-2 border border-gray-100 bg-white h-96 top-[10%] right-[25%] z-500 w-[50%] h-[80%]">
+            <button className="absolute left-4 top-4" onClick={handleCancel}>
+              <MdCancel className="w-6 h-6" />
+            </button>
+            <h1 className={`font-bold text-2xl text-center mb-4 mt-2`}>{language === "ar" ? "تم التعديل بنجاح" : "Updated Successfully"}</h1>
+          </div>
+        </div>
+      </> : ""}
     </div>
   );
 }
