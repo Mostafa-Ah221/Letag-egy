@@ -2,10 +2,13 @@ import { useState, useEffect, useContext, useMemo } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { ContextData } from '../../context/ContextApis';
+import { useLanguage } from '../../context/LanguageContextPro';
 
 export default function CartLayout() {
   const { cart, getTotalPrice, showToast } = useCart();
   const { userToken, userData, settings_domain } = useContext(ContextData);
+    const { language } = useLanguage();
+  
   const tax = settings_domain?.data.tax;
 
   const [updatedTotal, setUpdatedTotal] = useState(getTotalPrice().toFixed(2));
@@ -32,6 +35,7 @@ export default function CartLayout() {
   });
 
   const [required, setRequired] = useState({});
+  const [totalBeforeDiscount, setTotalBeforeDiscount] = useState();
 
   // Memoize total price
   const totalPrice = useMemo(() => getTotalPrice().toFixed(2), [cart]);
@@ -74,30 +78,26 @@ export default function CartLayout() {
   // تحديث طريقة حساب السعر النهائي
   useEffect(() => {
     const calculateTotal = () => {
-      // 1. حساب السعر الأساسي مع الضريبة
       const taxPercentage = parseFloat(tax || 0);
       const totalWithTax = parseFloat(baseTotal) * (1 + taxPercentage / 100);
-      
-      // 2. تطبيق الخصم إذا وجد
-      const totalAfterDiscount = totalWithTax * (1 - appliedDiscount / 100);
-      
-      // 3. إضافة سعر الشحن
       const shippingPrice = parseFloat(formData.shipping_price || 0);
-      const finalTotal = (totalAfterDiscount + shippingPrice).toFixed(2);
-      
+      const totalWithShipping = totalWithTax + shippingPrice;
+
+      setTotalBeforeDiscount(totalWithShipping);
+
+      const finalTotal = (totalWithShipping * (1 - appliedDiscount / 100)).toFixed(2);
       return finalTotal;
     };
 
     const newTotal = calculateTotal();
     setUpdatedTotal(newTotal);
-    setFormData(prev => ({ ...prev, total: newTotal }));
+    setFormData((prev) => ({ ...prev, total: newTotal }));
   }, [baseTotal, tax, formData.shipping_price, appliedDiscount]);
 
   const updateData = (data) => {
     setFormData((prev) => ({ ...prev, ...data }));
   };
 
-  // باقي الكود للvalidation يظل كما هو
   const validateFields = () => {
     const requiredFields = [
       'first_name',
@@ -133,10 +133,10 @@ export default function CartLayout() {
       });
 
       const responseData = await response.json();
-// console.log(formData);
+console.log(responseData);
 
       if (response.ok) {
-        showToast('تم إرسال الطلب بنجاح');
+        showToast(language === "ar"? "تم إرسال الطلب بنجاح":"Order submitted successfully");
       } else {
         showToast(responseData.message || 'تعذر إرسال الطلب.');
       }
@@ -160,7 +160,7 @@ export default function CartLayout() {
         },
         body: JSON.stringify({
           code: formData.coupon_discount,
-          total_cart: baseTotal, // إرسال السعر الأساسي بدون شحن
+          total_cart: baseTotal, 
         }),
       });
 
@@ -183,9 +183,50 @@ export default function CartLayout() {
     }
   };
 
+  const handlePointsButton = async () => {
+    if (!formData.total) {
+      showToast("يرجى التأكد من إجمالي السلة.");
+      return;
+    }
+
+    try {
+      const response = await fetch("https://tarshulah.com/api/customer/points/apply", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: userToken,
+        },
+        body: JSON.stringify({
+          total_cart: formData.total,
+        }),
+      });
+
+      const responseData = await response.json();
+
+      if (parseFloat(responseData.data.points) === 0) {
+        showToast('ليس لديك نقاط كافية لاستخدامها.');
+        return;
+      }
+
+     
+      if (responseData.status) {
+        const discountedTotal = (parseFloat(formData.total) - parseFloat(responseData.data.points_price)).toFixed(2);
+       setUpdatedTotal(discountedTotal);
+    setFormData((prev) => ({ ...prev, total: discountedTotal }));
+       
+        showToast('تم تطبيق النقاط بنجاح!');
+      } else {
+        showToast(responseData.message || 'تعذر تطبيق النقاط.');
+      }
+    } catch (networkError) {
+      console.error('Network Error:', networkError);
+      alert('خطأ في الشبكة. يرجى المحاولة مرة أخرى.');
+    }
+  };
+
   return (
     <div>
-      <Outlet context={{ updateData, handleReviewSubmit, handleCouponButton, formData, required, updatedTotal }} />
+      <Outlet context={{ updateData, handleReviewSubmit, handleCouponButton, handlePointsButton, formData, required, updatedTotal, appliedDiscount, totalBeforeDiscount }} />
     </div>
   );
 }

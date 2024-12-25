@@ -1,16 +1,14 @@
 import { useOutletContext } from "react-router-dom";
-// import Address from "../Address/Address";
 import { ContextData } from "../../context/ContextApis";
 import { useContext, useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "../../context/LanguageContextPro";
 import CartOrder from "./CartOrder";
 import { HiPlusSm } from "react-icons/hi";
 import AddAddress from "../AddAddress/AddAddress";
 
 export default function DataOrder() {
-  const { updateData, handleReviewSubmit, formData ,handleCouponButton,handlePointsButton,required,updatedTotal} = useOutletContext();
-  const { userData, getAddressList, userToken, settings_domain,addresses } = useContext(ContextData);
+  const { updateData, handleReviewSubmit, formData ,handleCouponButton,handlePointsButton,required} = useOutletContext();
+  const { userData, userToken, settings_domain,addresses } = useContext(ContextData);
   const { language } = useLanguage();
 
   // const [openAddress, setOpenAddress] = useState(false);
@@ -22,7 +20,6 @@ const [openSection, setOpenSection] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
   const towns = settings_domain?.data?.locations || [];
-console.log(updatedTotal);
 
   const handleTownChange = (event) => {
     const townId = event.target.value;
@@ -94,11 +91,11 @@ useEffect(() => {
 
 
   return (
-    <>
-          <h1 className="text-primary text-center text-3xl pt-3 pb-1 font-semibold">{language === "ar" ? "الدفع" : "Checkout"}</h1>
-        <div className="grid grid-cols-12 gap-4">
+    <div >
+          <h1 className="text-primary text-center text-3xl pt-3 pb-1 font-semibold mb-5">{language === "ar" ? "الدفع" : "Checkout"}</h1>
+        <div className={`grid grid-cols-12 gap-4 m-0 ${language === "ar" ?"ml-3":"mr-3"}`}>
       {/* عمود البيانات */}
-      <div className="col-span-12 lg:col-span-7 flex flex-col gap-4">
+      <div className={`col-span-12 lg:col-span-7 flex  flex-col gap-4 ${language === 'ar'? "mr-14":"ml-14"}`}>
         {/* تفاصيل الطلب */}
         <div className="bg-white rounded px-4">
           <h2 className="text-xl font-semibold my-5">
@@ -295,8 +292,8 @@ useEffect(() => {
       </div>
 
       {/* عمود ملخص الطلب */}
-      <div className="col-span-12 lg:col-span-4">
-        <CartOrder updateTotal={updatedTotal}/>
+      <div className="col-span-12 lg:col-span-4 mx-4">
+        <CartOrder/>
         <div className="px-4 py-4 bg-white rounded">
           <h3 className="font-semibold mb-2">{language === "ar" ? "نظام الدفع" : "Payment Method"}</h3>
           {settings_domain?.data?.getways.map((getway) => (
@@ -396,6 +393,6 @@ useEffect(() => {
         </button>
       </div>
     </div>
-    </>
+    </div>
   );
 }
