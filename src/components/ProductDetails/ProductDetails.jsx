@@ -1,9 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { ContextData } from '../../context/ContextApis';
-import { Link, useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { CiHeart } from "react-icons/ci";
-import { IoEyeSharp } from 'react-icons/io5';
 import { FaStar } from 'react-icons/fa6';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Slider from 'react-slick';
@@ -24,11 +23,11 @@ export default function ProductDetails() {
   const [showModal, setShowModal] = useState(false);
   const [activeModal, setActiveModal] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
-    // const [review, setReview] = useState([]);
+  const [dataReview, setDataReview] = useState();
   const { language } = useLanguage();
   const { addToCart, handleAddToWish, wishList } = useCart();
   const { id } = useParams();
-
+   const queryClient = useQueryClient();
   const { data, isError, isLoading } = useQuery({
     queryKey: ['getProdDetails', id, language],
     queryFn: () => getProdDetails(id),
@@ -38,10 +37,15 @@ export default function ProductDetails() {
     queryKey: ['getReviews', id, language],
     queryFn: () => getReviews(id),
     enabled: !!id,
-    //    onSuccess: (reviews) => {
-    //   setReview(reviews?.review || []); 
-    // },
   });
+
+ useEffect(() => {
+  if (reviews?.data?.reviews) {
+    setDataReview(reviews?.data.reviews);
+  }
+}, [reviews]);
+
+console.log(dataReview);
   const product = data?.data?.products;
   const related = data?.data?.related;
   const [selectedImage, setSelectedImage] = useState(null);
@@ -51,14 +55,9 @@ export default function ProductDetails() {
       setSelectedImage(product.photos[0].url);
     }
   }, [product]);
-  const averageRating = reviews?.data.reviews.length > 0
-    ?
-    reviews?.data.reviews
+  const averageRating =  dataReview && dataReview.length > 0 ? dataReview
       .map((item) => Number(item.rating))
-      .reduce((acc, item) => acc + item, 0) / reviews?.data.reviews.length : 0;
-
-  // console.log(averageRating.toFixed(1));
-
+      .reduce((acc, item) => acc + item, 0) / dataReview.length : 0;
 
   const handleAddToCart = (product) => {
     addToCart(product, quantity);
@@ -78,6 +77,7 @@ export default function ProductDetails() {
       const response = await axios.post(`https://tarshulah.com/api/review/store/${id}`, reviewData);
       if (response.data.message.includes("successfully added")) {
         toast.success(language === "ar" ? "تم إرسال التقييم بنجاح" : "Review submitted successfully");
+         queryClient.invalidateQueries(['getReviews', id, language]);
       }
     } catch (error) {
       toast.error(language === "ar" ? "حدث خطأ أثناء إرسال التقييم" : "Error submitting review");
@@ -193,7 +193,6 @@ export default function ProductDetails() {
                       {[1, 2, 3, 4, 5].map((star) => {
                         const decimalPart = averageRating - Math.floor(averageRating); 
                         if (star <= Math.floor(averageRating)) {
-                          // نجوم ممتلئة
                           return (
                             <li key={star} className="text-orange-500 ">
                               <FaStar />
@@ -301,7 +300,7 @@ export default function ProductDetails() {
           onClick={closeModal}>
           <div className="bg-white rounded-lg p-6 w-full mx-5 max-w-md relative"
             onClick={(e) => e.stopPropagation()} >
-            <ReviewList reviews={reviews?.data.reviews} language={language} />
+            <ReviewList reviews={dataReview} language={language} />
             <button
               onClick={closeModal}
               className={`absolute top-2 ${language === 'ar' ? 'left-2' : 'right-2'}  text-xl font-bold text-gray-600 hover:text-gray-800`}

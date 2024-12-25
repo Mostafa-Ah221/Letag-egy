@@ -18,18 +18,18 @@ const ProductCard = ({
   );
 
   return (
-    <div key={product.id} className="group">
+    <div key={product.id} className="group ">
       <Link
         to={`/productDetails/${product.id}`}
-        className="bg-white group-hover:translate-y-[-0.5rem] group-hover:shadow-lg transform transition-transform duration-300 rounded-lg shadow-md h-full flex flex-col"
+        className=" bg-white group-hover:translate-y-[-0.5rem] group-hover:shadow-lg transform transition-transform duration-300 rounded-lg shadow-md h-full flex flex-col"
       >
-        <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded-t-lg">
+        <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded-t-lg ">
           {product.photo && (
             <div className="group h-48 overflow-hidden">
               <img
                 src={product?.photo}
                 alt={product.name}
-                className="w-full h-full object-contain transform transition-transform duration-300"
+                className="w-full h-full object-contain transform transition-transform duration-300 "
               />
               <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <button

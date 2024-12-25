@@ -25,6 +25,7 @@ function AddAddress({ showAddress = true }) {
     // Handle Building and Floor input changes
     const handleBuildingChange = (event) => setSelectedBuilding(event.target.value);
     const handleFloorChange = (event) => setSelectedFloor(event.target.value);
+    const handleAddressChange = (event) => setAddress(event.target.value);
 
     // Handle Town Change
     const handleTownChange = (event) => {
@@ -42,14 +43,12 @@ function AddAddress({ showAddress = true }) {
     // Handle Region Change
     const handleRegionChange = (event) => {
         const selectedRegion = regions.find(region => String(region.id) === String(event.target.value));
-        setSelectedRegionId(selectedRegion?.id || '');
-
-      
-
-        const townName = towns.find(town => String(town.id) === String(selectedTownId))?.name || '';
-        const regionName = selectedRegion?.name || '';
-        const combinedAddress = `${regionName} - ${townName}`;
-        setAddress(combinedAddress);
+        setSelectedRegionId(selectedRegion?.id || '')
+        
+        // const townName = towns.find(town => String(town.id) === String(selectedTownId))?.name || '';
+        // const regionName = selectedRegion?.name || '';
+        // const combinedAddress = `${regionName} - ${townName}`;
+        // setAddress(combinedAddress);
     };
 
     // Handle Submit
@@ -135,7 +134,16 @@ function AddAddress({ showAddress = true }) {
                         </option>
                     ))}
                 </select>
-
+                {/*Address  */}
+                <h3 className='text-start font-bold text-2xl my-2'>
+                    {language === 'ar' ? ' تفاصيل العنوان' : 'Address Details'}
+                </h3>
+                <input
+                    placeholder={language === "ar" ? "من فضلك ادخل العنوان بالتفصيل" : "Please enter the detailed address"}
+                    className='w-full h-10 border border-gray-400'
+                    value={address}
+                    onChange={handleAddressChange}
+                />
                 {/* Building Number */}
                 <h3 className='text-start font-bold text-2xl my-2'>
                     {language === 'ar' ? 'رقم المبنى' : 'Building number'}

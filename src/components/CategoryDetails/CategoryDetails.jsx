@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ContextData } from '../../context/ContextApis';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -22,6 +22,7 @@ export default function CategoryDetails() {
   const [page, setPage] = useState(0);
   const pageSize = 30;
   const { language } = useLanguage(); 
+  const [progress, setProgress] = useState(0); 
 
   const { data, isError, isLoading } = useQuery({
     queryKey: ['categoryDetails', id, language], 
@@ -33,6 +34,7 @@ export default function CategoryDetails() {
     const handleAddToCart = (product) => {
     addToCart(product, quantity); 
   };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
