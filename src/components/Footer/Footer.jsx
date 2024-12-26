@@ -84,10 +84,8 @@ export default function Footer() {
       {/* Footer Bottom */}
       <div className="flex mt-1 py-3 px-3 justify-between flex-row-reverse text-center text-sm bg-primary text-white">
         <p>
-          &copy; 2024 {nameWebSite || 'Leetag'} All Rights Reserved |{' '}
-          <a href="#" className="hover:underline">
-            الشروط و الأحكام
-          </a>
+          &copy; 2024 {nameWebSite || 'Leetag'} All Rights Reserved {' '}
+          
         </p>
         <p>
           Powered by{' '}

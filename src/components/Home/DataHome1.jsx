@@ -7,11 +7,11 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from '../../context/LanguageContextPro';
 import { useCart } from '../../context/CartContext';
 import Modal from '../Modal/Modal';
-import ProductCard from '../CartProduct/CartProduct';
+import CardForCompSlider from '../CartProduct/CardForCompSlider';
 
 const CustomArrow = ({ direction, onClick }) => (
   <button onClick={onClick} className={`absolute top-1/2 -translate-y-1/2 z-10
-    ${direction === 'next' ? '-right-6' : '-left-6'}
+    ${direction === 'next' ? 'right-0' : 'left-0'}
     bg-white w-10 h-10 hover:bg-primary rounded-full shadow-lg group
     flex items-center justify-center duration-300 transition-colors
     border border-gray-200`}>
@@ -102,10 +102,9 @@ export default function DataHome({ sectionName }) {
         <Slider {...settings}>
           {trendingSection ? (
             trendingSection?.childreen.map((item, index) => {
-
               return (
                 <div key={index} className="product-item px-2">
-                  <ProductCard
+                  <CardForCompSlider
                     product={item}
                     handleAddToCart={handleAddToCart}
                     handleProductClick={handleProductClick}

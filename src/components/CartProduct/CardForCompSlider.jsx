@@ -5,7 +5,7 @@ import { CiHeart } from "react-icons/ci";
 import { GiBeachBag } from "react-icons/gi";
 import { FaStar } from "react-icons/fa";
 
-const ProductCard = ({
+const CardForCompSlider = ({
   product,
   handleAddToCart,
   handleProductClick,
@@ -73,21 +73,21 @@ const ProductCard = ({
           {product?.category[0]?.name}
         </h3>
         <div className="flex flex-col flex-grow px-2 mb-2">
-          <h2 className="text-right text-lg font-medium duration-300 line-clamp-1 pb-2 group-hover:text-primary">
+          <h2 className=" text-lg font-medium duration-300 line-clamp-1 pb-2 group-hover:text-primary">
             {product.title.length > 20
-              ? `${product.title.split(" ").slice(0, 4).join(" ")} ...`
+              ? `...${product.title.split(" ").slice(0, 4).join(" ")} `
               : product.title}
           </h2>
           <hr />
         </div>
-        <div className="flex items-center flex-row-reverse justify-between px-5 pb-3">
+        <div className="flex items-center flex-row justify-between px-5 pb-3">
             <div className="flex">
-              <p className="text-xl">{product.price}</p>
               <p className="text-xl">{currencyData}</p>
+              <p className="text-xl">{product.price}</p>
             </div>
              <p className='text-gray-700'>
-                  {product.reviews_count ? product.reviews_count : 0}
                   <FaStar className='text-yellow-500 inline-block'/>
+                  {product.reviews_count ? product.reviews_count : 0}
                 </p>
         </div>
       </Link>
@@ -95,4 +95,4 @@ const ProductCard = ({
   );
 };
 
-export default ProductCard;
+export default CardForCompSlider;

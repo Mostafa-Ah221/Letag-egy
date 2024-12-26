@@ -87,74 +87,44 @@ const handleOpenMenu = () => {
     };
   }, []);
 
-  const handlChange = async (e) => {
-    const value = e.target.value;
-    setQuery(value); // Update query state
-    console.log(value);
-    console.log(selectedTownId);
-    if (value) {
-      if (selectedTownId != null) {
-        const formData = new FormData();
-        formData.append("search", value);
-        formData.append("city_id", selectedTownId);
-        try {
-          const response = await axios.post(`https://tarshulah.com/api/products`, formData, {
-            headers: { lang: language },
-          });
-          const resdata = await response.data;
-          const resproducts = await resdata.data.products;
-          filteredSuggestionsProducts = await resproducts;
-          console.log(filteredSuggestionsProducts);
-        } catch (error) {
-          console.error("Error fetching products:", error);
-        }
+ const handlChange = async (e) => {
+  const value = e.target.value;
+  setQuery(value);
 
-        setSearchData2(filteredSuggestionsProducts);
-        console.log(searchData2);
-      } else {
-        const formData = new FormData();
-        formData.append("search", value);
-        try {
-          const response = await axios.post(`https://tarshulah.com/api/products`, formData, {
-            headers: { lang: language },
-          });
-          const resdata = await response.data;
-          const resproducts = await resdata.data.products;
-          filteredSuggestionsProducts = resproducts;
-        } catch (error) {
-          console.error("Error fetching products:", error);
-        }
+  if (!value) {
+    setSearchData2(null);
+    setSearchData(null);
+    return;
+  }
 
-        setSearchData2(filteredSuggestionsProducts);
-        console.log(searchData2);
-      }
-    }
-    else {
-      setSearchData2(null);
-    }
-    // Filter suggestions based on the input
-    if (value) {
-      filteredSuggestions = data?.data.categories.filter((item) =>
-        item.name.toLowerCase().includes(value.toLowerCase()) // Case-insensitive matching
-      );
-      if (filteredSuggestions.length != 0) {
-        setSearchData(filteredSuggestions);
-      }
-      else {
-        setSearchData(null);
-      }
-      console.log(filteredSuggestions);
-    } else {
-      setSearchData(null); // Clear suggestions if input is empty
-    }
-    console.log(searchData);
-  };
+  const formData = new FormData();
+  formData.append("search", value);
+  if (selectedTownId != null) {
+    formData.append("city_id", selectedTownId);
+  }
+
+  try {
+    const response = await axios.post(`https://tarshulah.com/api/products`, formData, {
+      headers: { lang: language },
+    });
+    const resdata = response.data?.data?.products || [];
+    setSearchData2(resdata);
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    setSearchData2([]);
+  }
+
+  const filteredSuggestions = data?.data.categories.filter((item) =>
+    item.name.toLowerCase().includes(value.toLowerCase())
+  );
+  setSearchData(filteredSuggestions.length ? filteredSuggestions : null);
+};
+
   return (
     <>
       <div
-        className={`fixed top-0 left-0 w-full h-full  z-40 overflow-y-auto ${isOpen ? "block" : "hidden"
-          } ${isOpen ? "animate-slideInRight" : ""}`}
-      >
+        className={`fixed top-0 left-0 w-full h-full z-40 overflow-y-auto ${isOpen ? "block" : "hidden"
+          } ${isOpen ? "animate-slideInRight bg-white " : ""}`}>
         <div className="p-6">
           <IoMdClose
             onClick={handleOpenMenu}
@@ -185,11 +155,11 @@ const handleOpenMenu = () => {
             </div>
           </div>
         </div>
-
+          
         {data?.data.categories.map((cat) => (
           <React.Fragment key={cat.id}>
             <div
-              className={`w-full h-12 bg-white flex mt-5 `}
+              className={`w-full h-12 bg-white flex mt-5 px-2`}
             >
               <Link to={`/categoryDetails/${cat.id}`} onClick={() => { handleOpenMenu() }} className="flex items-center"
               >
@@ -294,8 +264,8 @@ const handleOpenMenu = () => {
 
           <div className="flex md:order-1 mr-3">
             <div className="relative hidden md:block">
-              <Link to={`/SearchByItem/${query}`} className="">
-                <button className={`absolute inset-y-0 start-0 flex items-center ${language === "ar" ? "pr-2" : "pl-2"} z-100`} onClick={() => {
+              <div  className="">
+                <button className={`absolute inset-y-0 flex items-center ${language === "ar" ? "pr-2 left-2" : "pl-2 right-2"} z-100`} onClick={() => {
                   setSearchData(null); setQuery(""); setSearchData2(null);
                 }}>
                   <p className="p-[7px] bg-primary hover:cursor-pointer">
@@ -305,11 +275,11 @@ const handleOpenMenu = () => {
                   </p>
                   <span className="sr-only">Search icon</span>
                 </button>
-              </Link>
+              </div>
               <input
                 type="search"
                 id="search-navbar"
-                className="block lg:w-[30em] md:w-[25em] p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-right outline-none dark:border-gray-600 dark:placeholder-gray-400 focus:shadow-[0_0_8px_2px_rgba(249,115,22,0.3)] z-0"
+                className="block lg:w-[30em] md:w-[25em] p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 outline-none dark:border-gray-600 dark:placeholder-gray-400 focus:shadow-[0_0_8px_2px_rgba(249,115,22,0.3)] z-0"
                 placeholder={language === "ar" ? "ابحث عن منتج" : "Search for a product"}
                 onChange={handlChange}
                 value={query}

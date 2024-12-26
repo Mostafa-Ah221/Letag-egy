@@ -57,7 +57,7 @@ export default function SliderHome() {
       <Slider {...settings}>
         {data?.data?.sliders.map((item) => (
           <div key={item.id} className="relative">
-            <img src={item.photo} alt="" style={{ width: '100%', height: '23em' }} />
+            <img src={item.photo} alt="" className="w-full h-full lg:h-[25em] lg:object-fill object-contain " />
           </div>
         ))}
       </Slider>

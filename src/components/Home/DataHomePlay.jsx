@@ -1,16 +1,12 @@
 import { useState, useContext } from 'react';
 import { ContextData } from '../../context/ContextApis';
 import { useQuery } from '@tanstack/react-query';
-// import { IoEyeSharp } from "react-icons/io5";
-// import { Link } from 'react-router-dom';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-// import { CiHeart } from 'react-icons/ci';
 import { useCart } from '../../context/CartContext';
-// import { IoIosHeart } from 'react-icons/io';
 import { useLanguage } from '../../context/LanguageContextPro';
 import Modal from '../Modal/Modal';
-import ProductCard from '../CartProduct/CartProduct';
+import ProductCard from '../CartProduct/CardProduct';
 
 export default function DataHomePlay() {
     const [quantity, setQuantity] = useState(1); 

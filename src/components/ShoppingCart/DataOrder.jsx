@@ -171,14 +171,27 @@ useEffect(() => {
       {/* Header Row */}
       <thead className="bg-gray-100">
         <tr>
-          <th className="border border-gray-300 px-4 py-2 text-center">اختيار</th>
-          <th className="border border-gray-300 px-4 py-2 text-center">المحافظة</th>
-          <th className="border border-gray-300 px-4 py-2 text-center">المنطقة</th>
-          <th className="border border-gray-300 px-4 py-2 text-center">تفاصيل العنوان</th>
-          <th className="border border-gray-300 px-4 py-2 text-center">رقم المبنى</th>
-          <th className="border border-gray-300 px-4 py-2 text-center">رقم الطابق</th>
+          <th className="border border-gray-300 px-4 py-2 text-center">
+            {language === 'ar' ? "اختيار" : "Select"}
+          </th>
+          <th className="border border-gray-300 px-4 py-2 text-center">
+            {language === 'ar' ? "المحافظة" : "Governorate"}
+          </th>
+          <th className="border border-gray-300 px-4 py-2 text-center">
+            {language === 'ar' ? "المنطقة" : "Region"}
+          </th>
+          <th className="border border-gray-300 px-4 py-2 text-center">
+            {language === 'ar' ? "تفاصيل العنوان" : "Address Details"}
+          </th>
+          <th className="border border-gray-300 px-4 py-2 text-center">
+            {language === 'ar' ? "رقم المبنى" : "Building Number"}
+          </th>
+          <th className="border border-gray-300 px-4 py-2 text-center">
+            {language === 'ar' ? "رقم الطابق" : "Floor Number"}
+          </th>
         </tr>
       </thead>
+
 
       {/* Address Rows */}
       <tbody>

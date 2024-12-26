@@ -6,7 +6,7 @@ import { useCart } from "../../context/CartContext";
 import { useLocation } from "react-router-dom";
 import { useLanguage } from "../../context/LanguageContextPro";
 import Modal from "../Modal/Modal";
-import ProductCard from "../CartProduct/CartProduct";
+import ProductCard from "../CartProduct/CardProduct";
 
 export default function CategoryFilter() {
   const { fetchProducts } = useContext(ContextData);

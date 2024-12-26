@@ -4,9 +4,10 @@ import { ContextData } from "../../context/ContextApis";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
-  const { language } = useLanguage();
+  const { language } = useLanguage(); // الحصول على اللغة من السياق
   const { userToken } = useContext(ContextData);
   const [isPointsSystem, setIsPointsSystem] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -31,16 +32,12 @@ function Orders() {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
+
       try {
         const res = await fetch("https://tarshulah.com/api/domain/settings");
         const resJson = await res.json();
         const isPoints = await resJson.data.points_system;
-        if (isPoints == 1) {
-          setIsPointsSystem(true);
-        }
-        else {
-          setIsPointsSystem(false);
-        }
+        setIsPointsSystem(isPoints === 1);
       } catch (error) {
         console.log(error);
       }
@@ -51,18 +48,27 @@ function Orders() {
 
   return (
     <div className="mt-10 w-full">
-      {isPointsSystem ? <h2 className="my-2 font-semibold">النقاط المتاحة: </h2> : <></>}
+      {isPointsSystem && (
+        <h2 className="my-2 font-semibold">
+          {language === "ar" ? "النقاط المتاحة: " : "Available Points: "}
+        </h2>
+      )}
       <div className="relative ">
-        <table className="w-3/4 md:w-full text-gray-500 text-[0.6rem]">
+        <table className="w-3/4 md:w-full text-gray-500 text-[0.9rem]">
           <thead className=" text-gray-700 uppercase bg-gray-50">
             <tr>
-              <th className="px-1 md:px-6 py-3">رقم الطلب</th>
-              <th className="px-1 md:px-6 py-3">الحالة</th>
-              <th className="px-1 md:px-6 py-3">طريقة الدفع</th>
-              <th className="px-1 md:px-6 py-3">الإجمالي</th>
-              {/* <th className="px-6 py-3">المنتجات</th> */}
-              {/* <th className="px-6 py-3">معلومات الشحن</th> */}
-              {/* <th className="px-6 py-3">محتوى الطلب</th> */}
+              <th className="px-1 md:px-6 py-3">
+                {language === "ar" ? "رقم الطلب" : "Order Number"}
+              </th>
+              <th className="px-1 md:px-6 py-3">
+                {language === "ar" ? "الحالة" : "Status"}
+              </th>
+              <th className="px-1 md:px-6 py-3">
+                {language === "ar" ? "طريقة الدفع" : "Payment Method"}
+              </th>
+              <th className="px-1 md:px-6 py-3">
+                {language === "ar" ? "الإجمالي" : "Total"}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -72,35 +78,6 @@ function Orders() {
                 <td className="px-1 md:px-6 py-4">{order?.order_status || "N/A"}</td>
                 <td className="px-1 md:px-6 py-4">{order?.payment_method || "N/A"}</td>
                 <td className="px-1 md:px-6 py-4">{order?.total}</td>
-
-                {/* <td className="px-6 py-4">
-                  {order?.order_items?.length > 0 ? (
-                    order.order_items.map((item) => (
-                      <div key={item?.id || Math.random()}>
-                        <span>المنتج: {item?.term?.title_ar || "N/A"}</span> <br />
-                        <span>الكمية: {item?.qty || "N/A"}</span> <br />
-                        <span>السعر: {item?.amount || "N/A"}</span>
-                      </div>
-                    ))
-                  ) : (
-                    <span>لا توجد منتجات</span>
-                  )}
-                </td> */}
-
-                {/* <td className="px-6 py-4">
-                  <div>
-                    <span>المدينة: {order?.shipping_info?.city?.name || "N/A"}</span> <br />
-                    <span>طريقة الشحن: {order?.shipping_info?.shipping_method?.name || "N/A"}</span>
-                  </div>
-                </td> */}
-
-                {/* <td className="px-6 py-4">
-                  <div>
-                    <span>الاسم: {order?.order_content?.name || "N/A"}</span> <br />
-                    <span>الهاتف: {order?.order_content?.phone || "N/A"}</span> <br />
-                    <span>العنوان: {order?.order_content?.address || "N/A"}</span>
-                  </div>
-                </td> */}
               </tr>
             ))}
           </tbody>

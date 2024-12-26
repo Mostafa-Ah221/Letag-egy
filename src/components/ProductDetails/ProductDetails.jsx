@@ -14,7 +14,7 @@ import toast from 'react-hot-toast';
 import Modal from '../Modal/Modal';
 import ReviewForm from './ReviewForm';
 import ReviewList from './ReviewList';
-import ProductCard from '../CartProduct/CartProduct';
+import CardForCompSlider from '../CartProduct/CardForCompSlider';
 
 
 export default function ProductDetails() {
@@ -120,7 +120,7 @@ console.log(dataReview);
     prevArrow: <CustomArrow direction="prev" />,
     responsive: [
       { breakpoint: 1024, settings: { slidesToShow: 3 } },
-      { breakpoint: 768, settings: { slidesToShow: 1, slidesToScroll: 1 } },
+      { breakpoint: 768, settings: { slidesToShow: 2, slidesToScroll: 1 } },
       { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } },
     ],
   };
@@ -228,7 +228,7 @@ console.log(dataReview);
 
             <div className='w-full md:w-1/2 h-80'>
            <img 
-                className="w-full h-full object-cover rounded-lg hover:scale-110 transition-transform duration-300" 
+                className="w-full h-full object-contain rounded-lg hover:scale-110 transition-transform duration-300" 
               src={selectedImage} 
               alt={product.title} 
             />
@@ -318,7 +318,7 @@ console.log(dataReview);
           {related?.map((relatedProduct) => (
             <>
             <div className="mx-3">
-             <ProductCard
+             <CardForCompSlider
             key={relatedProduct.id}
             product={relatedProduct}
             handleAddToCart={handleAddToCart}

@@ -68,7 +68,7 @@ export default function Offers() {
             <img
               src={offer.photo}
               alt="offers"
-              className="w-full h-40 object-cover object-center rounded-md"
+              className="w-full md:h-40 h-full md:object-cover object-contain rounded-md"
             />
           </div>
         ))}

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import toast from 'react-hot-toast';
+import { useLanguage } from "./LanguageContextPro";
 
 const CartContext = createContext();
 
@@ -28,6 +29,7 @@ export const CartContextProvider = ({ children }) => {
     const savedCart = localStorage.getItem("cart");
     return savedCart ? JSON.parse(savedCart) : [];
   });
+  const { language } = useLanguage();
 
   const [wishList, setWishList] = useState(() => {
     const savedWishList = localStorage.getItem("wishList");
@@ -45,15 +47,16 @@ export const CartContextProvider = ({ children }) => {
     }
     setCart(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
-    // alert("Product added to cart!");
-    showToast("Product added to cart!");
+    showToast(language === 'ar' ? 'تم إضافة المنتج إلى السلة!' : 'Product added to cart!');
+
   }
 
   const removeFromCart = (productId) => {
     const updatedCart = cart.filter((item) => item.id!== productId);
     setCart(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
-    showToast("Product removed from cart!");
+    showToast(language === 'ar' ? 'تم إزالة المنتج من السلة!' : 'Product removed from cart!');
+
   }
   const updateQuantity = (productId, newQuantity) => {
     const updatedCart = cart.map((item) =>
@@ -76,7 +79,8 @@ export const CartContextProvider = ({ children }) => {
     }
     setWishList(updatedWishList);
     localStorage.setItem("wishList", JSON.stringify(updatedWishList));
-    alert("Product added to wishlist!");
+    showToast(language === 'ar' ? 'تم إضافة المنتج إلى قائمة المفضلة!' : 'Product added to wishlist!');
+
   };
 
   const removeFromWishList = (productId) => {
@@ -100,7 +104,7 @@ const handleAddToWish = (product, isInWishList, setIsInWishList) => {
     setWishList((prev) => {
       const updatedWishList = prev.filter((item) => item && item.id !== product.id);
       localStorage.setItem("wishList", JSON.stringify(updatedWishList));
-       showToast("Product removed to wishlist!");
+       showToast(language === 'ar' ? 'تم إزالة المنتج من قائمة المفضلة!' : 'Product removed from wishlist!');
       return updatedWishList;
     });
     setIsInWishList(false);
@@ -109,7 +113,7 @@ const handleAddToWish = (product, isInWishList, setIsInWishList) => {
     setWishList((prev) => {
       const updatedWishList = [...prev, product];
       localStorage.setItem("wishList", JSON.stringify(updatedWishList));
-     showToast("Product added to wishlist!");
+         showToast(language === 'ar' ? 'تم إضافة المنتج إلى قائمة المفضلة!' : 'Product added to wishlist!');
       
       return updatedWishList;
     });
@@ -117,9 +121,6 @@ const handleAddToWish = (product, isInWishList, setIsInWishList) => {
   }
 };
 
-// useEffect(() => {
-//   console.log("Total Price:", getTotalPrice());
-// }, [cart]);
   return (
     <CartContext.Provider
       value={{

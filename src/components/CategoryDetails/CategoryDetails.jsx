@@ -6,7 +6,7 @@ import ReactPaginate from "react-paginate";
 import { useLanguage } from '../../context/LanguageContextPro'; 
 import { useCart } from '../../context/CartContext';
 import Modal from '../Modal/Modal';
-import ProductCard from '../CartProduct/CartProduct';
+import ProductCard from '../CartProduct/CardProduct';
 
 export default function CategoryDetails() {
   const { getProductCategory,currencyData } = useContext(ContextData);

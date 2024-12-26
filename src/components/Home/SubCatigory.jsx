@@ -30,7 +30,7 @@ export default function SubCategory() {
 
   const NextArrow = () => (
     <div
-      className="absolute top-1/2 -right-4 transform -translate-y-1/2 cursor-pointer z-10"
+      className="absolute lg:top-[50%] top-[96%] right-2 transform -translate-y-1/2 cursor-pointer z-10"
       onClick={() => sliderRef.current?.slickNext()}
     >
       <div className="bg-white rounded-full w-9 h-9 flex items-center justify-center hover:bg-primary transition-all duration-300 border border-primary">
@@ -43,7 +43,7 @@ export default function SubCategory() {
 
   const PrevArrow = () => (
     <div
-      className="absolute top-1/2 -left-4 transform -translate-y-1/2 cursor-pointer z-10"
+      className="absolute lg:top-[50%] top-[96%] left-2 transform -translate-y-1/2 cursor-pointer z-10"
       onClick={() => sliderRef.current?.slickPrev()}
     >
       <div className="bg-white  rounded-full w-9 h-9 flex items-center justify-center hover:bg-primary transition-all duration-300 border border-primary">
@@ -77,14 +77,14 @@ export default function SubCategory() {
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 5,
           slidesToScroll: 3,
         }
       },
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 3,
           slidesToScroll: 2,
         }
       }
@@ -103,8 +103,8 @@ export default function SubCategory() {
 
   return (
     <div>
-        <div className="relative py-7">
-      <h2 className=' pb-4 text-xl text-secondary'>{language === "ar"? "الفئات الرئيسية ": "Main Categories"}</h2>
+        <div className="relative py-7 mb-7">
+      <h2 className=' pb-4 text-xl text-secondary px-2'>{language === "ar"? "الفئات الرئيسية ": "Main Categories"}</h2>
       <Slider ref={sliderRef} {...settings}>
         {filteredCategory.map((category, index) => (
           <div key={index} className='group px-2 cursor-pointer'>

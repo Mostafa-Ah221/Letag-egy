@@ -63,7 +63,7 @@ export default function ShoppingCart() {
         className={`fixed top-0 ${language === "ar" ? "left-0" : "right-0"} h-full bg-white shadow-2xl transform ${
           isCartOpen ? "translate-x-0" : `${language === "ar" ? "-translate-x-full" : "translate-x-full"}`
         } ${disableTransition ? "transition-none" : "transition-transform duration-300 ease-in-out"} z-50`}
-        style={{ width: "45vw" }}
+        style={{ width: "40vw" }}
       >
         <div className="p-6 relative h-full overflow-y-auto">
           <div className="flex justify-between items-center mb-4 border-b pb-3">
@@ -94,7 +94,7 @@ export default function ShoppingCart() {
                         className="w-full h-full object-cover rounded-md"
                       />
                     </div>
-                    <div className="flex flex-col flex-grow">
+                    <div className="flex flex-col flex-grow overflow-hidden">
                       <h3 className="text-lg font-medium truncate">{product.title}</h3>
                       <span className="text-primary text-lg font-semibold">
                         {product.price} {currencyData}

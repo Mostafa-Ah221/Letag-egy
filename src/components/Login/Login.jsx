@@ -38,9 +38,7 @@ export default function Login() {
     }
   })
   .then((apiResponse) => {
-    // console.log("Full API Response:", apiResponse);
     
-    // محاولة استخراج التوكن بطرق مختلفة
     const tokenUser = 
       apiResponse.data?.data?.user?.original?.access_token ||
       apiResponse.data?.access_token ||

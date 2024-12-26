@@ -51,12 +51,7 @@ async function getBrands(language) {
   return response.data;
 }
 
-async function getApiHome(language) {
-  const response = await axios.get(`https://tarshulah.com/api/home`, {
-    headers: { lang: language },
-  });
-  return response.data;
-}
+
 async function getOffers(language) {
   const response = await axios.get(`https://demo.leetag.com/api/offers`, {
      headers: { lang: language },
@@ -181,6 +176,13 @@ export default function DataContextProvider({ children }) {
     console.error("Error deleting address:", error);
     throw new Error(error.response?.data?.message || "Failed to delete address");
   }
+}
+
+async function getApiHome(language) {
+  const response = await axios.get(`https://tarshulah.com/api/home`, {
+    params: { lang: language, city_id: selectedTownId },
+  });
+  return response.data;
 }
 
  useEffect(() => {

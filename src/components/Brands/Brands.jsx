@@ -52,7 +52,7 @@ if (filteredBrands.length === 0) {
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 6,
         },
       },
       {
@@ -61,6 +61,7 @@ if (filteredBrands.length === 0) {
           slidesToShow: 2,
         },
       },
+      
     ],
     afterChange: (currentSlide) => {
       sliderRef.current.slickGoTo(currentSlide); 

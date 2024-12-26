@@ -16,11 +16,11 @@ export default function Layout() {
        
       <div className="grid grid-cols-12">
        
-        <div className="col-span-1">
+        <div className="col-span-1 hidden lg:block">
           <Menu />
         </div>
           <MenuMobile/>
-        <div className={`col-span-11 flex flex-col ${language === "ar" ? " ml-7":"mr-7"}`}>  
+        <div className={`col-span-12 lg:col-span-11 flex flex-col w-full lg:px-3 p-0 ${language === "ar" ? " ml-7":"mr-7"}`}>  
           <Navbar/>
           <SecondMenu/>
         <div className={` bg-Neutral  container flex-grow `}>

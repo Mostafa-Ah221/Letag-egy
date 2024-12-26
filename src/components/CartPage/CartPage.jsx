@@ -3,6 +3,7 @@ import { useCart } from "../../context/CartContext";
 import { ContextData } from "../../context/ContextApis";
 import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "../../context/LanguageContextPro";
+import { Link } from "react-router-dom";
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, getTotalPrice } = useCart();
@@ -112,7 +113,7 @@ export default function CartPage() {
 
         {/* معلومات الطلب */}
         <div className="col-span-12 md:col-span-4">
-          <div className="bg-black text-white p-5 rounded-md shadow-lg">
+          <div className=" p-5 rounded-md shadow-lg hover:shadow-xl">
             <h2 className="text-xl font-bold mb-4 text-center">
               {language === "ar" ? "إجمالي السلة" : "Cart Summary"}
             </h2>
@@ -129,9 +130,10 @@ export default function CartPage() {
               <span>{language === "ar" ? "الإجمالي" : "Total"}:</span>
               <span>{getTotalPrice().toFixed(2)} {currencyData}</span>
             </div>
-            <button className="w-full bg-primary text-white py-2 rounded-md mt-5 hover:bg-primary-dark">
+          
+            <Link to={"/CartLayout"} className="w-full bg-primary text-white py-2 rounded-md mt-5 hover:bg-primary-dark block text-center">
               {language === "ar" ? "الإنتقال لعملية الدفع" : "Proceed to Checkout"}
-            </button>
+            </Link>
           </div>
         </div>
       </div>

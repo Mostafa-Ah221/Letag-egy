@@ -11,22 +11,7 @@ function Stock() {
     const favicon = settings_domain?.data.logo
     const towns = settings_domain?.data?.locations || [];
 
-    // useEffect(() => {
-    //     const fetchdata = async () => {
-    //         try {
-    //             const res = await fetch("https://tarshulah.com/api/domain/settings");
-    //             const resJson = await res.json();
-    //             const data = await resJson.data;
-    //             const resTowns = await data.locations;
-    //             setTowns(resTowns);
-    //         } catch (error) {
-    //             console.log(error);
-    //         }
-    //     };
-    //     fetchdata();
-    // }, []);
-
-    // console.log(settings_domain?.data.locations);
+   
 
 
     const handleTownChange = (event) => {
