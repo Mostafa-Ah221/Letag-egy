@@ -83,8 +83,8 @@ function Orders() {
                 <td className="px-1 md:px-6 py-4">{order?.order_status || "N/A"}</td>
                 <td className="px-1 md:px-6 py-4">{order?.payment_method || "N/A"}</td>
                 <td className="px-1 md:px-6 py-4">{order?.total}</td>
-                <td className="px-1 md:px-6 py-4"><Link to={`/ShowOrder/${order.id}`} className="bg-primary rounded-md flex items-center justify-center w-20 h-12">
-                  <p className="text-white text-center font-bold text-xs">{language === "ar" ? "اظهار الطلب" : "Show Order"}</p>
+                <td className="px-1 md:px-6 py-4"><Link to={`/ShowOrder/${order.id}`} className="bg-primary rounded-md flex items-center justify-center py-3 px-2 hover:shadow-md ">
+                  <p className="text-white text-center font-bold text-xs">{language === "ar" ? "تفاصيل الطلب" : "Order Details"}</p>
                 </Link></td>
 
                 {/* <td className="px-6 py-4">
