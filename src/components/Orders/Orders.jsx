@@ -1,50 +1,55 @@
 import { useContext, useEffect, useState } from "react";
 import { useLanguage } from "../../context/LanguageContextPro";
 import { ContextData } from "../../context/ContextApis";
+import { Link } from "react-router-dom";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
   const { language } = useLanguage(); // الحصول على اللغة من السياق
   const { userToken } = useContext(ContextData);
   const [isPointsSystem, setIsPointsSystem] = useState(false);
+  const handleClick =
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          if (!userToken) {
+            console.error("User token is missing!");
+            return;
+          }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!userToken) {
-          console.error("User token is missing!");
-          return;
+          const ordersRes = await fetch("https://tarshulah.com/api/customer/orders", {
+            headers: {
+              "Authorization": userToken,
+            },
+          });
+
+          if (!ordersRes.ok) {
+            throw new Error("Failed to fetch orders");
+          }
+
+          const ordersJson = await ordersRes.json();
+          console.log("Data In API:", ordersJson);
+          setOrders(ordersJson.data?.orders || []);
+        } catch (error) {
+          console.error("Error fetching data:", error);
         }
-
-        const ordersRes = await fetch("https://tarshulah.com/api/customer/orders", {
-          headers: {
-            "Authorization": userToken,
-          },
-        });
-
-        if (!ordersRes.ok) {
-          throw new Error("Failed to fetch orders");
+        try {
+          const res = await fetch("https://tarshulah.com/api/domain/settings");
+          const resJson = await res.json();
+          const isPoints = await resJson.data.points_system;
+          if (isPoints == 1) {
+            setIsPointsSystem(true);
+          }
+          else {
+            setIsPointsSystem(false);
+          }
+        } catch (error) {
+          console.log(error);
         }
+      };
 
-        const ordersJson = await ordersRes.json();
-        console.log("Data In API:", ordersJson);
-        setOrders(ordersJson.data?.orders || []);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-
-      try {
-        const res = await fetch("https://tarshulah.com/api/domain/settings");
-        const resJson = await res.json();
-        const isPoints = await resJson.data.points_system;
-        setIsPointsSystem(isPoints === 1);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, [userToken, language]);
+      fetchData();
+    }, [userToken, language]);
 
   return (
     <div className="mt-10 w-full">
@@ -78,6 +83,38 @@ function Orders() {
                 <td className="px-1 md:px-6 py-4">{order?.order_status || "N/A"}</td>
                 <td className="px-1 md:px-6 py-4">{order?.payment_method || "N/A"}</td>
                 <td className="px-1 md:px-6 py-4">{order?.total}</td>
+                <td className="px-1 md:px-6 py-4"><Link to={`/ShowOrder/${order.id}`} className="bg-primary rounded-md flex items-center justify-center w-20 h-12">
+                  <p className="text-white text-center font-bold text-xs">{language === "ar" ? "اظهار الطلب" : "Show Order"}</p>
+                </Link></td>
+
+                {/* <td className="px-6 py-4">
+                  {order?.order_items?.length > 0 ? (
+                    order.order_items.map((item) => (
+                      <div key={item?.id || Math.random()}>
+                        <span>المنتج: {item?.term?.title_ar || "N/A"}</span> <br />
+                        <span>الكمية: {item?.qty || "N/A"}</span> <br />
+                        <span>السعر: {item?.amount || "N/A"}</span>
+                      </div>
+                    ))
+                  ) : (
+                    <span>لا توجد منتجات</span>
+                  )}
+                </td> */}
+
+                {/* <td className="px-6 py-4">
+                  <div>
+                    <span>المدينة: {order?.shipping_info?.city?.name || "N/A"}</span> <br />
+                    <span>طريقة الشحن: {order?.shipping_info?.shipping_method?.name || "N/A"}</span>
+                  </div>
+                </td> */}
+
+                {/* <td className="px-6 py-4">
+                  <div>
+                    <span>الاسم: {order?.order_content?.name || "N/A"}</span> <br />
+                    <span>الهاتف: {order?.order_content?.phone || "N/A"}</span> <br />
+                    <span>العنوان: {order?.order_content?.address || "N/A"}</span>
+                  </div>
+                </td> */}
               </tr>
             ))}
           </tbody>

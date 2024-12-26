@@ -13,11 +13,12 @@ import { FaRegHeart } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import { useLanguage } from "../../context/LanguageContextPro";
 import { useCart } from "../../context/CartContext";
+import { CgShutterstock } from "react-icons/cg";
 
 function Menu() {
     const { userToken } = useContext(ContextData);
     const { language, toggleLanguage } = useLanguage();
-  const {wishList } = useCart(); 
+    const { wishList } = useCart();
 
     return (
         <div className="lg:hidden rounded-tr-2xl rounded-tl-2xl bg-Neutral z-[60] flex w-full justify-between items-center fixed bottom-0 h-16">
@@ -35,7 +36,7 @@ function Menu() {
                             {language === "ar" ? "البيانات" : "Profile"}
                         </p>
                     </NavLink>
-                      
+
                 </>
             ) : (
                 <NavLink
@@ -53,42 +54,45 @@ function Menu() {
                     </p>
                 </NavLink>
             )}
-             <NavLink
-                            to={'/wishlist'}
-                          className="flex flex-col order-5 items-center w-1/5 justify-center hover:cursor-pointer group duration-300 hover:bg-primary h-full"
-                        >
-                            <div className="flex items-center justify-center">
-                                <FaRegHeart
-                                    icon={faRightFromBracket}
-                                    className="text-black text-[1.7rem] group-hover:text-white"
-                                />
-                                <div className="bg-primary flex justify-center items-center rounded text-center w-4 h-4 text-[0.8rem] text-white absolute border border-white bottom-11 left-[11%] shadow-md">
-                                <span>{wishList.length}</span>
-                                </div>
-                            </div>
-                            <p className='text-black text-center text-xs group-hover:text-white'>
-                                {language === "ar" ? "المفضلة" : "Favorites"}
-                            </p>
-                        </NavLink>
-            {/* Contact Icon */}
-            <div className="flex flex-col order-2 items-center w-1/5 justify-center hover:cursor-pointer group duration-300 hover:bg-primary h-full">
+            <NavLink
+                to={'/wishlist'}
+                className="flex flex-col order-5 items-center w-1/5 justify-center hover:cursor-pointer group duration-300 hover:bg-primary h-full"
+            >
                 <div className="flex items-center justify-center">
-                    <FontAwesomeIcon
+                    <FaRegHeart
+                        icon={faRightFromBracket}
+                        className="text-black text-[1.7rem] group-hover:text-white"
+                    />
+                    <div className="bg-primary flex justify-center items-center rounded text-center w-4 h-4 text-[0.8rem] text-white absolute border border-white bottom-11 left-[11%] shadow-md">
+                        <span>{wishList.length}</span>
+                    </div>
+                </div>
+                <p className='text-black text-center text-xs group-hover:text-white'>
+                    {language === "ar" ? "المفضلة" : "Favorites"}
+                </p>
+            </NavLink>
+            {/* Contact Icon */}
+            <Link
+                to={"/"}
+                className="flex flex-col order-2 items-center w-1/5 justify-center hover:cursor-pointer group duration-300 hover:bg-primary h-full"
+            >
+                <div className="flex items-center justify-center">
+                    <CgShutterstock
                         icon={faPhone}
                         className="text-black group-hover:text-white text-[1.2rem]"
                     />
                 </div>
                 <p className="text-black text-center text-xs group-hover:text-white">
-                    {language === "ar" ? "تواصل معنا" : "Contact"}
+                    {language === "ar" ? "المخزن" : "Stock"}
                 </p>
-            </div>
+            </Link>
 
             {/* Cart Icon */}
             <div className="flex flex-col order-3 items-center w-1/5 justify-center hover:cursor-pointer group duration-300 bg-primary h-full">
                 <div className="flex items-center justify-center text-xl">
                     <ShoppingCart />
                 </div>
-                
+
             </div>
 
             {/* Language/Home Icon */}

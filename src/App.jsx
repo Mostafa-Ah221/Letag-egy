@@ -28,6 +28,7 @@ import ForgetPassword from "./components/ForgetPassword/ForgetPassword";
 import UpDateProfile from "./components/Profile/UpDateProfile";
 import User from "./components/User/User";
 import DataOrder from "./components/ShoppingCart/DataOrder";
+import ShowOrder from "./components/Show Order/ShowOrder";
 
 
 
@@ -70,6 +71,7 @@ function App() {
         { path: "pageBrand", element: <PageBrands /> },
         { path: "wishlist", element: <WishList /> },
         { path: "SearchByItem/:id", element: <SearchByItem /> },
+        { path: "ShowOrder/:id", element: <ShowOrder /> },
         { path: "categoryDetails/:id", element: <CategoryDetails /> },
         { path: "productDetails/:id", element: <ProductDetails /> },
         { path: "categoryFilter/:id", element: <CategoryFilter /> },
@@ -82,17 +84,18 @@ function App() {
           children: [
             { index: true, element: <DataOrder /> },
             // { path: "payment", element: <PayPage /> },
-           
+
           ],
         },
-        { path: "user", element: <User />,
+        {
+          path: "user", element: <User />,
           children: [
             { path: "", element: <Profile /> },
             { path: "updateProfile", element: <UpDateProfile /> },
             { path: "addAddress", element: <AddAddress /> },
             { path: "orders", element: <Orders /> },
           ]
-         },
+        },
       ],
     },
   ]);

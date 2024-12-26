@@ -15,6 +15,7 @@ export default {
         primary700: "#c2410c",
         primary400: "#f0851f",
         black: "#000000",
+        yellow: "#FFFF00",
       },
       keyframes: {
         "slide-in-right": {
