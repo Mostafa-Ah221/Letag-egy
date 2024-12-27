@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { useLanguage } from "../../context/LanguageContextPro";
@@ -27,6 +27,7 @@ export default function Navbar() {
   const [searchData, setSearchData] = useState(null);
   const [searchData2, setSearchData2] = useState(null);
   const [query, setQuery] = useState("");
+  const resultsRef = useRef(null);
   let location = useLocation();
   // const [query2, setQuery2] = useState("");
 
@@ -119,7 +120,22 @@ const handleOpenMenu = () => {
   );
   setSearchData(filteredSuggestions.length ? filteredSuggestions : null);
 };
-
+const handleClickOutside = (event) => {
+    if (resultsRef.current && !resultsRef.current.contains(event.target)) {
+      // إذا النقر خارج النتائج، قم بإخفائها
+      setSearchData(null);
+      setSearchData2(null);
+      setQuery("");
+    }
+  };
+    useEffect(() => {
+    // أضف مستمع للنقر
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      // قم بإزالة المستمع عند إلغاء تثبيت المكون
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
   return (
     <>
       <div
@@ -289,6 +305,7 @@ const handleOpenMenu = () => {
         </div>
         <div className="flex justify-center items-center sm:mr-[5rem] lg:ml-[20rem] md:ml-[7rem] ">
           <div
+          ref={resultsRef}
             className={`${searchData || searchData2 ? "flex" : "hidden"
               }  bg-white flex-col z-50 absolute top-14 lg:w-[32%] h-96 md:w-[25em] rounded-md shadow-lg border border-gray-200 overflow-auto`}>
             <p

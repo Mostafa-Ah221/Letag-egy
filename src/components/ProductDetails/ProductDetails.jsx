@@ -234,6 +234,16 @@ console.log(dataReview);
                     <p className='text-[0.9rem]'>({averageRating.toFixed(1)})</p>
                 </div>
               </div>
+              {/* Product Description */}
+              {activeModal === 'Description' &&(
+                 <div >
+                <h3 className="mb-4 font-semibold mt-2">
+                  {language === 'ar' ? 'وصف المنتج' : 'Product Description'}:
+                </h3>
+                <p>{language === 'ar'? product.description.content_ar: product.description.content_en}</p>
+              </div>
+              )}
+             
             </div>
 
             <div className='w-full md:w-1/2 h-80 mb-28 md:mb-0'>
@@ -279,6 +289,15 @@ console.log(dataReview);
             className="px-4 py-2 rounded hover:bg-primary hover:text-white duration-200"
           >
             {language === 'ar' ? 'عرض التقييمات' : 'View Reviews'}
+          </button>
+          <span className="inline-block w-full h-[1px] bg-primary"></span>
+        </div>
+        <div className='w-64 flex flex-col'>
+          <button
+            onClick={() => openModal('Description')}
+            className="px-4 py-2 rounded hover:bg-primary hover:text-white duration-200"
+          >
+            {language === 'ar' ? 'وصف المنتج ' : 'Product Description'}
           </button>
           <span className="inline-block w-full h-[1px] bg-primary"></span>
         </div>

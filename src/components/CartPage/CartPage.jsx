@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useCart } from "../../context/CartContext";
 import { ContextData } from "../../context/ContextApis";
 import { useQuery } from "@tanstack/react-query";
@@ -9,6 +9,8 @@ export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, getTotalPrice } = useCart();
   const { currencyData, getProdDetails } = useContext(ContextData);
   const { language } = useLanguage();
+    const [quantity, setQuantity] = useState(1);
+  
 
   const ids = cart.map((item) => item.id);
 
@@ -62,7 +64,7 @@ export default function CartPage() {
                 return (
                   <tr key={product.id} className="text-center hover:bg-gray-100">
                     {/* صورة المنتج */}
-                    <td className="border border-gray-300 p-3 flex items-center justify-center">
+                    <td className="border border-gray-300 p-3 flex items-center justify-start">
                       <img
                         src={product.photos[0].url}
                         alt={product.title}
@@ -73,17 +75,29 @@ export default function CartPage() {
 
                     {/* الكمية */}
                     <td className="border border-gray-300 p-3">
-                      <input
-                        type="number"
-                        value={cartItem.quantity}
-                        onChange={(e) => {
-                          const newQuantity = Math.max(1, parseInt(e.target.value, 10) || 1);
-                          updateQuantity(product.id, newQuantity);
-                        }}
-                        min={1}
-                        className="w-16 text-center border rounded-md"
-                      />
-                    </td>
+                        <div className="flex border">
+                          <button
+                            onClick={() => {
+                              if (cartItem.quantity > 1) {
+                                updateQuantity(product.id, cartItem.quantity - 1);
+                              }
+                            }}
+                            className="bg-gray-200 px-2 text-lg font-bold hover:bg-gray-300"
+                          >
+                            -
+                          </button>
+                          <span className="px-6 text-[1rem]">
+                            {cartItem.quantity}
+                          </span>
+                          <button
+                            onClick={() => updateQuantity(product.id, cartItem.quantity + 1)}
+                            className="bg-gray-200 px-2 text-lg font-bold hover:bg-gray-300"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </td>
+
 
                     {/* السعر */}
                     <td className="border border-gray-300 p-3">

@@ -18,11 +18,11 @@ export default function Modal({
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
-      onClick={onClose} // إغلاق المودال عند النقر خارج المودال
+      onClick={onClose} 
     >
       <div
         className="bg-white p-6 rounded-lg relative max-w-2xl w-full mx-4"
-        onClick={(e) => e.stopPropagation()} // منع إغلاق المودال عند النقر داخله
+        onClick={(e) => e.stopPropagation()} 
       >
         {/* زر الإغلاق */}
         <button
@@ -38,7 +38,7 @@ export default function Modal({
           <img
             src={product.photo}
             alt={product.title}
-            className="md:w-4/5 md:h-64 w-3/5 h-36 m-auto object-cover rounded-md mt-4"
+            className="md:w-4/5 md:h-64 w-3/5 h-36 m-auto object-contain rounded-md mt-4"
           />
 
           {/* تفاصيل المنتج */}
