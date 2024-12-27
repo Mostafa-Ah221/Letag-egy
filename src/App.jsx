@@ -29,6 +29,7 @@ import UpDateProfile from "./components/Profile/UpDateProfile";
 import User from "./components/User/User";
 import DataOrder from "./components/ShoppingCart/DataOrder";
 import ShowOrder from "./components/Show Order/ShowOrder";
+import Loader from "./components/Loader/Loader";
 
 
 
@@ -64,6 +65,7 @@ function App() {
         { path: "/", element: isStock ? <Stock /> : <Home /> },
         { path: "home", element: isStock ? <Home /> : <Navigate replace to={"/"} /> },
         { path: "about", element: <About /> },
+        { path: "Loader", element: <Loader /> },
         { path: "contactUs", element: <Contact /> },
         { path: "login", element: <Login /> },
         { path: "register", element: <SignUp /> },
