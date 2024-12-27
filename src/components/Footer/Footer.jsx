@@ -25,7 +25,7 @@ export default function Footer() {
   return (
     <>
       <footer className="bg-slate-100 py-10  px-4">
-        <div className="container mx-auto grid grid-cols-2 md:grid-cols-3  gap-8 text-sm">
+        <div className="container mx-auto grid grid-cols-1 md:grid-cols-3  gap-8 text-sm">
           <div>
             <img
               className="w-32 mb-7 h-auto object-cover"
@@ -42,7 +42,6 @@ export default function Footer() {
                 {Array.isArray(socials) && socials.length > 0 ? (
                   socials.map((social, index) => <li className="w-9 h-9 rounded-full" key={index}>{social.icon}</li>)
                 ) : (
-
                   [1, 2, 3, 4].map((_, index) => (
                     <li key={index} className="w-9 h-9 rounded-full bg-gray-300"></li>
                   ))
@@ -84,7 +83,7 @@ export default function Footer() {
       {/* Footer Bottom */}
       <div className="flex mt-1 py-3 px-3 justify-between flex-row-reverse text-center text-sm bg-primary text-white">
         <p>
-          &copy; 2024 {nameWebSite || 'Leetag'} All Rights Reserved {' '}
+          &copy; 2024 {nameWebSite || 'Leetag'} All Rights Reserved {''}
           
         </p>
         <p>

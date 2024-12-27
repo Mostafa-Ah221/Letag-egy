@@ -4,6 +4,7 @@ import { IoIosHeart } from "react-icons/io";
 import { CiHeart } from "react-icons/ci";
 import { GiBeachBag } from "react-icons/gi";
 import { FaStar } from "react-icons/fa";
+import { useLanguage } from "../../context/LanguageContextPro";
 
 const ProductCard = ({
   product,
@@ -16,6 +17,7 @@ const ProductCard = ({
   const isInWishList = wishList.some(
     (wishItem) => wishItem && wishItem.id === product.id
   );
+  const { language } = useLanguage();
 
   return (
     <div key={product.id} className="group ">
@@ -87,7 +89,7 @@ const ProductCard = ({
             </div>
              <p className='text-gray-700'>
                   {product.reviews_count ? product.reviews_count : 0}
-                  <FaStar className='text-yellow-500 inline-block'/>
+                  <FaStar className='text-orange-500 inline-block'/>
                 </p>
         </div>
       </Link>

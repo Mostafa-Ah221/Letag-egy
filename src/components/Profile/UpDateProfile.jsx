@@ -1,127 +1,91 @@
 import { useState, useContext, useEffect } from 'react';
-import { User, Mail, Lock, Save } from 'lucide-react';
+import { User, Mail, Lock, Save, Phone } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContextPro';
 import { ContextData } from "../../context/ContextApis";
-import { MdCancel } from "react-icons/md";
 import axios from 'axios';
+import { useCart } from '../../context/CartContext';
 
 export default function UpdateProfile() {
-  const [NameError, setNameError] = useState(false);
-  const [EmailError, setEmailError] = useState(false);
-  const [NewPassError, setNewPassError] = useState(false);
-  const [newPassword, setNewPassword] = useState(null);
-  const [Name, setName] = useState(null);
-  const [Email, setEmail] = useState(null);
-  const [ConfirmNewPass, setConfirmNewPass] = useState(null);
-  const [ConfrinNewPassError, setConfrinNewPassError] = useState(false);
-  const [isShown, setisShown] = useState(false);
-  const [Phone, setPhone] = useState(null);
-  const [user, setUser] = useState({});
-  const { userData } = useContext(ContextData);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errors, setErrors] = useState({});
+  const { userData,userToken } = useContext(ContextData);
   const { language } = useLanguage();
-  const userToken = localStorage.getItem("userToken"); // تأكد من أخذ التوكن من المحفوظات
-  console.log(userToken);
-  const isValid = (pattern, text) => {
-    return new RegExp(pattern).test(text);
-  };
+  const { showToast } = useCart();
 
-  const handleCancel = () => {
-    setisShown(false);
-  };
-
-  const handleNameChange = (e) => {
-    const userName = e.target.value;
-    if (userName.length <= 3) {
-      setNameError(true);
-    } else {
-      setNameError(false);
-      setName(userName);
+  const validate = () => {
+    const newErrors = {};
+    if (!firstName.trim()) newErrors.firstName = language === "ar" ? "الاسم الأول مطلوب" : "First name is required";
+    if (!lastName.trim()) newErrors.lastName = language === "ar" ? "الاسم الأخير مطلوب" : "Last name is required";
+    if (!email.trim() || !/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/.test(email)) {
+      newErrors.email = language === "ar" ? "البريد الإلكتروني غير صالح" : "Invalid email address";
     }
+    if (!phone.trim() || phone.length < 10) {
+      newErrors.phone = language === "ar" ? "رقم الهاتف غير صالح" : "Invalid phone number";
+    }
+    if (newPassword && newPassword.length < 8) {
+      newErrors.newPassword = language === "ar"
+        ? "يجب أن تكون كلمة المرور 8 أحرف على الأقل"
+        : "Password must be at least 8 characters";
+    }
+    if (newPassword !== confirmPassword) {
+      newErrors.confirmPassword = language === "ar" ? "كلمات المرور غير متطابقة" : "Passwords do not match";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
+const handleSaveClick = async (e) => {
+  e.preventDefault();
+  if (validate()) {
+    const formData = new FormData();
+    formData.append("first_name", firstName);
+    formData.append("last_name", lastName);
+    formData.append("email", email);
+    formData.append("phone", phone);
+    if (newPassword) formData.append("password", newPassword);
+    formData.append("password_confirmation", confirmPassword);
 
-  const handleEmailChange = (e) => {
-    const email = e.target.value;
-    const valid = isValid(/^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/, email);
-    if (email.length !== 0) {
-      if (valid) {
-        setEmailError(false);
-        setEmail(email);
-      } else {
-        setEmailError(true);
+    try {
+      const res = await axios.post("https://demo.leetag.com/api/customer/profile/update", formData, {
+        headers: {
+          'Authorization': userToken,
+          'lang': language,
+        },
+      });
+
+      if (res.status === 200) {
+        showToast(language === "ar" 
+          ? "تم تحديث حسابك بنجاح، شكرًا لك" 
+          : res.data.message 
+        );
       }
+    } catch (error) {
+      console.error(error);
+      showToast(language === "ar" 
+        ? "حدث خطأ أثناء تحديث الحساب" 
+        : "An error occurred while updating the account"
+      );
     }
-  };
+  }
+};
 
-  const handleNewPassChange = (e) => {
-    const newPass = e.target.value;
-    const valid = isValid(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/, newPass);
-    if (newPass.length !== 0) {
-      if (valid) {
-        setNewPassError(false);
-        setNewPassword(newPass);
-      } else {
-        setNewPassError(true);
-      }
-    }
-  };
-
-  const handleConfirmNewPassChange = (e) => {
-    const newConfirmPass = e.target.value;
-    if (newPassword != null) {
-      if (newConfirmPass === newPassword) {
-        setConfrinNewPassError(false);
-        setConfirmNewPass(newConfirmPass);
-      } else {
-        setConfrinNewPassError(true);
-      }
-    }
-  };
-
-  const handleSaveClick = async (e) => {
-    e.preventDefault(); // منع إعادة تحميل الصفحة
-
-    if (Name != null && Email != null && newPassword != null && ConfirmNewPass != null && Phone != null) {
-      const formData = new FormData();
-
-      formData.append("first_name", Name.split(" ")[0]);
-      formData.append("last_name", Name.split(" ")[1]);
-      formData.append("email", Email);
-      formData.append("password", newPassword);
-      formData.append("password_confirmation", ConfirmNewPass);
-      formData.append("phone", Phone);
-
-      try {
-        const res = await axios.post("https://demo.leetag.com/api/customer/profile/update", formData, {
-          headers: {
-            'Authorization': userToken,
-            "lang": language
-          }
-        });
-
-        if (res.status === 200) { // تأكد من أن النتيجة 200 تعني نجاح الطلب
-          setisShown(true);
-        } else {
-          setisShown(false);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      { language === "ar" ? alert("من فضلك ادخل البيانات جميعا و بشكل صحيح") : alert("Please enter all data correctly.") }
-    }
-  };
+ 
 
   useEffect(() => {
-    setName(userData?.name);
-    setEmail(userData?.email);
-    setPhone(userData?.phone);
+    setFirstName(userData?.name || '');
+    setLastName(userData?.last_name || '');
+    setEmail(userData?.email || '');
+    setPhone(userData?.phone || '');
   }, [userData]);
 
   return (
-    <div className="min-h-screen ">
-      <div className=" bg-white rounded-xl shadow-lg">
-        {/* Header Section */}
-        <div className="p-6 border-b ">
+    <div className="min-h-screen">
+      <div className="bg-white rounded-xl shadow-lg">
+        <div className="p-6 border-b">
           <h2 className="text-2xl font-bold text-center text-gray-900">
             {language === "ar" ? "تحديث الملف الشخصي" : "Update Profile"}
           </h2>
@@ -130,124 +94,115 @@ export default function UpdateProfile() {
           </p>
         </div>
 
-        {/* Form Content */}
         <div className="p-6">
-          <form className="">
-            {/* Basic Information Section */}
-            <div className="">
-              <div className="flex items-center gap-4 w-full">
-                <User className="w-5 h-5 text-gray-400" />
-                <h3 className="text-lg font-medium text-gray-900">
-                  {language === "ar" ? "المعلومات الأساسية" : "Basic Information"}
-                </h3>
-              </div>
-
-              <div className="grid gap-4">
-                <div className="">
-                  <label htmlFor="name" className="text-right block text-sm font-medium text-gray-700">
-                    {language === "ar" ? "الاسم" : "Name"} <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    id="name"
-                    placeholder={language === "ar" ? "أدخل اسمك الكامل" : "Enter your full name"}
-                    className="w-full text-right px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                    onChange={(e) => handleNameChange(e)}
-                    defaultValue={Name}
-                  />
-                  {NameError ? <p className='my-2 text-red'>{language === "ar" ? "من فضلك لا يقل الاسم عن 3 عناصر" : "Please Name must be more than 3 characters"}</p> : <></>}
-                </div>
-
-                <div className="">
-                  <label htmlFor="email" className="text-right block text-sm font-medium text-gray-700">
-                    {language === "ar" ? "البريد الإلكتروني" : "Email"} <span className="text-red-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      id="email"
-                      type="email"
-                      placeholder="البريد الإلكتروني"
-                      className="w-full text-right px-4 py-2 pl-10 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                      onChange={(e) => handleEmailChange(e)}
-                      defaultValue={Email}
-                    />
-                    <Mail className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                  </div>
-                  {EmailError ? <p className='my-2 text-red'>{language === "ar" ? "البريد الالكترونى خاطئ" : "Wrong Email"}</p> : <></>}
-                </div>
-              </div>
+          <form>
+            {/* First Name */}
+            <div>
+              <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
+                {language === "ar" ? "الاسم الأول" : "First Name"} <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="first-name"
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                placeholder={language === "ar" ? "أدخل الاسم الأول" : "Enter first name"}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+              {errors.firstName && <p className="text-red-500">{errors.firstName}</p>}
             </div>
 
-            {/* Separator */}
-            <div className="h-px bg-gray-200 my-6"></div>
+            {/* Last Name */}
+            <div>
+              <label htmlFor="last-name" className="block text-sm font-medium text-gray-700">
+                {language === "ar" ? "الاسم الأخير" : "Last Name"} <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="last-name"
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                placeholder={language === "ar" ? "أدخل الاسم الأخير" : "Enter last name"}
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+              {errors.lastName && <p className="text-red-500">{errors.lastName}</p>}
+            </div>
 
-            {/* Password Section */}
-            <div className="">
-              <div className="flex items-center gap-4">
-                <Lock className="w-5 h-5 text-gray-400" />
-                <h3 className="text-lg font-medium text-gray-900">
-                  {language === "ar" ? "تغيير كلمة المرور" : "Change Password"}
-                </h3>
-              </div>
+            {/* Email */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                {language === "ar" ? "البريد الإلكتروني" : "Email"} <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="email"
+                type="email"
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                placeholder={language === "ar" ? "أدخل البريد الإلكتروني" : "Enter email"}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {errors.email && <p className="text-red-500">{errors.email}</p>}
+            </div>
 
-              <div className="grid gap-4">
+            {/* Phone */}
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                {language === "ar" ? "الهاتف" : "Phone"} <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="phone"
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                placeholder={language === "ar" ? "أدخل رقم الهاتف" : "Enter phone number"}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+              {errors.phone && <p className="text-red-500">{errors.phone}</p>}
+            </div>
 
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="">
-                    <label htmlFor="new-password" className=" block text-sm font-medium text-gray-700">
-                      {language === "ar" ? "كلمة المرور الجديدة" : "New Password"}
-                    </label>
-                    <input
-                      id="new-password"
-                      type="password"
-                      className="w-full text-right px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                      placeholder="كلمة المرور الجديدة"
-                      onChange={(e) => handleNewPassChange(e)}
-                    />
-                    {NewPassError ? <p className='my-2 text-red'>{language === "ar" ? "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل، وحرف صغير واحد، ورقم واحد، وحرف خاص واحد." : "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."}</p> : <></>}
-                  </div>
+            {/* Password */}
+            <div>
+              <label htmlFor="new-password" className="block text-sm font-medium text-gray-700">
+                {language === "ar" ? "كلمة المرور الجديدة" : "New Password"}
+              </label>
+              <input
+                id="new-password"
+                type="password"
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                placeholder={language === "ar" ? "أدخل كلمة المرور الجديدة" : "Enter new password"}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+              {errors.newPassword && <p className="text-red-500">{errors.newPassword}</p>}
+            </div>
 
-                  <div className="">
-                    <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
-                      {language === "ar" ? "تأكيد كلمة المرور" : "Confirm Password"}
-                    </label>
-                    <input
-                      id="confirm-password"
-                      type="password"
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-                      placeholder="تأكيد كلمة المرور"
-                      onChange={(e) => handleConfirmNewPassChange(e)}
-                    />
-                    {ConfrinNewPassError ? <p className='my-2 text-red'>{language === "ar" ? "كلمة المرور غير متطابقة" : "Passwords don't match"}</p> : <></>}
-                  </div>
-                </div>
-              </div>
+            {/* Confirm Password */}
+            <div>
+              <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700">
+                {language === "ar" ? "تأكيد كلمة المرور" : "Confirm Password"}
+              </label>
+              <input
+                id="confirm-password"
+                type="password"
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none"
+                placeholder={language === "ar" ? "تأكيد كلمة المرور" : "Confirm password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              {errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword}</p>}
             </div>
 
             {/* Submit Button */}
-            <div className="pt-6">
-              <button
-                type="submit"
-                onClick={handleSaveClick}
-                disabled={NameError || EmailError || NewPassError || ConfrinNewPassError}
-                className="w-full bg-primary text-white py-2 px-4 rounded-lg h-11 text-lg flex items-center justify-center gap-2 transition-colors"
-              >
-                <Save className="w-5 h-5" />
-                {language === "ar" ? "حفظ التغييرات" : "Save Changes"}
-              </button>
-            </div>
+            <button
+              type="submit"
+              onClick={handleSaveClick}
+              className="mt-6 w-full bg-primary text-white py-2 px-4 rounded-lg"
+            >
+              <Save className="w-5 h-5" />
+              {language === "ar" ? "حفظ التغييرات" : "Save Changes"}
+            </button>
           </form>
         </div>
+
+      
       </div>
-      {isShown ? <>
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex flex-col items-center justify-center" >
-          <div className="fixed rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-2 border border-gray-100 bg-white h-96 top-[10%] right-[25%] z-500 w-[50%] h-[80%]">
-            <button className="absolute left-4 top-4" onClick={handleCancel}>
-              <MdCancel className="w-6 h-6" />
-            </button>
-            <h1 className={`font-bold text-2xl text-center mb-4 mt-2`}>{language === "ar" ? "تم التعديل بنجاح" : "Updated Successfully"}</h1>
-          </div>
-        </div>
-      </> : ""}
     </div>
   );
 }

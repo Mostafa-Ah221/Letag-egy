@@ -262,8 +262,8 @@ const handleOpenMenu = () => {
             </ul>
           </div>
 
-          <div className="flex md:order-1 mr-3">
-            <div className="relative hidden md:block">
+          <div className="flex md:order-1 mr-3 ">
+            <div className={`relative hidden sm:block ${language === 'ar'? "left-20 md:-left-5":"right-16"}`}>
               <div  className="">
                 <button className={`absolute inset-y-0 flex items-center ${language === "ar" ? "pr-2 left-2" : "pl-2 right-2"} z-100`} onClick={() => {
                   setSearchData(null); setQuery(""); setSearchData2(null);
@@ -279,7 +279,7 @@ const handleOpenMenu = () => {
               <input
                 type="search"
                 id="search-navbar"
-                className="block lg:w-[30em] md:w-[25em] p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 outline-none dark:border-gray-600 dark:placeholder-gray-400 focus:shadow-[0_0_8px_2px_rgba(249,115,22,0.3)] z-0"
+                className="block w-[13em] lg:w-[30em] md:w-[25em] p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 outline-none dark:border-gray-600 dark:placeholder-gray-400 focus:shadow-[0_0_8px_2px_rgba(249,115,22,0.3)] z-0"
                 placeholder={language === "ar" ? "ابحث عن منتج" : "Search for a product"}
                 onChange={handlChange}
                 value={query}
@@ -287,11 +287,10 @@ const handleOpenMenu = () => {
             </div>
           </div>
         </div>
-        <div className="flex justify-center items-center ml-[9.7rem] ">
+        <div className="flex justify-center items-center sm:mr-[5rem] lg:ml-[20rem] md:ml-[7rem] ">
           <div
             className={`${searchData || searchData2 ? "flex" : "hidden"
               }  bg-white flex-col z-50 absolute top-14 lg:w-[32%] h-96 md:w-[25em] rounded-md shadow-lg border border-gray-200 overflow-auto`}>
-
             <p
               className={`text-gray-600 text-sm px-4 py-2 `}>
               {language === "ar" ? "المنتجات" : "Products"}

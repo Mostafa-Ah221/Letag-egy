@@ -86,7 +86,7 @@ const CardForCompSlider = ({
               <p className="text-xl">{product.price}</p>
             </div>
              <p className='text-gray-700'>
-                  <FaStar className='text-yellow-500 inline-block'/>
+                  <FaStar className='text-orange-500 inline-block'/>
                   {product.reviews_count ? product.reviews_count : 0}
                 </p>
         </div>

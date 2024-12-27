@@ -128,9 +128,9 @@ console.log(dataReview);
     <div className="flex flex-col items-center mt-5 mb-11">
       {product ? (
         <>
-          <div className="flex flex-col md:flex-row-reverse md:items-start gap-6 mb-44">
+          <div className="flex flex-col-reverse md:flex-row-reverse md:items-start gap-6 mb-44">
             <div className="p-4 text-right flex-1">
-              <h2 className="text-3xl font-bold mb-2">{product.title}</h2>
+              <h2 className="text-xl md:text-3xl font-bold mb-2">{product.title}</h2>
               <div className="flex items-center justify-between mb-4">
                 <span className="text-2xl font-bold text-primary">
                   {product.price} {currencyData}
@@ -165,13 +165,23 @@ console.log(dataReview);
                   
                   {language === 'ar' ? 'أضف إلى العربة' : 'Add To Cart'}
                 </button>
-                <input
-                  type="number"
-                  value={quantity}
-                  onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value)))}
-                  min={1}
-                  className="rounded-md border text-right text-primary border-stone-500 w-28 py-2 px-2"
-                />
+                 <div className="flex border">
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="bg-gray-200 px-2  text-lg font-bold  hover:bg-gray-300"
+                  >
+                    -
+                  </button>
+                  <span className="px-6 text-[1rem] ">
+                    {quantity}
+                  </span>
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="bg-gray-200 px-2 text-lg font-bold  hover:bg-gray-300"
+                  >
+                    +
+                  </button>
+                </div>
               </div>
               <hr />
               <div className='flex justify-between items-center'>
@@ -226,13 +236,13 @@ console.log(dataReview);
               </div>
             </div>
 
-            <div className='w-full md:w-1/2 h-80'>
+            <div className='w-full md:w-1/2 h-80 mb-28 md:mb-0'>
            <img 
                 className="w-full h-full object-contain rounded-lg hover:scale-110 transition-transform duration-300" 
               src={selectedImage} 
               alt={product.title} 
             />
-              <div className={`flex rounded-md mt-2 border-2 border-primary w-fit ${language === "ar"? "mr-auto":"ml-auto"}`}>
+              <div className={`flex rounded-md mt-2 border-2 border-primary md:mx-0 ml-5  w-fit ${language === "ar"? "mr-auto":"ml-auto"}`}>
               {product.photos.map((photo, index) => (
                   <img key={index} 
                   className="w-[4.5rem] h-[4.5rem] object-cover cursor-pointer"
@@ -240,7 +250,6 @@ console.log(dataReview);
                   alt={product.title}
                   onClick={() => setSelectedImage(photo.url)}
                 />
-                
               ))}
               </div>
             </div>
@@ -254,7 +263,7 @@ console.log(dataReview);
       ) : (
         <p>المنتج غير موجود.</p>
       )}
-      <div className='flex justify-evenly gap-7 '>
+      <div className=' flex md:flex-row justify-evenly gap-7 flex-col'>
         <div className='w-64 flex flex-col'>
           <button
             onClick={() => openModal('reviewForm')}

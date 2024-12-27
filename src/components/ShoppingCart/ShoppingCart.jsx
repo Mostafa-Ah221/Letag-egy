@@ -62,8 +62,7 @@ export default function ShoppingCart() {
       <div
         className={`fixed top-0 ${language === "ar" ? "left-0" : "right-0"} h-full bg-white shadow-2xl transform ${
           isCartOpen ? "translate-x-0" : `${language === "ar" ? "-translate-x-full" : "translate-x-full"}`
-        } ${disableTransition ? "transition-none" : "transition-transform duration-300 ease-in-out"} z-50`}
-        style={{ width: "40vw" }}
+        } ${disableTransition ? "transition-none" : "transition-transform duration-300 ease-in-out"} z-50 w-[100vw] md:w-[50vw] lg:w-[40vw]`}
       >
         <div className="p-6 relative h-full overflow-y-auto">
           <div className="flex justify-between items-center mb-4 border-b pb-3">
