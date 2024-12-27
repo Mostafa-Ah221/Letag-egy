@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css'; // استيراد الأنماط الخاصة بالمكتبة
 
@@ -10,12 +10,12 @@ const LoadingIndicator = () => {
     const interval = setInterval(() => {
       setProgress((prevProgress) => {
         if (prevProgress >= 100) {
-          clearInterval(interval); // إيقاف التقدم عند الوصول لـ 100%
+          clearInterval(interval); 
           return 100;
         }
         return prevProgress + 1;
       });
-    }, 50); // يمكن تعديل الوقت لتحديد سرعة التقدم
+    }, 30);
 
     return () => clearInterval(interval);
   }, []);
@@ -29,7 +29,7 @@ const LoadingIndicator = () => {
           text={`${progress}%`}
           styles={buildStyles({
             // تخصيص ألوان التقدم
-            pathColor: '#3b82f6',
+            pathColor: 'primary',
             textColor: '#000',
             trailColor: '#e5e7eb',
             strokeLinecap: 'round',

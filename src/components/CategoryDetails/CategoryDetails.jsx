@@ -7,6 +7,7 @@ import { useLanguage } from '../../context/LanguageContextPro';
 import { useCart } from '../../context/CartContext';
 import Modal from '../Modal/Modal';
 import ProductCard from '../CartProduct/CardProduct';
+import LoadingIndicator from '../Loading/Loading';
 
 export default function CategoryDetails() {
   const { getProductCategory,currencyData } = useContext(ContextData);
@@ -37,9 +38,7 @@ export default function CategoryDetails() {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+    <LoadingIndicator/>
     );
   }
 
