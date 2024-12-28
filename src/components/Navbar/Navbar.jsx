@@ -158,17 +158,20 @@ const handleClickOutside = (event) => {
               </Link>
               :
               <Link
-                to="/profile"
+                to="/user"
+                className="flex"
                 onClick={() => {
                   handleOpenMenu();
                 }}
               >
+                <div className="text-3xl font-semibold">
                 {userData.name}
+                </div>
+            <div className="icon-profile mx-2">
+              <CgProfile className="text-4xl text-gray-500 " />
+            </div>
               </Link>
             }
-            <div className="icon-profile">
-              <CgProfile className="text-4xl text-gray-500" />
-            </div>
           </div>
         </div>
           
