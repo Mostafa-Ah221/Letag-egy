@@ -7,7 +7,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { FaArrowDown } from "react-icons/fa6";
 import { IoMdClose } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
-
+import { IoIosSearch } from "react-icons/io";
 import { useLocation } from 'react-router-dom';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faEarthAmericas } from '@fortawesome/free-solid-svg-icons';
@@ -219,95 +219,114 @@ const handleClickOutside = (event) => {
       </div>
 
       <nav className="border-gray-200 relative z-10 bg-white">
-        <div className="flex-row justify-start flex flex-wrap items-center lg:justify-around mx-auto p-4">
-          <Link to={"/"} className={`flex items-center space-x-3 ${language === "ar" ? "ml-20" : "mr-20"}  md:ml-0 rtl:space-x-reverse`}>
-            <img src={logo} className="h-10" alt="Logo" />
-          </Link>
-          <div className={`absolute top-4 ${language === "ar" ? "left-4 " : "right-4 "} flex items-center`}>
-            <div
-              className=" group hover:cursor-pointer m-2 lg:hidden"
-              onClick={toggleLanguage}
-            >
-              <p className="text-black text-center ">
-                {language === "ar" ? "EN" : "AR"}
-              </p>
-            </div>
-            <button
-              data-collapse-toggle="navbar-search"
-              type="button"
-              className=" items-center justify-center p-2 w-10 h-10 text-gray-500 rounded-lg lg:hidden hover:border hover:border-primary duration-200 cursor-pointer"
-              aria-controls="navbar-search"
-              aria-expanded={isMenuOpen}
-              onClick={() => setMenuOpen(!isMenuOpen)}
-            >
-              <span className="sr-only">Open main menu</span>
-              <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14" onClick={handleOpenMenu}>
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
-              </svg>
-            </button>
-
-          </div>
-
-
-          <div className={`items-center  justify-between w-full lg:flex lg:w-auto md:order-2 ${isMenuOpen ? 'block' : 'hidden'}`} id="navbar-search">
-            <ul className="lg:flex font-medium gap-5 hidden">
-              <li>
-                <Link to={isStock ? "/home" : "/"} className="relative block py-2 rounded md:p-0 group">
-                  <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-primary transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
-                  <span className="relative z-10">
-                    {language === "ar" ? "الرئيسية" : "Home"}
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link to={"/about"} className="relative block py-2  rounded md:p-0 group">
-                <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-primary transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
-                  <span className="relative z-10">
-                    {language === "ar" ? "نبذة عنا" : "About"}
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link to={"/pageBrand"} className="relative block py-2  rounded md:p-0 group">
-                  <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-primary transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
-                  <span className="relative z-10">
-                    {language === "ar" ? "العلامات التجارية" : "Brands"}
-                  </span>
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div className="flex md:order-1 mr-3 ">
-            <div className={`relative hidden sm:block ${language === 'ar'? "left-20 md:-left-5":"right-16"}`}>
-              <div  className="">
-                <button className={`absolute inset-y-0 flex items-center ${language === "ar" ? "pr-2 left-2" : "pl-2 right-2"} z-100`} onClick={() => {
-                  setSearchData(null); setQuery(""); setSearchData2(null);
-                }}>
-                  <p className="p-[7px] bg-primary hover:cursor-pointer">
-                    <svg className="w-4 h-4 text-gray-100 hover:cursor-pointer" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                    </svg>
+      <div className="grid grid-cols-1 md:grid-cols-3 items-center mx-auto p-4 gap-y-4 lg:gap-y-0">
+  {/* Logo Section */}
+      <div className="flex justify-start  items-center mx-3">
+        <Link
+          to={"/"}
+          className={`flex items-center space-x-3 ${
+            language === "ar" ? "ml-20" : "mr-20"
+          } md:ml-0 rtl:space-x-reverse`}
+        >
+          <img src={logo} className="h-10" alt="Logo" />
+        </Link>
+      </div>
+    <div className={`absolute top-4 ${language === "ar" ? "left-4 " : "right-4 "} flex items-center lg:hidden`}>
+                <div
+                  className=" group hover:cursor-pointer m-2 "
+                  onClick={toggleLanguage}
+                >
+                  <p className="text-black text-center ">
+                    {language === "ar" ? "EN" : "AR"}
                   </p>
-                  <span className="sr-only">Search icon</span>
+                </div>
+                <button
+                  data-collapse-toggle="navbar-search"
+                  type="button"
+                  className=" items-center justify-center p-2 w-10 h-10 text-gray-500 rounded-lg lg:hidden hover:border hover:border-primary duration-200 cursor-pointer"
+                  aria-controls="navbar-search"
+                  aria-expanded={isMenuOpen}
+                  onClick={() => setMenuOpen(!isMenuOpen)}
+                >
+                  <span className="sr-only">Open main menu</span>
+                  <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14" onClick={handleOpenMenu}>
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
+                  </svg>
                 </button>
+
               </div>
-              <input
-                type="search"
-                id="search-navbar"
-                className="block w-[13em] lg:w-[30em] md:w-[25em] p-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 outline-none dark:border-gray-600 dark:placeholder-gray-400 focus:shadow-[0_0_8px_2px_rgba(249,115,22,0.3)] z-0"
-                placeholder={language === "ar" ? "ابحث عن منتج" : "Search for a product"}
-                onChange={handlChange}
-                value={query}
-              />
+      {/* Search Section */}
+
+        <div className="flex justify-center lg:mx-5">
+          <div className="relative w-full lg:w-[25em] md:w-[25em]">
+            <input
+              type="search"
+              id="search-navbar"
+              className={`block w-full p-2 pl-3 ${
+                language === "ar" ? "pl-10" : "pr-10"
+              } text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 outline-none dark:border-gray-600 dark:placeholder-gray-400 focus:shadow-[0_0_8px_2px_rgba(249,115,22,0.3)]`}
+              placeholder={language === "ar" ? "ابحث عن منتج" : "Search for a product"}
+              onChange={handlChange}
+              value={query}
+            />
+            <div className={`absolute inset-y-0 ${
+              language === "ar" ? "left-0 pl-2" : "right-0 pr-2"
+            } flex items-center pointer-events-none`}>
+              <div className="p-[7px] bg-primary rounded-md">
+                <IoIosSearch className="text-white text-xl" />
+              </div>
             </div>
           </div>
         </div>
-        <div className="flex justify-center items-center sm:mr-[5rem] lg:ml-[13rem] md:ml-[11rem] ">
+        
+      {/* Links Section */}
+      <div
+        className={`items-center justify-around hidden lg:flex`}
+        id="navbar-search"
+      >
+        <ul className="font-medium gap-5 flex flex-col lg:flex-row">
+          <li>
+            <Link
+              to={isStock ? "/home" : "/"}
+              className="relative block py-2 rounded md:p-0 group"
+            >
+              <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-primary transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
+              <span className="relative z-10">
+                {language === "ar" ? "الرئيسية" : "Home"}
+              </span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={"/about"}
+              className="relative block py-2 rounded md:p-0 group"
+            >
+              <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-primary transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
+              <span className="relative z-10">
+                {language === "ar" ? "نبذة عنا" : "About"}
+              </span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={"/pageBrand"}
+              className="relative block py-2 rounded md:p-0 group"
+            >
+              <span className="absolute right-0 bottom-[-1px] h-0 w-0 bg-primary transition-all duration-300 group-hover:h-[0.1em] group-hover:w-full"></span>
+              <span className="relative z-10">
+                {language === "ar" ? "العلامات التجارية" : "Brands"}
+              </span>
+            </Link>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+        <div className="flex justify-center items-center sm:mr-[5rem] lg:ml-[5rem] md:ml-[7rem] ">
           <div
           ref={resultsRef}
             className={`${searchData || searchData2 ? "flex" : "hidden"
-              }  bg-white flex-col z-50 absolute top-14  lg:w-[32%] h-96 md:w-[22em] rounded-md shadow-lg border border-gray-200 overflow-auto`}>
+              }  bg-white flex-col z-50 absolute top-28 md:top-14  lg:w-[32%] h-96 md:w-[22em] rounded-md shadow-lg border border-gray-200 overflow-auto`}>
             <p
               className={`text-gray-600 text-sm px-4 py-2 `}>
               {language === "ar" ? "المنتجات" : "Products"}

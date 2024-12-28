@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import LoadingIndicator from "../Loading/LoadingIndicator";
 
 export default function PageMenu() {
   const { id } = useParams();
@@ -11,11 +12,10 @@ export default function PageMenu() {
     return response.data;
   };
 
-  // استخدام React Query لجلب البيانات
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['getPageDetails', id], // إضافة `id` كـ جزء من المفتاح
+    queryKey: ['getPageDetails', id], 
     queryFn: () => getPageDetails(id),
-    enabled: !!id, // التأكد من وجود `id` قبل الجلب
+    enabled: !!id,
   });
 
   // بيانات الصفحة
@@ -23,9 +23,7 @@ export default function PageMenu() {
 
    if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+     <LoadingIndicator />
     );
   }
   if (isError) return <p>Error occurred while fetching data.</p>;
