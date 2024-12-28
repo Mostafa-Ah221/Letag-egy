@@ -75,7 +75,7 @@ function SecondMenu() {
                                     <img className='h-7 w-full object-contain transform transition-all duration-300 group-hover:scale-110' 
                                          src={category.photo || defaultImage} 
                                          alt={category.name} loading="lazy" />
-                                    <h3 className=' line-clamp-1  py-2 text-[0.7rem] font-medium text-secondary group-hover:text-primary transition-all duration-300'>
+                                    <h3 className=' line-clamp-1  py-2 text-[0.6rem] text-center font-medium text-secondary group-hover:text-primary transition-all duration-300'>
                                         {category.name.split(" ").slice(0, 2).join(' ')}
                                     </h3>
                                 </div>

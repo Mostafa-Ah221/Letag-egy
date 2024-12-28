@@ -4,6 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { ContextData } from "../../context/ContextApis";
 import { useContext } from "react";
+import LoadingIndicator from "../Loading/LoadingIndicator";
 
 export default function SliderHome() {
     const { getApiHome } = useContext(ContextData);
@@ -48,7 +49,7 @@ export default function SliderHome() {
 
   // console.log(data?.data);
   
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <LoadingIndicator/>;
   if (isError) return <p>Error occurred while fetching data.</p>;
 
   return (

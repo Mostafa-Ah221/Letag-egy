@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css'; // استيراد الأنماط الخاصة بالمكتبة
+import 'react-circular-progressbar/dist/styles.css';
 
 const LoadingIndicator = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // محاكاة تحميل البيانات
     const interval = setInterval(() => {
       setProgress((prevProgress) => {
         if (prevProgress >= 100) {

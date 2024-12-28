@@ -8,6 +8,7 @@ import { useLanguage } from '../../context/LanguageContextPro';
 import { useCart } from '../../context/CartContext';
 import Modal from '../Modal/Modal';
 import CardForCompSlider from '../CartProduct/CardForCompSlider';
+import LoadingIndicator from '../Loading/LoadingIndicator';
 
 const CustomArrow = ({ direction, onClick }) => (
   <button onClick={onClick} className={`absolute top-1/2 -translate-y-1/2 z-10
@@ -69,9 +70,7 @@ export default function DataHome({ sectionName }) {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+     <LoadingIndicator />
     );
   }
   if (isError) return <p>Error occurred while fetching data.</p>;

@@ -10,6 +10,7 @@ import { ContextData } from "../../context/ContextApis";
 import { useQuery } from "@tanstack/react-query";
 import Modal from "../Modal/Modal";
 import { GiBeachBag } from "react-icons/gi";
+import LoadingIndicator from "../Loading/LoadingIndicator";
 
 export default function WishList() {
   const [showModal, setShowModal] = useState(false);
@@ -38,9 +39,7 @@ export default function WishList() {
   };
 if (isLoading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
+      <LoadingIndicator/>
     );
   }
 

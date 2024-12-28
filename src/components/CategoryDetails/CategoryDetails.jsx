@@ -7,7 +7,7 @@ import { useLanguage } from '../../context/LanguageContextPro';
 import { useCart } from '../../context/CartContext';
 import Modal from '../Modal/Modal';
 import ProductCard from '../CartProduct/CardProduct';
-import LoadingIndicator from '../Loading/Loading';
+import LoadingIndicator from '../Loading/LoadingIndicator';
 
 export default function CategoryDetails() {
   const { getProductCategory,currencyData } = useContext(ContextData);
