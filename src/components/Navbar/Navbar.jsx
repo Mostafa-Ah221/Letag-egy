@@ -303,11 +303,11 @@ const handleClickOutside = (event) => {
             </div>
           </div>
         </div>
-        <div className="flex justify-center items-center sm:mr-[5rem] lg:ml-[20rem] md:ml-[7rem] ">
+        <div className="flex justify-center items-center sm:mr-[5rem] lg:ml-[13rem] md:ml-[11rem] ">
           <div
           ref={resultsRef}
             className={`${searchData || searchData2 ? "flex" : "hidden"
-              }  bg-white flex-col z-50 absolute top-14 lg:w-[32%] h-96 md:w-[25em] rounded-md shadow-lg border border-gray-200 overflow-auto`}>
+              }  bg-white flex-col z-50 absolute top-14  lg:w-[32%] h-96 md:w-[22em] rounded-md shadow-lg border border-gray-200 overflow-auto`}>
             <p
               className={`text-gray-600 text-sm px-4 py-2 `}>
               {language === "ar" ? "المنتجات" : "Products"}
