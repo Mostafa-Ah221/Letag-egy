@@ -54,12 +54,12 @@ function AddAddress({ showAddress = true }) {
     // Handle Submit
     const handleClick = async () => {
         if (!token) {
-            alert(language === 'ar' ? 'التوكن غير موجود. قم بتسجيل الدخول مرة أخرى.' : 'Token not found. Please log in again.');
+            showToast(language === 'ar' ? ' قم بتسجيل الدخول أولا ' : ' Please log in again.');
             return;
         }
 
         if (!selectedRegionId || !selectedBuilding || !selectedFloor) {
-            alert(language === 'ar' ? 'يرجى ملء جميع الحقول المطلوبة' : 'Please fill in all required fields.');
+            showToast(language === 'ar' ? 'يرجى ملء جميع الحقول المطلوبة' : 'Please fill in all required fields.');
             return;
         }
 

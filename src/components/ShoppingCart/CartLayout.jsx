@@ -142,7 +142,7 @@ console.log(responseData);
       }
     } catch (networkError) {
       console.error('Network Error:', networkError);
-      alert('خطأ في الشبكة. يرجى المحاولة مرة أخرى.');
+      showToast('خطأ في الشبكة. يرجى المحاولة مرة أخرى.');
     }
   };
 
@@ -175,11 +175,11 @@ console.log(responseData);
         }));
         showToast("تم تطبيق القسيمة بنجاح!");
       } else {
-        alert(responseData.message || "تعذر تطبيق القسيمة.");
+        showToast(responseData.message || "تعذر تطبيق القسيمة.");
       }
     } catch (error) {
       console.error("Network Error:", error);
-      alert("خطأ في الشبكة. يرجى المحاولة مرة أخرى.");
+      showToast("خطأ في الشبكة. يرجى المحاولة مرة أخرى.");
     }
   };
 
@@ -220,7 +220,7 @@ console.log(responseData);
       }
     } catch (networkError) {
       console.error('Network Error:', networkError);
-      alert('خطأ في الشبكة. يرجى المحاولة مرة أخرى.');
+      showToast('خطأ في الشبكة. يرجى المحاولة مرة أخرى.');
     }
   };
 

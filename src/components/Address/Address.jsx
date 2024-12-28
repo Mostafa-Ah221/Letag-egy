@@ -101,12 +101,12 @@ export default function Address({ address = true}) {
   const handleConfirm = async (id) => {
  
     if (!userToken) {
-      alert(language === 'ar' ? 'التوكن غير موجود. قم بتسجيل الدخول مرة أخرى.' : 'Token not found. Please log in again.');
+            showToast(language === 'ar' ? ' قم بتسجيل الدخول أولا ' : ' Please log in again.');
       return;
     }
 
     if (!selectedRegionId || !selectedBuilding || !selectedFloor) {
-      alert(language === 'ar' ? 'يرجى ملء جميع الحقول المطلوبة' : 'Please fill in all required fields.');
+      showToast(language === 'ar' ? 'يرجى ملء جميع الحقول المطلوبة' : 'Please fill in all required fields.');
       return;
     }
 
@@ -140,7 +140,7 @@ export default function Address({ address = true}) {
       }
     } catch (error) {
       console.error('Error:', error.response || error.message);
-      alert(language === 'ar' ? 'حدث خطأ أثناء التعديل: ' + error.response?.data?.message : 'An error occurred while updating: ' + error.response?.data?.message);
+      showToast(language === 'ar' ? 'حدث خطأ أثناء التعديل: ' + error.response?.data?.message : 'An error occurred while updating: ' + error.response?.data?.message);
     }
   };
   const handleCancel = () => {

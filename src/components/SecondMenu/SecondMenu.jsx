@@ -107,7 +107,7 @@ function SecondMenu() {
                                  </Link>
                             ))}
                         </div>
-                        <div className={`w-60 h-60 ${language === "ar" ? "absolute left-0" : "absolute right-0"} ml-48`}>
+                        <div className={`w-60 h-60 ${language === "ar" ? "absolute left-0 ml-48" : "absolute right-0 mr-48"} `}>
                             <img src={image} alt="Selected category" />
                         </div>
                     </div>
