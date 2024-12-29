@@ -59,7 +59,7 @@ function Orders() {
         </h2>
       )}
       <div className="relative ">
-        <table className="w-3/4 md:w-full text-gray-500  text-xs sm:text-base">
+        <table className="w-full text-gray-500  text-xs sm:text-base">
           <thead className=" text-gray-700 uppercase bg-gray-50">
             <tr>
               <th className="px-1 md:px-6 py-3">
@@ -84,7 +84,7 @@ function Orders() {
                 <td className="px-1 md:px-6 py-4">{order?.payment_method || "N/A"}</td>
                 <td className="px-1 md:px-6 py-4">{order?.total}</td>
                 <td className="px-1 md:px-6 py-4"><Link to={`/ShowOrder/${order.id}`} className="bg-primary rounded-md flex items-center justify-center py-3 px-2 hover:shadow-md ">
-                  <p className="text-white text-center font-bold text-xs">{language === "ar" ? "تفاصيل الطلب" : "Order Details"}</p>
+                  <p className="text-white text-center font-bold text-xs sm:text-base">{language === "ar" ? "تفاصيل الطلب" : "Order Details"}</p>
                 </Link></td>
 
              
