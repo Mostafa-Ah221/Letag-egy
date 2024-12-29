@@ -59,7 +59,7 @@ function Orders() {
         </h2>
       )}
       <div className="relative ">
-        <table className="w-3/4 md:w-full text-gray-500 text-[0.9rem]">
+        <table className="w-3/4 md:w-full text-gray-500  text-xs sm:text-base">
           <thead className=" text-gray-700 uppercase bg-gray-50">
             <tr>
               <th className="px-1 md:px-6 py-3">
@@ -87,34 +87,8 @@ function Orders() {
                   <p className="text-white text-center font-bold text-xs">{language === "ar" ? "تفاصيل الطلب" : "Order Details"}</p>
                 </Link></td>
 
-                {/* <td className="px-6 py-4">
-                  {order?.order_items?.length > 0 ? (
-                    order.order_items.map((item) => (
-                      <div key={item?.id || Math.random()}>
-                        <span>المنتج: {item?.term?.title_ar || "N/A"}</span> <br />
-                        <span>الكمية: {item?.qty || "N/A"}</span> <br />
-                        <span>السعر: {item?.amount || "N/A"}</span>
-                      </div>
-                    ))
-                  ) : (
-                    <span>لا توجد منتجات</span>
-                  )}
-                </td> */}
+             
 
-                {/* <td className="px-6 py-4">
-                  <div>
-                    <span>المدينة: {order?.shipping_info?.city?.name || "N/A"}</span> <br />
-                    <span>طريقة الشحن: {order?.shipping_info?.shipping_method?.name || "N/A"}</span>
-                  </div>
-                </td> */}
-
-                {/* <td className="px-6 py-4">
-                  <div>
-                    <span>الاسم: {order?.order_content?.name || "N/A"}</span> <br />
-                    <span>الهاتف: {order?.order_content?.phone || "N/A"}</span> <br />
-                    <span>العنوان: {order?.order_content?.address || "N/A"}</span>
-                  </div>
-                </td> */}
               </tr>
             ))}
           </tbody>
