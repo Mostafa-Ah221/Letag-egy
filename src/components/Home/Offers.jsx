@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { ContextData } from "../../context/ContextApis";
 import Slider from "react-slick";
 import { ChevronRight, ChevronLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const NextArrow = ({ onClick }) => (
   <button
@@ -60,16 +61,37 @@ export default function Offers() {
     cacheTime: 1000 * 60 * 40,
   });
 
+  const isExternalLink = (url) => {
+    // تحقق ما إذا كان الرابط يبدأ بـ http:// أو https://
+    return /^https?:\/\//.test(url);
+  };
+
   return (
     <div className="relative px-8 mb-3">
       <Slider {...sliderSettings}>
         {offers?.data.offer_ads.map((offer) => (
           <div key={offer.id} className="px-2"> 
-            <img
-              src={offer.photo}
-              alt="offers"
-              className="w-full md:h-40 h-full md:object-cover object-contain rounded-md"
-            />
+            {isExternalLink(offer.link) ? (
+              <a
+                href={offer.link}
+                target="_blank" // يفتح الرابط في نافذة جديدة
+                rel="noopener noreferrer" // لأمان إضافي
+              >
+                <img
+                  src={offer.photo}
+                  alt="offers"
+                  className="w-full md:h-40 h-full md:object-cover object-contain rounded-md"
+                />
+              </a>
+            ) : (
+              <Link to={offer.link}>
+                <img
+                  src={offer.photo}
+                  alt="offers"
+                  className="w-full md:h-40 h-full md:object-cover object-contain rounded-md"
+                />
+              </Link>
+            )}
           </div>
         ))}
       </Slider>

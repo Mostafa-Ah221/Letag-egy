@@ -6,6 +6,8 @@ import { useCart } from "./CartContext";
 
 export const ContextData = createContext();
 
+const baseDomain = window.location.protocol + "//" + window.location.hostname;
+console.log(baseDomain);
 
 async function fetchProducts(filters, language) {
   const formData = new FormData();

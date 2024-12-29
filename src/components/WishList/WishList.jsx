@@ -69,7 +69,7 @@ if (isLoading) {
                           src={product.photos[0].url}
                           alt=
                           {product.title}
-                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
+                          className="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-300"
                         />
                         <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                           <button

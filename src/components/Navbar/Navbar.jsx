@@ -9,8 +9,7 @@ import { IoMdClose } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 import { IoIosSearch } from "react-icons/io";
 import { useLocation } from 'react-router-dom';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faEarthAmericas } from '@fortawesome/free-solid-svg-icons';
+
 import axios from "axios";
 
 export default function Navbar() {
@@ -21,7 +20,7 @@ export default function Navbar() {
   const [openSubMenus, setOpenSubMenus] = useState({});
   const [ca2, setCa2] = useState({});
   const [catChildren2, setCatChildren2] = useState([]);
-  const { subCategories, userData, settings_domain, selectedTownId, setSelectedTownId } = useContext(ContextData);
+  const { subCategories, userData, settings_domain, selectedTownId } = useContext(ContextData);
   const [isStock, setIsStock] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [searchData, setSearchData] = useState(null);
@@ -32,8 +31,8 @@ export default function Navbar() {
   // const [query2, setQuery2] = useState("");
 
 
-  let filteredSuggestions = [];
-  let filteredSuggestionsProducts = [];
+  // let filteredSuggestions = [];
+  // let filteredSuggestionsProducts = [];
 
   const logo = settings_domain?.data.logo
   // console.log(logo);

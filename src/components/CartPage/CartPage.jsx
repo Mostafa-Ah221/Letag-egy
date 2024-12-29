@@ -10,8 +10,7 @@ export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, getTotalPrice } = useCart();
   const { currencyData, getProdDetails } = useContext(ContextData);
   const { language } = useLanguage();
-    const [quantity, setQuantity] = useState(1);
-  
+  const [quantity, setQuantity] = useState(1);
 
   const ids = cart.map((item) => item.id);
 
@@ -21,11 +20,19 @@ export default function CartPage() {
     enabled: ids.length > 0,
   });
 
+  // Function to truncate title to 4 words
+  const truncateTitle = (title) => {
+    const words = title.split(' ');
+    if (words.length > 4) {
+      return words.slice(0, 4).join(' ') + '...';
+    }
+    return title;
+  };
+
   if (isLoading) {
-    return (
-      <LoadingIndicator/>
-    );
+    return <LoadingIndicator />;
   }
+
   if (isError)
     return (
       <div>
@@ -36,115 +43,132 @@ export default function CartPage() {
     );
 
   return (
-    <div className="w-full px-5 my-10">
-      {/* العنوان */}
-      <h1 className="font-bold text-3xl text-center mb-8">
+    <div className="w-full px-1 sm:px-5 my-3 sm:my-10">
+      <h1 className="font-bold text-lg sm:text-3xl text-center mb-3 sm:mb-8">
         {language === "ar" ? "عربة التسوق" : "Your Shopping Cart"}
       </h1>
 
-      {/* جدول السلة */}
-      <div className="grid grid-cols-12 gap-8">
-        <div className="col-span-12 md:col-span-8">
-          <table className="w-full border-collapse border border-gray-300">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="border border-gray-300 p-3 text-center">{language === "ar" ? "المنتج" : "Product"}</th>
-                <th className="border border-gray-300 p-3 text-center">{language === "ar" ? "العدد" : "Quantity"}</th>
-                <th className="border border-gray-300 p-3 text-center">{language === "ar" ? "السعر" : "Price"}</th>
-                <th className="border border-gray-300 p-3 text-center">{language === "ar" ? "الإجمالي" : "Total"}</th>
-                <th className="border border-gray-300 p-3 text-center">{language === "ar" ? "حذف" : "Remove"}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {productsData.map((productData) => {
-                const product = productData.data.products;
-                const cartItem = cart.find((item) => item.id === product.id);
+      <div className="grid grid-cols-12 gap-2 sm:gap-8">
+        <div className="col-span-12 lg:col-span-8">
+          <div className="overflow-x-auto">
+            <table className="border-collapse border border-gray-300 w-full text-xs sm:text-base">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="border border-gray-300 p-1 sm:p-3 text-center">
+                    {language === "ar" ? "المنتج" : "Product"}
+                  </th>
+                  <th className="border border-gray-300 p-1 sm:p-3 text-center">
+                    {language === "ar" ? "العدد" : "Qty"}
+                  </th>
+                  <th className="border border-gray-300 p-1 sm:p-3 text-center">
+                    {language === "ar" ? "السعر" : "Price"}
+                  </th>
+                  <th className="border border-gray-300 p-1 sm:p-3 text-center">
+                    {language === "ar" ? "الإجمالي" : "Total"}
+                  </th>
+                  <th className="border border-gray-300 p-1 sm:p-3 text-center">
+                    {language === "ar" ? "حذف" : "Remove"}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {productsData.map((productData) => {
+                  const product = productData.data.products;
+                  const cartItem = cart.find((item) => item.id === product.id);
 
-                return (
-                  <tr key={product.id} className="text-center hover:bg-gray-100">
-                    {/* صورة المنتج */}
-                    <td className="border border-gray-300 p-3 flex items-center justify-start">
-                      <img
-                        src={product.photos[0].url}
-                        alt={product.title}
-                        className="w-20 h-20 object-cover rounded-md"
-                      />
-                      <span className="ml-4">{product.title}</span>
-                    </td>
+                  return (
+                    <tr key={product.id} className="text-center hover:bg-gray-100">
+                      <td className="border border-gray-300 p-1 sm:p-3">
+                        <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-4">
+                          <img
+                            src={product.photos[0].url}
+                            alt={product.title}
+                            className="w-12 h-12 sm:w-20 sm:h-20 object-cover rounded-md"
+                          />
+                          <span className="text-[10px] sm:text-base">
+                            <span className="block sm:hidden">{truncateTitle(product.title)}</span>
+                            <span className="hidden sm:block">{product.title}</span>
+                          </span>
+                        </div>
+                      </td>
 
-                    {/* الكمية */}
-                    <td className="border border-gray-300 p-3">
-                        <div className="flex border">
+                      <td className="border border-gray-300 p-1 sm:p-3">
+                        <div className="flex border max-w-[80px] sm:max-w-[120px] mx-auto">
                           <button
                             onClick={() => {
                               if (cartItem.quantity > 1) {
                                 updateQuantity(product.id, cartItem.quantity - 1);
                               }
                             }}
-                            className="bg-gray-200 px-2 text-lg font-bold hover:bg-gray-300"
+                            className="bg-gray-200 px-1 sm:px-2 text-xs sm:text-lg font-bold hover:bg-gray-300"
                           >
                             -
                           </button>
-                          <span className="px-6 text-[1rem]">
+                          <span className="px-2 sm:px-6 text-xs sm:text-base">
                             {cartItem.quantity}
                           </span>
                           <button
                             onClick={() => updateQuantity(product.id, cartItem.quantity + 1)}
-                            className="bg-gray-200 px-2 text-lg font-bold hover:bg-gray-300"
+                            className="bg-gray-200 px-1 sm:px-2 text-xs sm:text-lg font-bold hover:bg-gray-300"
                           >
                             +
                           </button>
                         </div>
                       </td>
 
+                      <td className="border border-gray-300 p-1 sm:p-3 text-[10px] sm:text-base">
+                        {product.price} {currencyData}
+                      </td>
 
-                    {/* السعر */}
-                    <td className="border border-gray-300 p-3">
-                      {product.price} {currencyData}
-                    </td>
+                      <td className="border border-gray-300 p-1 sm:p-3 font-semibold text-[10px] sm:text-base">
+                        {(product.price * cartItem.quantity).toFixed(2)} {currencyData}
+                      </td>
 
-                    {/* الإجمالي */}
-                    <td className="border border-gray-300 p-3 font-semibold">
-                      {(product.price * cartItem.quantity).toFixed(2)} {currencyData}
-                    </td>
-
-                    {/* زر الحذف */}
-                    <td className="border border-gray-300 p-3">
-                      <button
-                        className="text-red-500 hover:text-red-700 font-medium"
-                        onClick={() => removeFromCart(product.id)}
-                      >
-                        {language === "ar" ? "حذف" : "Remove"}
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                      <td className="border border-gray-300 p-1 sm:p-3">
+                        <button
+                          className="text-red-500 hover:text-red-700 font-medium text-[10px] sm:text-base"
+                          onClick={() => removeFromCart(product.id)}
+                        >
+                          {language === "ar" ? "حذف" : "Remove"}
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        {/* معلومات الطلب */}
-        <div className="col-span-12 md:col-span-4">
-          <div className=" p-5 rounded-md shadow-lg hover:shadow-xl">
-            <h2 className="text-xl font-bold mb-4 text-center">
+        <div className="col-span-12 lg:col-span-4">
+          <div className="p-2 sm:p-5 rounded-md shadow-lg hover:shadow-xl">
+            <h2 className="text-base sm:text-xl font-bold mb-3 sm:mb-4 text-center">
               {language === "ar" ? "إجمالي السلة" : "Cart Summary"}
             </h2>
-            <div className="flex justify-between mb-3">
+            <div className="flex justify-between mb-2 sm:mb-3 text-xs sm:text-base">
               <span>{language === "ar" ? "المجموع الفرعي" : "Subtotal"}:</span>
-              <span>{getTotalPrice().toFixed(2)} {currencyData}</span>
+              <span>
+                {getTotalPrice().toFixed(2)} {currencyData}
+              </span>
             </div>
-            <div className="flex justify-between mb-3">
+            <div className="flex justify-between mb-2 sm:mb-3 text-xs sm:text-base">
               <span>{language === "ar" ? "الضرائب" : "Taxes"}:</span>
-              <span>0.00 {currencyData}</span>
+              <span>
+                0.00 {currencyData}
+              </span>
             </div>
-            <hr className="my-3 border-gray-500" />
-            <div className="flex justify-between text-lg font-bold">
+            <hr className="my-2 sm:my-3 border-gray-500" />
+            <div className="flex justify-between text-sm sm:text-lg font-bold">
               <span>{language === "ar" ? "الإجمالي" : "Total"}:</span>
-              <span>{getTotalPrice().toFixed(2)} {currencyData}</span>
+              <span>
+                {getTotalPrice().toFixed(2)} {currencyData}
+              </span>
             </div>
-          
-            <Link to={"/CartLayout"} className="w-full bg-primary text-white py-2 rounded-md mt-5 hover:bg-primary-dark block text-center">
+
+            <Link
+              to={"/CartLayout"}
+              className="w-full bg-primary text-white py-1.5 sm:py-2 rounded-md mt-3 sm:mt-5 hover:bg-primary-dark block text-center text-xs sm:text-base"
+            >
               {language === "ar" ? "الإنتقال لعملية الدفع" : "Proceed to Checkout"}
             </Link>
           </div>
