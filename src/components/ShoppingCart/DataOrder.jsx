@@ -95,7 +95,7 @@ useEffect(() => {
           <h1 className="text-primary text-center text-3xl pt-3 pb-1 font-semibold mb-5">{language === "ar" ? "الدفع" : "Checkout"}</h1>
         <div className={`grid grid-cols-12 gap-4 m-0 ${language === "ar" ?"ml-3":"mr-3"}`}>
       {/* عمود البيانات */}
-      <div className={`col-span-12 lg:col-span-7 flex  flex-col gap-4 ${language === 'ar'? "mr-14":"ml-14"}`}>
+      <div className={`col-span-12 lg:col-span-7 flex  flex-col gap-4 ${language === 'ar'? "lg:mr-14":"lg:ml-14"}`}>
         {/* تفاصيل الطلب */}
         <div className="bg-white rounded px-4">
           <h2 className="text-xl font-semibold my-5">
@@ -135,7 +135,7 @@ useEffect(() => {
           {required.email && <span className="text-red-500">{required.email}</span>}
         </div>
       {userToken ? (
-        <div className="bg-white p-4 rounded-md">
+        <div className="bg-white p-4 rounded-md overflow-hidden">
           <div className=" mb-3">
             <h2>{language === "ar"?"يُرجى اختيار أو إضافة عنوان التوصيل لهذه الطلبيه" :"Please choose or add a delivery address for this order"} </h2>
           </div>
@@ -171,19 +171,19 @@ useEffect(() => {
       {/* Header Row */}
       <thead className="bg-gray-100">
         <tr>
-          <th className="border border-gray-300 px-4 py-2 text-center">
+          <th className="border border-gray-300 md:px-4 py-2 text-center">
             {language === 'ar' ? "اختيار" : "Select"}
           </th>
-          <th className="border border-gray-300 px-4 py-2 text-center">
+          <th className="border border-gray-300 md:px-4 py-2 text-center">
             {language === 'ar' ? "المحافظة" : "Governorate"}
           </th>
-          <th className="border border-gray-300 px-4 py-2 text-center">
+          <th className="border border-gray-300 md:px-4 py-2 text-center">
             {language === 'ar' ? "المنطقة" : "Region"}
           </th>
-          <th className="border border-gray-300 px-4 py-2 text-center">
+          <th className="border border-gray-300 md:px-4 py-2 text-center">
             {language === 'ar' ? "تفاصيل العنوان" : "Address Details"}
           </th>
-          <th className="border border-gray-300 px-4 py-2 text-center">
+          <th className="border border-gray-300 md:px-4 py-2 text-center">
             {language === 'ar' ? "رقم المبنى" : "Building Number"}
           </th>
           <th className="border border-gray-300 px-4 py-2 text-center">
@@ -198,7 +198,7 @@ useEffect(() => {
         {addresses && addresses.length > 0 ? (
           addresses.map((address) => (
             <tr key={address.id} className="hover:bg-gray-50">
-              <td className="border border-gray-300 px-4 py-2 text-center">
+              <td className="border border-gray-300 md:px-4 py-2 text-center">
                 <input
                   className="appearance-none w-5 h-5 border-2 border-gray-300 rounded-full checked:bg-primary checked:border-gray-300 "
                   type="radio"
@@ -207,19 +207,19 @@ useEffect(() => {
                   onChange={() => handleAddressSelection(address.id)}
                 />
               </td>
-              <td className="border border-gray-300 px-4 py-2 text-center">
+              <td className="border border-gray-300 md:px-4 py-2 text-center">
                 {address.location_name}
               </td>
-              <td className="border border-gray-300 px-4 py-2 text-center">
+              <td className="border border-gray-300 md:px-4 py-2 text-center">
                 {address.region_name}
               </td>
-              <td className="border border-gray-300 px-4 py-2 text-center">
+              <td className="border border-gray-300 md:px-4 py-2 text-center">
                 {address.address}
               </td>
-              <td className="border border-gray-300 px-4 py-2 text-center">
+              <td className="border border-gray-300 md:px-4 py-2 text-center">
                 {address.building_number}
               </td>
-              <td className="border border-gray-300 px-4 py-2 text-center">
+              <td className="border border-gray-300 md:px-4 py-2 text-center">
                 {address.floor_number}
               </td>
             </tr>
