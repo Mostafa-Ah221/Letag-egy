@@ -8,7 +8,7 @@ import { useCart } from "../../context/CartContext";
 export default function ForgetPassword() {
   const [loading, setLoading] = useState(false);
   const [errorMas, setErrorMas] = useState("");
-  const [openSection, setOpenSection] = useState("email"); // الحالة المبدئية لإظهار فورم الإيميل
+  const [openSection, setOpenSection] = useState("email"); 
   const { language } = useLanguage();
       const { showToast } = useCart();
   
