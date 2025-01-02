@@ -20,7 +20,7 @@ export default function Navbar() {
   const [openSubMenus, setOpenSubMenus] = useState({});
   const [ca2, setCa2] = useState({});
   const [catChildren2, setCatChildren2] = useState([]);
-  const { subCategories, userData, settings_domain, selectedTownId } = useContext(ContextData);
+  const { subCategories, userData, settings_domain, selectedTownId ,isLanguage} = useContext(ContextData);
   const [isStock, setIsStock] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [searchData, setSearchData] = useState(null);
@@ -234,6 +234,7 @@ const handleClickOutside = (event) => {
         </Link>
       </div>
     <div className={`absolute top-4 ${language === "ar" ? "left-4 " : "right-4 "} flex items-center lg:hidden`}>
+                {isLanguage && 
                 <div
                   className=" group hover:cursor-pointer m-2 "
                   onClick={toggleLanguage}
@@ -242,6 +243,7 @@ const handleClickOutside = (event) => {
                     {language === "ar" ? "EN" : "AR"}
                   </p>
                 </div>
+                }
                 <button
                   data-collapse-toggle="navbar-search"
                   type="button"

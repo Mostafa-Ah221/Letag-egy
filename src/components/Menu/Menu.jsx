@@ -141,7 +141,7 @@ function Menu() {
                 <hr className="w-full border-neutral-400" />
 
                 {/* Language Icon */}
-                {/* {isLanguage &&  */}
+                {isLanguage && 
                  <div
                     className="mt-2 group hover:cursor-pointer hover:bg-primary w-full p-2"
                     onClick={toggleLanguage}
@@ -157,7 +157,7 @@ function Menu() {
                         {language === "ar" ? "EN" : "AR"}
                     </p>
                 </div>
-                {/* } */}
+                 }
                
                
 
