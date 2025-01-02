@@ -34,6 +34,7 @@ export default function ShoppingCart() {
 
     return () => clearTimeout(timeout);
   }, [language]);
+  const defaultImage = "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg";
 
   return (
     <div className="w-full relative">
@@ -88,7 +89,7 @@ export default function ShoppingCart() {
                   >
                     <div className="w-20 h-20 flex-shrink-0">
                       <img
-                        src={product.photos[0].url}
+                        src={product.photos[0].url || defaultImage}
                         alt={product.name}
                         className="w-full h-full object-cover rounded-md"
                       />
