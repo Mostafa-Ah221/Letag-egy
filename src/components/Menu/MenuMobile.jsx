@@ -4,7 +4,6 @@ import {
     faRightFromBracket,
     faPhone,
 } from "@fortawesome/free-solid-svg-icons";
-import { TbCircleLetterR } from "react-icons/tb";
 import { IoMdHome } from "react-icons/io";
 import { Link, NavLink } from "react-router-dom";
 import ShoppingCart from "../ShoppingCart/ShoppingCart";
@@ -16,9 +15,12 @@ import { useCart } from "../../context/CartContext";
 import { CgShutterstock } from "react-icons/cg";
 
 function Menu() {
-    const { userToken } = useContext(ContextData);
-    const { language, toggleLanguage } = useLanguage();
+    const { userToken,settings_domain } = useContext(ContextData);
+    const { language } = useLanguage();
     const { wishList } = useCart();
+   
+    let isStockHere=settings_domain?.data?.multi_stocks_management
+
 
     return (
         <div className="lg:hidden rounded-tr-2xl rounded-tl-2xl bg-Neutral z-[60] flex w-full justify-between items-center fixed bottom-0 h-16">
@@ -72,20 +74,26 @@ function Menu() {
                 </p>
             </NavLink>
             {/* Contact Icon */}
+          {isStockHere ? (
             <Link
                 to={"/"}
                 className="flex flex-col order-2 items-center w-1/5 justify-center hover:cursor-pointer group duration-300 hover:bg-primary h-full"
             >
                 <div className="flex items-center justify-center">
-                    <CgShutterstock
-                        icon={faPhone}
-                        className="text-black group-hover:text-white text-[1.2rem]"
-                    />
+                <CgShutterstock
+                    icon={faPhone}
+                    className="text-black group-hover:text-white text-[1.2rem]"
+                />
                 </div>
                 <p className="text-black text-center text-xs group-hover:text-white">
-                    {language === "ar" ? "المخزن" : "Stock"}
+                {language === "ar" ? "المخزن" : "Stock"}
                 </p>
             </Link>
+            ) : (
+            "" 
+            )}
+
+           
 
             {/* Cart Icon */}
             <div className="flex flex-col order-3 items-center w-1/5 justify-center hover:cursor-pointer group duration-300 bg-primary h-full">

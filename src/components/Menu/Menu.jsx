@@ -11,7 +11,7 @@ import { useCart } from '../../context/CartContext';
 import { CgShutterstock } from "react-icons/cg";
 
 function Menu() {
-    let { userToken ,isLanguage} = useContext(ContextData);
+    let { userToken ,isLanguage,settings_domain} = useContext(ContextData);
     const { language, toggleLanguage } = useLanguage();
     const { wishList } = useCart();
     const [isStock, setIsStock] = useState(false);
@@ -36,7 +36,8 @@ function Menu() {
         fetchdata();
     }, []);
     
-    console.log(isLanguage);
+    let isStockHere=settings_domain?.data?.multi_stocks_management
+    // console.log(isStockHere);
     
     return (
         <div className="hidden lg:flex bg-Neutral h-[95%] fixed z-50 top-4 flex-col items-center mr-4 ml-3">
@@ -110,7 +111,8 @@ function Menu() {
                     </div>
                 </NavLink>
                 <hr className="w-full border-neutral-400 relative bottom-1" />
-                {isStock ? <>
+                {isStockHere && 
+                   isStock ? <>
                     <NavLink
                         to={'/'}
                         className="hover:cursor-pointer my-1 group duration-300 hover:bg-primary w-full p-2 flex flex-col items-center justify-center"
@@ -120,7 +122,9 @@ function Menu() {
                             {language === "ar" ? "المخزن" : "Stock"}
                         </div>
                     </NavLink>
-                </> : ""}
+                </> : ""
+                }
+                
             </div>
 
             {/* Main Icons Section */}
