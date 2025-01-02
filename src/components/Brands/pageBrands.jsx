@@ -26,6 +26,8 @@ export default function PageBrands() {
       <LoadingIndicator/>
     );
   }
+    const defaultImage = "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg";
+
 
   return (
     <div className=" px-6 py-4">
@@ -37,7 +39,7 @@ export default function PageBrands() {
               <div className="w-full h-full flex items-center justify-center p-2">
                 <img
                   className="w-full h-full object-contain"
-                  src={brand.photo}
+                  src={brand.photo || defaultImage}
                   alt={brand.slug}
                   onError={(e) => { e.target.src = "/path/to/placeholder-image.jpg"; }}
                 />

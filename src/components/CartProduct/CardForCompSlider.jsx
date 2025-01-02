@@ -16,7 +16,8 @@ const CardForCompSlider = ({
   const isInWishList = wishList.some(
     (wishItem) => wishItem && wishItem.id === product.id
   );
-    const defaultImage = "https://via.placeholder.com/150"
+  const defaultImage = "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg";
+  const imageSrc = product?.photo ? product?.photo : defaultImage;
 
   return (
     <div key={product.id} className="group ">
@@ -28,7 +29,7 @@ const CardForCompSlider = ({
           {product.photo && (
             <div className="group h-48 overflow-hidden">
               <img
-                src={product?.photo || defaultImage}
+                src={imageSrc}
                 alt={product.name}
                 className="w-full h-full object-contain transform transition-transform duration-300 "
               />

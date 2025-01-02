@@ -11,7 +11,7 @@ export default function Brands() {
   const { getBrands } = useContext(ContextData);
   const { language } = useLanguage();
   const sliderRef = useRef(null);
-  const [filteredBrands, setFilteredBrands] = useState([]);
+  const [brands, setBrands] = useState([]);
   const { data, isLoading, isError } = useQuery({
     queryKey: ["getBrands", language],
     queryFn: () => getBrands(language),
@@ -21,17 +21,13 @@ export default function Brands() {
 
   useEffect(() => {
     if (data?.data?.brands) {
-      const availableBrands = data.data.brands.filter(brand => brand.photo);
-      setFilteredBrands(availableBrands);
+      setBrands(data.data.brands); // عرض جميع البيانات بدون تصفية
     }
   }, [data]);
 
-  if (filteredBrands.length === 0) {
-    return <div>لا توجد علامات تجارية متاحة حالياً.</div>;
-  }
+  const defaultImage = "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg";
 
-  // تحديد عدد الشرائح بناءً على طول filteredBrands
-  const slidesToShow = Math.min(filteredBrands.length, 5); // الحد الأقصى 5 شرائح في العرض الكامل
+  const slidesToShow = Math.min(brands.length, 5); 
 
   const settings = {
     dots: false,
@@ -49,19 +45,19 @@ export default function Brands() {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: Math.min(filteredBrands.length - 1, 4), 
+          slidesToShow: Math.min(brands.length - 1, 4), 
         },
       },
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: Math.min(filteredBrands.length-1, 3), 
+          slidesToShow: Math.min(brands.length - 1, 3), 
         },
       },
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: Math.min(filteredBrands.length-1, 2), 
+          slidesToShow: Math.min(brands.length - 1, 2), 
         },
       },
     ],
@@ -76,15 +72,14 @@ export default function Brands() {
   return (
     <div className="relative px-6 py-4">
       <Slider ref={sliderRef} {...settings}>
-        {filteredBrands.map((brand) => (
+        {brands.map((brand) => (
           <Link to={`/categoryFilter/${brand.id}`} key={brand.id} className="flex items-center justify-center px-2 cursor-pointer" state={{ title: brand.name }}>
             <div className="w-28 h-28 border border-gray-200 rounded-lg overflow-hidden transition-transform duration-300 hover:scale-110 group">
               <div className="w-full h-full flex items-center justify-center p-2">
                 <img
                   className="w-full h-full object-contain"
-                  src={brand.photo}
+                  src={brand.photo || defaultImage} // إذا كانت الصورة غير موجودة، استخدم الصورة الافتراضية
                   alt={brand.slug}
-                  onError={(e) => { e.target.src = "/path/to/placeholder-image.jpg"; }}
                 />
               </div>
             </div>

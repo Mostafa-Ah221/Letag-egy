@@ -14,7 +14,7 @@ export default function Modal({
   currency,
 }) {
   if (!isOpen || !product) return null;
-    const defaultImage = "https://via.placeholder.com/150"
+  const defaultImage = "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg";
 
   return (
     <div

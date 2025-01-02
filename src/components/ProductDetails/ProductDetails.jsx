@@ -124,6 +124,8 @@ console.log(dataReview);
       { breakpoint: 480, settings: { slidesToShow: 1, slidesToScroll: 1 } },
     ],
   };
+    const defaultImage = "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg";
+
   return (
     <div className="flex flex-col items-center mt-5 mb-11">
       {product ? (
@@ -134,7 +136,7 @@ console.log(dataReview);
           <div className="col-span-12 md:col-span-4 w-full h-80 mb-28 md:mb-0">
             <img
               className="w-full h-full object-contain rounded-lg hover:scale-110 transition-transform duration-300"
-              src={selectedImage}
+              src={selectedImage || defaultImage}
               alt={product.title}
             />
             <div

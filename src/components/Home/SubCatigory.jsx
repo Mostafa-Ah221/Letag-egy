@@ -14,7 +14,7 @@ export default function SubCategory() {
   const { language } = useLanguage();
   const sliderRef = useRef(null);
 
-  const defaultImage = "https://via.placeholder.com/150"; // رابط الصورة الافتراضية
+  const defaultImage = "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg";
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['subCategory', language], 

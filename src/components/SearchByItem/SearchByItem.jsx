@@ -73,7 +73,7 @@ const handleAddToCart = (product) => {
 
     fetchData();
   }, [id, data, language, selectedTownId]);
-    const defaultImage = "https://via.placeholder.com/150"
+  const defaultImage = "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg";
 
   return (
     <>

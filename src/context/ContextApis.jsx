@@ -201,19 +201,6 @@ async function getApiHome(language) {
 }
 
 
- useEffect(() => {
-  if (userToken) {
-    getAddressList(userToken,language).then((data) => {
-      if (data && data.data && Array.isArray(data?.data.addresses)) {
-        setAddresses(data?.data?.addresses); 
-      } else {
-        console.error("No addresses found in the response:", data);
-      }
-    }).catch(error => {
-      console.error("Error fetching address list:", error);
-    });
-  } 
-}, [userToken,language]);
   useEffect(() => {
     if (userToken) {
       getAddressList(userToken, language).then((data) => {
