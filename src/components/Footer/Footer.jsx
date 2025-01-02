@@ -48,16 +48,30 @@ export default function Footer() {
               <ul className="flex gap-4 mt-4">
                 {Array.isArray(socials) && socials.length > 0 ? (
                   socials.map((social, index) => (
-                    <li className="w-9 h-9 rounded-full" key={index}>
-                      {social.icon}
+                    <li key={index} className="w-9 h-9 rounded-full">
+                      <a
+                        href={social.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block"
+                      >
+                        {social.image ? (
+                          <img
+                            src={social.image}
+                            alt="Social Icon"
+                            className="w-full h-full object-cover rounded-full hover:opacity-75"
+                          />
+                        ) : (
+                          <i
+                            className={`${social.icon} text-xl text-gray-700 hover:text-primary`}
+                          />
+                        )}
+                      </a>
                     </li>
                   ))
                 ) : (
                   [1, 2, 3, 4].map((_, index) => (
-                    <li
-                      key={index}
-                      className="w-9 h-9 rounded-full bg-gray-300"
-                    ></li>
+                    <li key={index} className="w-9 h-9 rounded-full bg-gray-300"></li>
                   ))
                 )}
               </ul>

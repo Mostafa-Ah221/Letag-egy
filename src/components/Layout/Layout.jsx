@@ -22,8 +22,8 @@ export default function Layout() {
           <MenuMobile/>
         <div className={`col-span-12 lg:col-span-11 flex flex-col w-full lg:px-3 p-0 ${language === "ar" ? " ml-7":"mr-7"}`}>  
           <Navbar/>
-          <SecondMenu/>
-        <div className={` bg-Neutral  container flex-grow `}>
+           <SecondMenu/>
+        <div className={` bg-Neutral  flex-grow `}>
           <Outlet>
           </Outlet>
        </div>

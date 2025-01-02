@@ -4,9 +4,10 @@ import DataHomePlay from "./DataHomePlay";
 import SliderHome from "./SliderHome";
 import SubCatigory from "./SubCatigory";
 import { useLanguage } from "../../context/LanguageContextPro";
+import SecondMenu from "../SecondMenu/SecondMenu";
+import Navbar from "../Navbar/Navbar";
 
 export default function Home() {
-  // تحديد اللغة (مبدئيًا العربية، يمكن تغييرها حسب الحاجة)
   const { language } = useLanguage();
 
 
@@ -18,6 +19,7 @@ export default function Home() {
 
   return (
     <div className="bg-Neutral">
+                
       <SliderHome />
       <SubCatigory />
       <Brands />

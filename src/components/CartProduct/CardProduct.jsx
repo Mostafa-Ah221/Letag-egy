@@ -18,6 +18,7 @@ const ProductCard = ({
     (wishItem) => wishItem && wishItem.id === product.id
   );
   const { language } = useLanguage();
+    const defaultImage = "https://via.placeholder.com/150"
 
   return (
     <div key={product.id} className="group ">
@@ -29,7 +30,7 @@ const ProductCard = ({
           {product.photo && (
             <div className="group h-48 overflow-hidden">
               <img
-                src={product?.photo}
+                src={product?.photo || defaultImage}
                 alt={product.name}
                 className="w-full h-full object-contain transform transition-transform duration-300 "
               />

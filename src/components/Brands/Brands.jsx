@@ -9,13 +9,13 @@ import { useLanguage } from "../../context/LanguageContextPro";
 
 export default function Brands() {
   const { getBrands } = useContext(ContextData);
-     const { language } = useLanguage();
+  const { language } = useLanguage();
   const sliderRef = useRef(null);
   const [filteredBrands, setFilteredBrands] = useState([]);
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["getBrands",language],
-    queryFn:()=> getBrands(language),
-     staleTime: 1000 * 60 * 30,
+    queryKey: ["getBrands", language],
+    queryFn: () => getBrands(language),
+    staleTime: 1000 * 60 * 30,
     cacheTime: 1000 * 60 * 40,
   });
 
@@ -25,16 +25,19 @@ export default function Brands() {
       setFilteredBrands(availableBrands);
     }
   }, [data]);
-  
-if (filteredBrands.length === 0) {
-  return <div>لا توجد علامات تجارية متاحة حالياً.</div>;
-}
+
+  if (filteredBrands.length === 0) {
+    return <div>لا توجد علامات تجارية متاحة حالياً.</div>;
+  }
+
+  // تحديد عدد الشرائح بناءً على طول filteredBrands
+  const slidesToShow = Math.min(filteredBrands.length, 5); // الحد الأقصى 5 شرائح في العرض الكامل
 
   const settings = {
     dots: false,
     infinite: true,
     speed: 4000,
-    slidesToShow: 9,
+    slidesToShow: slidesToShow, // استخدام عدد الشرائح المحسوب
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 0,
@@ -46,25 +49,24 @@ if (filteredBrands.length === 0) {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 4,
+          slidesToShow: Math.min(filteredBrands.length - 1, 4), 
         },
       },
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 6,
+          slidesToShow: Math.min(filteredBrands.length-1, 3), 
         },
       },
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: Math.min(filteredBrands.length-1, 2), 
         },
       },
-      
     ],
     afterChange: (currentSlide) => {
-      sliderRef.current.slickGoTo(currentSlide); 
+      sliderRef.current.slickGoTo(currentSlide);
     },
   };
 

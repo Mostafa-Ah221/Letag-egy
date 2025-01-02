@@ -73,6 +73,7 @@ const handleAddToCart = (product) => {
 
     fetchData();
   }, [id, data, language, selectedTownId]);
+    const defaultImage = "https://via.placeholder.com/150"
 
   return (
     <>
@@ -86,7 +87,7 @@ const handleAddToCart = (product) => {
                 {category.photo && (
                   <div className="group h-40 overflow-hidden bg-white">
                     <img
-                      src={category.photo}
+                      src={category.photo || defaultImage}
                       alt={category.name}
                       className="w-full h-full object-contain transform transition-transform duration-300 "
                     />

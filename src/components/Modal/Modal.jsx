@@ -14,6 +14,7 @@ export default function Modal({
   currency,
 }) {
   if (!isOpen || !product) return null;
+    const defaultImage = "https://via.placeholder.com/150"
 
   return (
     <div
@@ -36,7 +37,7 @@ export default function Modal({
         <div className="mt-2 flex gap-1 flex-col md:flex-row-reverse">
           {/* صورة المنتج */}
           <img
-            src={product.photo}
+            src={product.photo || defaultImage}
             alt={product.title}
             className="md:w-4/5 md:h-64 w-3/5 h-36 m-auto object-contain rounded-md mt-4"
           />

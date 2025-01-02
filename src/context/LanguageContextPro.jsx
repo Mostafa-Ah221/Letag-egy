@@ -14,7 +14,6 @@ export const LanguageContextPro = ({ children }) => {
     setLanguage((prevLang) => (prevLang === "ar" ? "en" : "ar"));
   };
 
-  // تحديث Axios headers + سمة "lang" في <html> عند تغيير اللغة
   useEffect(() => {
     axios.defaults.headers.common["lang"] = language; // تحديث Axios
     document.documentElement.setAttribute("lang", language); // تحديث سمة "lang"

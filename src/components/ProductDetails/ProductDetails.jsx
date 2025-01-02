@@ -39,6 +39,7 @@ export default function ProductDetails() {
     queryFn: () => getReviews(id),
     enabled: !!id,
   });
+console.log(reviews);
 
  useEffect(() => {
   if (reviews?.data?.reviews) {
@@ -127,144 +128,157 @@ console.log(dataReview);
     <div className="flex flex-col items-center mt-5 mb-11">
       {product ? (
         <>
-          <div className="flex flex-col-reverse md:flex-row-reverse md:items-start gap-6 mb-44">
-            <div className="p-4 text-right flex-1">
-              <h2 className="text-xl md:text-3xl font-bold mb-2">{product.title}</h2>
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-2xl font-bold text-primary">
-                  {product.price} {currencyData}
-                </span>
-                <span className="text-gray-400">
-                 {language === 'ar' ? 'الكمية' : 'Quantity'}: {product.stock_qty}
-                </span>
-              </div>
-              <div className="flex items-center justify-between mb-5 gap-2">
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const isInWishList = wishList.some(
-                      (wishItem) => wishItem && wishItem.id === product.id
-                    );
-                    handleAddToWish(product, isInWishList, () => {});
-                  }}
-                  className="z-20"
-                >
-                  {wishList.some(
-                    (wishItem) => wishItem && wishItem.id === product.id
-                  ) ? (
-                    <IoIosHeart className="text-primary text-[2.5rem]" />
-                  ) : (
-                    <CiHeart className="text-primary text-5xl" />
-                  )}
-                </button>
-                <button
-                  onClick={() => handleAddToCart(product)}
-                  className="px-4 bg-primary w-36 text-white font-bold py-2 rounded "
-                >
-                  
-                  {language === 'ar' ? 'أضف إلى العربة' : 'Add To Cart'}
-                </button>
-                 <div className="flex border">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="bg-gray-200 px-2  text-lg font-bold  hover:bg-gray-300"
-                  >
-                    -
-                  </button>
-                  <span className="px-6 text-[1rem] ">
-                    {quantity}
-                  </span>
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="bg-gray-200 px-2 text-lg font-bold  hover:bg-gray-300"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-              <hr />
-              <div className='flex justify-between items-center'>
-                <h3 className="mb-4 font-semibold mt-2"> {language === 'ar' ? 'الفئة' : 'Category'}:</h3>
-                <p className="text-slate-700">
-                  {product?.category?.map((category) => (
-                    <span key={category.id} className="text-slate-600">
-                      {category.name}
-                    </span>
-                  ))}
-                </p>
-              </div>
-              <div className='flex justify-between items-center'>
-                <h3 className="mb-4 font-semibold mt-2">
-                  {language === 'ar' ? 'التقييم' : 'Review'}:
-                </h3>
-                <div className='flex items-center gap-2'>
-                    <ul className="rate flex gap-1">
-                      {[1, 2, 3, 4, 5].map((star) => {
-                        const decimalPart = averageRating - Math.floor(averageRating); 
-                        if (star <= Math.floor(averageRating)) {
-                          return (
-                            <li key={star} className="text-orange-500 ">
-                              <FaStar />
-                            </li>
-                          );
-                        } else if (star === Math.ceil(averageRating) && decimalPart > 0) {
-                          return (
-                            <li
-                              key={star}
-                              className="relative"
-                              style={{ width: "0.9rem", height: "0.9rem" }}
-                            >
-                              <FaStar className="text-slate-200  absolute inset-0" />
-                              <FaStar
-                                className="text-orange-500 absolute inset-0 overflow-hidden"
-                                style={{ clipPath: `${language === "ar" ? `inset(0 0 0 ${100 - decimalPart * 100}%)`:`inset(0 ${100 - decimalPart * 100}% 0 0)`} ` }} 
-                              />
-                            </li>
-                          );
-                        } else {
-                          return (
-                            <li key={star} className="text-slate-200">
-                              <FaStar />
-                            </li>
-                          );
-                        }
-                      })}
-                    </ul>
-                    <p className='text-[0.9rem]'>({averageRating.toFixed(1)})</p>
-                </div>
-              </div>
-              {/* Product Description */}
-              {activeModal === 'Description' &&(
-                 <div >
-                <h3 className="mb-4 font-semibold mt-2">
-                  {language === 'ar' ? 'وصف المنتج' : 'Product Description'}:
-                </h3>
-                <p>{language === 'ar'? product.description.content_ar: product.description.content_en}</p>
-              </div>
-              )}
-             
-            </div>
+          <div className="grid grid-cols-12 gap-6 mb-16">
 
-            <div className='w-full md:w-1/2 h-80 mb-28 md:mb-0'>
-           <img 
-                className="w-full h-full object-contain rounded-lg hover:scale-110 transition-transform duration-300" 
-              src={selectedImage} 
-              alt={product.title} 
+           {/* Product Image Section */}
+          <div className="col-span-12 md:col-span-4 w-full h-80 mb-28 md:mb-0">
+            <img
+              className="w-full h-full object-contain rounded-lg hover:scale-110 transition-transform duration-300"
+              src={selectedImage}
+              alt={product.title}
             />
-              <div className={`flex rounded-md mt-2 border-2 border-primary md:mx-0 ml-5  w-fit ${language === "ar"? "mr-auto":"ml-auto"}`}>
+            <div
+              className={`flex rounded-md mt-2 border-2 border-primary md:mx-0 ml-5 w-fit ${
+                language === 'ar' ? 'mr-auto' : 'ml-auto'
+              }`}
+            >
               {product.photos.map((photo, index) => (
-                  <img key={index} 
-                  className="w-[4.5rem] h-[4.5rem] object-cover cursor-pointer"
+                <img
+                  key={index}
+                  className="w-[4.5rem] h-[4.5rem] object-cover m-1 cursor-pointer"
                   src={photo.url}
                   alt={product.title}
                   onClick={() => setSelectedImage(photo.url)}
                 />
               ))}
+            </div>
+          </div>
+
+  {/* Product Details Section */}
+          <div className="p-4 col-span-12 md:col-span-8">
+            <h2 className="text-xl md:text-3xl font-bold mb-2">{product.title}</h2>
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-2xl font-bold text-primary">
+                {product.price} {currencyData}
+              </span>
+              <span className="text-gray-400">
+                {language === 'ar' ? 'الكمية' : 'Quantity'}: {product.stock_qty}
+              </span>
+            </div>
+            <div className="flex items-center justify-around mb-5 gap-2">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  const isInWishList = wishList.some(
+                    (wishItem) => wishItem && wishItem.id === product.id
+                  );
+                  handleAddToWish(product, isInWishList, () => {});
+                }}
+                className="z-20"
+              >
+                {wishList.some(
+                  (wishItem) => wishItem && wishItem.id === product.id
+                ) ? (
+                  <IoIosHeart className="text-primary text-[2.5rem]" />
+                ) : (
+                  <CiHeart className="text-primary text-5xl" />
+                )}
+              </button>
+              <button
+                onClick={() => handleAddToCart(product)}
+                className="px-4 bg-primary w-36 text-white font-bold py-2 rounded "
+              >
+                {language === 'ar' ? 'أضف إلى العربة' : 'Add To Cart'}
+              </button>
+              <div className="flex border">
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="bg-gray-200 px-2 text-lg font-bold hover:bg-gray-300"
+                >
+                  -
+                </button>
+                <span className="px-6 text-[1rem] ">{quantity}</span>
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="bg-gray-200 px-2 text-lg font-bold hover:bg-gray-300"
+                >
+                  +
+                </button>
               </div>
             </div>
-
-            
+            <hr />
+            <div className="flex justify-between items-center">
+              <h3 className="mb-4 font-semibold mt-2">
+                {language === 'ar' ? 'الفئة' : 'Category'}:
+              </h3>
+              <p className="text-slate-700">
+                {product?.category?.map((category) => (
+                  <span key={category.id} className="text-slate-600">
+                    {category.name}
+                  </span>
+                ))}
+              </p>
+            </div>
+            <div className="flex justify-between items-center">
+              <h3 className="mb-4 font-semibold mt-2">
+                {language === 'ar' ? 'التقييم' : 'Review'}:
+              </h3>
+              <div className="flex items-center gap-2">
+                <ul className="rate flex gap-1">
+                  {[1, 2, 3, 4, 5].map((star) => {
+                    const decimalPart = averageRating - Math.floor(averageRating);
+                    if (star <= Math.floor(averageRating)) {
+                      return (
+                        <li key={star} className="text-orange-500 ">
+                          <FaStar />
+                        </li>
+                      );
+                    } else if (star === Math.ceil(averageRating) && decimalPart > 0) {
+                      return (
+                        <li
+                          key={star}
+                          className="relative"
+                          style={{ width: '0.9rem', height: '0.9rem' }}
+                        >
+                          <FaStar className="text-slate-200 absolute inset-0" />
+                          <FaStar
+                            className="text-orange-500 absolute inset-0 overflow-hidden"
+                            style={{
+                              clipPath: `${
+                                language === 'ar'
+                                  ? `inset(0 0 0 ${100 - decimalPart * 100}%)`
+                                  : `inset(0 ${100 - decimalPart * 100}% 0 0)`
+                              }`,
+                            }}
+                          />
+                        </li>
+                      );
+                    } else {
+                      return (
+                        <li key={star} className="text-slate-200">
+                          <FaStar />
+                        </li>
+                      );
+                    }
+                  })}
+                </ul>
+                <p className="text-[0.9rem]">({averageRating.toFixed(1)})</p>
+              </div>
+            </div>
+            {/* Product Description */}
+            {activeModal === 'Description' && (
+              <div>
+                <h3 className="mb-4 font-semibold mt-2">
+                  {language === 'ar' ? 'وصف المنتج' : 'Product Description'}:
+                </h3>
+                <p>{language === 'ar' ? product.description.content_ar : product.description.content_en}</p>
+              </div>
+            )}
           </div>
+
+        </div>
+
+        
 
           {/* Review Section */}
        
@@ -272,7 +286,7 @@ console.log(dataReview);
       ) : (
         <p>المنتج غير موجود.</p>
       )}
-      <div className=' flex md:flex-row justify-evenly gap-7 flex-col'>
+      <div className=' flex md:flex-row justify-evenly gap-7 flex-col mb-7'>
         <div className='w-64 flex flex-col'>
           <button
             onClick={() => openModal('reviewForm')}
@@ -282,7 +296,7 @@ console.log(dataReview);
           </button>
           <span className="inline-block w-full h-[1px]  bg-primary"></span>
         </div>
-        <div className='w-64 flex flex-col'>
+        {/* <div className='w-64 flex flex-col'>
           <button
             onClick={() => openModal('reviewList')}
             className="px-4 py-2 rounded hover:bg-primary hover:text-white duration-200"
@@ -290,7 +304,7 @@ console.log(dataReview);
             {language === 'ar' ? 'عرض التقييمات' : 'View Reviews'}
           </button>
           <span className="inline-block w-full h-[1px] bg-primary"></span>
-        </div>
+        </div> */}
         <div className='w-64 flex flex-col'>
           <button
             onClick={() => openModal('Description')}
@@ -301,6 +315,51 @@ console.log(dataReview);
           <span className="inline-block w-full h-[1px] bg-primary"></span>
         </div>
       </div>
+             
+        {dataReview && dataReview.length > 0 ? (
+          <>
+            <h3 className="mb-4 font-semibold mt-2 text-lg">
+              {language === 'ar' ? 'التقييمات' : 'Reviews'} 
+              <span className="text-gray-500 ">({dataReview.length})</span>
+            </h3>
+            <div className="h-60 w-[70%] space-y-3 overflow-auto">
+              {dataReview.map((review) => (
+                <div 
+                  key={review.id} 
+                  className="p-4 flex flex-col sm:flex-row sm:justify-between gap-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200"
+                >
+                  <div className="">
+                    <div className=''>
+                      <h4 className="font-semibold text-gray-800">{review.name}</h4>
+                      <p className="text-gray-600 ">{review.comment}</p>
+                    </div>
+                   <span className="text-sm  text-gray-500">
+                      {review.created_at}
+                    </span>
+                  </div>
+                    
+                  
+                  <ul className="rate flex gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <li
+                        key={i}
+                        className={i < review.rating ? "text-orange-500" : "text-gray-300"}
+                      >
+                        <FaStar />
+                      </li>
+                    ))}
+                  </ul>
+                  
+                </div>
+              ))}
+            </div>
+            
+          </>
+        ) : (
+          <div className="text-center text-gray-500 mt-4 h-14 flex items-center justify-center">
+            {language === "ar" ? "لا توجد تقييمات بعد" : "No reviews yet"}
+          </div>
+        )}
 
       {activeModal === 'reviewForm' && (
         <div className="fixed inset-0  bg-black bg-opacity-50 z-50 flex items-center justify-center"
@@ -322,7 +381,7 @@ console.log(dataReview);
         </div>
       )}
 
-      {activeModal === 'reviewList' && (
+      {/* {activeModal === 'reviewList' && (
         <div className="fixed inset-0  bg-black bg-opacity-50 z-50 flex items-center justify-center"
           onClick={closeModal}>
           <div className="bg-white rounded-lg p-6 w-full mx-5 max-w-md relative"
@@ -336,7 +395,7 @@ console.log(dataReview);
             </button>
           </div>
         </div>
-      )}
+      )} */}
       {/* Related Products Section */}
       <div className="w-full mt-8">
         <h3 className=" text-2xl font-semibold mb-4 px-4"> {language === 'ar' ? 'منتجات ذات صلة' : 'Related Products'}</h3>

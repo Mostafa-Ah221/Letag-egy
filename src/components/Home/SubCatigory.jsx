@@ -14,6 +14,8 @@ export default function SubCategory() {
   const { language } = useLanguage();
   const sliderRef = useRef(null);
 
+  const defaultImage = "https://via.placeholder.com/150"; // رابط الصورة الافتراضية
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ['subCategory', language], 
     queryFn: () => subCategories(language),
@@ -23,8 +25,7 @@ export default function SubCategory() {
 
   useEffect(() => {
     if (data?.data.categories) {
-      const availableCategor = data?.data.categories.filter(category => category.photo);
-      setFilteredCategory(availableCategor);
+      setFilteredCategory(data.data.categories);
     }
   }, [data, language]); 
 
@@ -58,8 +59,8 @@ export default function SubCategory() {
     dots: false,
     infinite: true,
     speed: 500, 
-    slidesToShow: 8,
-    slidesToScroll: 2,
+    slidesToShow: Math.min(filteredCategory.length, 8),
+    slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000, 
     cssEase: 'ease',  
@@ -70,22 +71,22 @@ export default function SubCategory() {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 6,
+          slidesToShow: Math.min(filteredCategory.length, 6),
           slidesToScroll: 1,
         }
       },
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 5,
-          slidesToScroll: 3,
+          slidesToShow: Math.min(filteredCategory.length, 5),
+          slidesToScroll: 1,
         }
       },
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 3,
-          slidesToScroll: 2,
+          slidesToShow: Math.min(filteredCategory.length, 3),
+          slidesToScroll: 1,
         }
       }
     ]
@@ -103,32 +104,33 @@ export default function SubCategory() {
 
   return (
     <div>
-        <div className="relative py-7 mb-7">
-      <h2 className=' pb-4 text-xl text-secondary px-2'>{language === "ar"? "الفئات الرئيسية ": "Main Categories"}</h2>
-      <Slider ref={sliderRef} {...settings}>
-        {filteredCategory.map((category, index) => (
-          <div key={index} className='group px-2 cursor-pointer'>
-            <Link to={`/categoryDetails/${category.id}`}>
-              <div className='overflow-hidden rounded-lg bg-Neutral shadow-sm hover:shadow-md transition-all duration-300'>
-                <img 
-                  className='h-16 w-full object-contain transform transition-all duration-300 group-hover:scale-110' 
-                  src={category.photo} 
-                  alt={category.name} 
-                  loading="lazy"
-                />
-                <h3 className='text-center py-2 text-sm font-medium text-secondary group-hover:text-primary transition-all duration-300'>
-                  {category.name.split(" ").slice(0,2).join(' ')}
-                </h3>
-              </div>
-            </Link>
-          </div>
-        ))}
-      </Slider>
-      <PrevArrow />
-      <NextArrow />
+      <div className="relative py-7 mb-7">
+        <h2 className='pb-4 text-xl text-secondary px-2'>
+          {language === "ar" ? "الفئات الرئيسية" : "Main Categories"}
+        </h2>
+        <Slider ref={sliderRef} {...settings}>
+          {filteredCategory.map((category, index) => (
+            <div key={index} className='group px-2 cursor-pointer'>
+              <Link to={`/categoryDetails/${category.id}`}>
+                <div className='overflow-hidden rounded-lg bg-Neutral shadow-sm hover:shadow-md transition-all duration-300'>
+                  <img 
+                    className='h-20 w-full object-contain transform transition-all duration-300 group-hover:scale-110' 
+                    src={category.photo || defaultImage} 
+                    alt={category.slug} 
+                    loading="lazy"
+                  />
+                  <h3 className='text-center py-2 text-sm font-medium text-secondary group-hover:text-primary transition-all duration-300'>
+                    {category.slug.split(" ").slice(0, 2).join(' ')}
+                  </h3>
+                </div>
+              </Link>
+            </div>
+          ))}
+        </Slider>
+        <PrevArrow />
+        <NextArrow />
+      </div>
+      <Offers />
     </div>
-    <Offers />
-    </div>
-   
   );
 }

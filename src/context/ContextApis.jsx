@@ -55,10 +55,10 @@ async function getBrands(language) {
 
 
 async function getOffers(language) {
-  const response = await axios.get(`https://demo.leetag.com/api/offers`, {
+  const response = await axios.get(`https://tarshulah.com/api/offers`, {
     headers: { lang: language },
   });
-  console.log(response.data);
+  // console.log(response.data);
 
   return response.data;
 }
@@ -87,7 +87,7 @@ async function getOrderDetails(id, language, token) {
 }
 
 async function getSlider(language) {
-  const response = await axios.get(`http://demo.leetag.com/api/sliders`, {
+  const response = await axios.get(`https://tarshulah.com/api/sliders`, {
     headers: { lang: language },
   });
   return response.data;
@@ -194,10 +194,12 @@ export default function DataContextProvider({ children }) {
   }
 async function getApiHome(language) {
   const response = await axios.get(`https://tarshulah.com/api/home`, {
-    params: { lang: language, city_id: selectedTownId },
+    params: { city_id: selectedTownId }, 
+    headers: { lang: language }, 
   });
   return response.data;
 }
+
 
  useEffect(() => {
   if (userToken) {
@@ -233,8 +235,9 @@ async function getApiHome(language) {
   let settings_domain = settings;
   let colorWebSite = settings_domain?.data.theme_color;
   let nameWebSite = settings_domain?.data.shop_name;
+  let isLanguage = settings_domain?.data?.languages.english;
   // let logoWebSite = settings_domain?.data.logo;
-  // console.log(nameWebSite);
+  // console.log(isLanguage.length);
 
   // =================================Web Site Color=======================================
   useEffect(() => {
@@ -332,8 +335,8 @@ async function getApiHome(language) {
         nameWebSite,
         getAddressList,
         setAddresses,
-        addresses
-
+        addresses,
+        isLanguage
       }}
     >
       {children}

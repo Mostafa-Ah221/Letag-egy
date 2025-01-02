@@ -32,19 +32,19 @@ const sliderSettings = {
   slidesToScroll: 1,
   nextArrow: <NextArrow />,
   prevArrow: <PrevArrow />,
-  rtl: true, 
+  rtl: true,
   responsive: [
     {
-      breakpoint: 1024, 
+      breakpoint: 1024,
       settings: {
-        slidesToShow: 2, 
+        slidesToShow: 2,
         slidesToScroll: 1,
       },
     },
     {
-      breakpoint: 640, 
+      breakpoint: 640,
       settings: {
-        slidesToShow: 1, 
+        slidesToShow: 1,
         slidesToScroll: 1,
       },
     },
@@ -53,29 +53,32 @@ const sliderSettings = {
 
 export default function Offers() {
   const { getOffers } = useContext(ContextData);
-  
+
   const { data: offers } = useQuery({
-    queryKey: ['getOffers'],
+    queryKey: ["getOffers"],
     queryFn: getOffers,
     staleTime: 1000 * 60 * 30,
     cacheTime: 1000 * 60 * 40,
   });
 
   const isExternalLink = (url) => {
-    // تحقق ما إذا كان الرابط يبدأ بـ http:// أو https://
     return /^https?:\/\//.test(url);
   };
+
+  if (!offers || !offers.data || !offers.data.offer_ads || offers.data.offer_ads.length === 0) {
+    return null; 
+  }
 
   return (
     <div className="relative px-8 mb-3">
       <Slider {...sliderSettings}>
-        {offers?.data.offer_ads.map((offer) => (
-          <div key={offer.id} className="px-2"> 
+        {offers.data.offer_ads.map((offer) => (
+          <div key={offer.id} className="px-2">
             {isExternalLink(offer.link) ? (
               <a
                 href={offer.link}
-                target="_blank" // يفتح الرابط في نافذة جديدة
-                rel="noopener noreferrer" // لأمان إضافي
+                target="_blank" 
+                rel="noopener noreferrer" 
               >
                 <img
                   src={offer.photo}
@@ -88,7 +91,7 @@ export default function Offers() {
                 <img
                   src={offer.photo}
                   alt="offers"
-                  className="w-full md:h-40 h-full md:object-cover object-contain rounded-md"
+                  className="w-full h-full object-contain rounded-md"
                 />
               </Link>
             )}

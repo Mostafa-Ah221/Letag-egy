@@ -11,7 +11,7 @@ import { useCart } from '../../context/CartContext';
 import { CgShutterstock } from "react-icons/cg";
 
 function Menu() {
-    let { userToken, setUserToken } = useContext(ContextData);
+    let { userToken ,isLanguage} = useContext(ContextData);
     const { language, toggleLanguage } = useLanguage();
     const { wishList } = useCart();
     const [isStock, setIsStock] = useState(false);
@@ -35,6 +35,9 @@ function Menu() {
         };
         fetchdata();
     }, []);
+    
+    console.log(isLanguage);
+    
     return (
         <div className="hidden lg:flex bg-Neutral h-[95%] fixed z-50 top-4 flex-col items-center mr-4 ml-3">
             {/* Cart Icon */}
@@ -138,7 +141,8 @@ function Menu() {
                 <hr className="w-full border-neutral-400" />
 
                 {/* Language Icon */}
-                <div
+                {/* {isLanguage &&  */}
+                 <div
                     className="mt-2 group hover:cursor-pointer hover:bg-primary w-full p-2"
                     onClick={toggleLanguage}
                 >
@@ -153,6 +157,9 @@ function Menu() {
                         {language === "ar" ? "EN" : "AR"}
                     </p>
                 </div>
+                {/* } */}
+               
+               
 
                 <hr className="w-full border-neutral-400" />
 
