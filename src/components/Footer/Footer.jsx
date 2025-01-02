@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ContextData } from "../../context/ContextApis";
 import { useQuery } from "@tanstack/react-query";
@@ -23,6 +23,16 @@ export default function Footer() {
   for (let i = 0; i < menuItems.length; i += itemsPerColumn) {
     columns.push(menuItems.slice(i, i + itemsPerColumn));
   }
+
+  useEffect(() => {
+  if (logo) {
+    const link = document.createElement("link");
+    link.rel = "icon";
+    link.type = "image/png"; 
+    link.href = logo; 
+    document.head.appendChild(link); 
+  }
+}, [logo]);
 
   return (
     <>

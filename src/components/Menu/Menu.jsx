@@ -37,7 +37,8 @@ function Menu() {
     }, []);
     
     let isStockHere=settings_domain?.data?.multi_stocks_management
-    // console.log(isStockHere);
+    let phone=settings_domain?.data.whatsapp.phone_number
+    console.log(phone);
     
     return (
         <div className="hidden lg:flex bg-Neutral h-[95%] fixed z-50 top-4 flex-col items-center mr-4 ml-3">
@@ -180,11 +181,14 @@ function Menu() {
                     </p>
 
                     {/* Phone Number Popup */}
+                    {phone && 
+                      <p className=' opacity-0 group-hover:opacity-100 transition-opacity absolute right-[4.5rem] top-0 bg-primary py-[0.9rem] z-30 text-white px-1 duration-300'>{phone}</p>
+                    }
                     
                 </div>
             </div>
-        </div>
+        </div> 
     );
 }
 
-export default Menu;
+export default Menu

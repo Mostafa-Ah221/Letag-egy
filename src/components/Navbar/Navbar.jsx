@@ -27,13 +27,7 @@ export default function Navbar() {
   const [searchData2, setSearchData2] = useState(null);
   const [query, setQuery] = useState("");
   const resultsRef = useRef(null);
-  let location = useLocation();
-  // const [query2, setQuery2] = useState("");
-
-
-  // let filteredSuggestions = [];
-  // let filteredSuggestionsProducts = [];
-
+ 
   const logo = settings_domain?.data.logo
   // console.log(logo);
 
@@ -121,17 +115,14 @@ const handleOpenMenu = () => {
 };
 const handleClickOutside = (event) => {
     if (resultsRef.current && !resultsRef.current.contains(event.target)) {
-      // إذا النقر خارج النتائج، قم بإخفائها
       setSearchData(null);
       setSearchData2(null);
       setQuery("");
     }
   };
     useEffect(() => {
-    // أضف مستمع للنقر
     document.addEventListener("click", handleClickOutside);
     return () => {
-      // قم بإزالة المستمع عند إلغاء تثبيت المكون
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
