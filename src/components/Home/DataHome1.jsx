@@ -49,7 +49,7 @@ export default function DataHome({ sectionName }) {
   const { data: sliderData, isLoading: isSliderLoading } = useQuery({
     queryKey: ['getSliderImages'],
     queryFn: async () => {
-      const response = await fetch("http://demo.leetag.com/api/sliders");
+      const response = await fetch("https://tarshulah.com/api/sliders");
       return response.json();
     },
     staleTime: 1000 * 60 * 15,
