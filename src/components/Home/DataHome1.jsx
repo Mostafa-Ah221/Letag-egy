@@ -94,8 +94,8 @@ const trendingSection = homeData && homeData.data && homeData.data.sections
   };
 
   return (
-    <div className="relative">
-      <h2 className={`text-2xl font-semibold my-7 `}>
+    <div className="relative ">
+      <h2 className={`text-2xl font-semibold my-7 px-2`}>
         {trendingSection?.name}
       </h2>
       <div className="relative">
@@ -140,13 +140,13 @@ const trendingSection = homeData && homeData.data && homeData.data.sections
         {sliderData && sectionName === sections.trending && homeData?.data?.sliders?.[1]?.photo ? (
           <img
             src={homeData.data.sliders[1]?.photo}
-            className="w-[100%] md:h-[25rem] h-full md:object-cover object-contain rounded-lg shadow-lg"
+            className="w-[100%] md:h-[28rem] h-full md:object-cover object-contain rounded-lg shadow-lg"
             alt="Slider Image"
           />
         ) : sectionName === sections.bestSelling && sliderData?.data?.sliders?.[0]?.photo ? (
           <img
             src={sliderData.data.sliders[0]?.photo}
-            className="w-[95%] md:h-[25rem] h-full md:object-cover object-contain rounded-lg shadow-lg"
+            className="w-[95%] md:h-[28rem] h-full md:object-cover object-contain rounded-lg shadow-lg"
             alt="Slider Image"
           />
         ) : null}
