@@ -75,8 +75,9 @@ export default function DataHome({ sectionName }) {
   }
   if (isError) return <p>Error occurred while fetching data.</p>;
 
-  const trendingSection = homeData?.data?.sections?.find(section => section.name === sectionName);
-
+const trendingSection = homeData && homeData.data && homeData.data.sections
+  ? homeData.data.sections.find(section => section.name === sectionName)
+  : null;
   const settings = {
     dots: false,
     infinite: true,
