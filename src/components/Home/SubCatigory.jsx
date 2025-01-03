@@ -116,12 +116,13 @@ export default function SubCategory() {
                   <img 
                     className='h-20 w-full object-contain transform transition-all duration-300 group-hover:scale-110' 
                     src={category.photo || defaultImage} 
-                    alt={category.slug} 
+                    alt={category.name} 
                     loading="lazy"
                   />
                   <h3 className='text-center py-2 text-sm font-medium text-secondary group-hover:text-primary transition-all duration-300'>
-                    {category.slug.split(" ").slice(0, 2).join(' ')}
+                    {category.name.split(" ").slice(0, 2).join(' ')}
                   </h3>
+          
                 </div>
               </Link>
             </div>
