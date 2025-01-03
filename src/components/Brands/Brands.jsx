@@ -30,41 +30,39 @@ export default function Brands() {
   const slidesToShow = Math.min(brands.length, 5); 
 
   const settings = {
-    dots: false,
-    infinite: true,
-    speed: 4000,
-    slidesToShow: slidesToShow, // استخدام عدد الشرائح المحسوب
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 0,
-    cssEase: "linear",
-    pauseOnHover: true,
-    draggable: true,
-    swipe: true,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: Math.min(brands.length - 1, 4), 
-        },
+  dots: false,
+  infinite: true,
+  speed: 4000, 
+  slidesToShow: slidesToShow,
+  slidesToScroll: 1, 
+  autoplay: true, 
+  autoplaySpeed: 0, 
+  cssEase: "ease-in-out", 
+  pauseOnHover: true, 
+  draggable: true,
+  swipe: true,
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: Math.min(brands.length - 1, 4),
       },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: Math.min(brands.length - 1, 3), 
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: Math.min(brands.length - 1, 2), 
-        },
-      },
-    ],
-    afterChange: (currentSlide) => {
-      sliderRef.current.slickGoTo(currentSlide);
     },
-  };
+    {
+      breakpoint: 768,
+      settings: {
+        slidesToShow: Math.min(brands.length - 1, 3),
+      },
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        slidesToShow: Math.min(brands.length - 1, 2),
+      },
+    },
+  ],
+};
+
 
   if (isLoading) return <div>جارٍ التحميل...</div>;
   if (isError) return <div>حدث خطأ أثناء جلب البيانات.</div>;
