@@ -113,52 +113,55 @@ function SecondMenu() {
                     </div>
                 </div>
 
-                <div className={`${isOpen ? "block" : "hidden"} bg-black bg-opacity-50 w-full h-full fixed z-20 overflow-auto`}>
-                    <div className={`h-[100vh] bg-white flex ${language === "ar" ? "flex-row" : "flex-row mx-auto"} w-5/6 rounded-md relative z-10 mt-5 ${
-                        language === "ar" ? "right-5" : "-left-20"
-                    } border-2 border-primary`}>
-                        <div className="flex flex-col bg-white">
-                            {categories.map((category) => (
-                                <div 
-                                    key={category.id} 
-                                    className="flex gap-2 bg-white group hover:cursor-pointer w-60 relative z-50" 
-                                    onClick={() => handleClick(category.name)}
-                                >
-                                    <img 
-                                        src={category.photo || defaultImage} 
-                                        alt={category.name} 
-                                        className="w-10 m-1" 
-                                    />
-                                    <p className="hover:text-primary my-2">{category.name}</p>
+                <div className={`${isOpen ? "block" : "hidden"} bg-black bg-opacity-50 w-full h-full fixed z-20 overflow-hidden`}>
+                <div className={`h-[90vh] bg-white flex ${language === "ar" ? "flex-row" : "flex-row mx-auto"} w-5/6 rounded-lg relative z-10 my-5 ${
+                    language === "ar" ? "right-5" : "-left-20"
+                } border-2 border-primary shadow-2xl`}>
+                    <div className="flex flex-col bg-white p-4 overflow-y-auto max-h-[90vh] scrollbar-thin scrollbar-thumb-gray-300 hover:scrollbar-thumb-gray-400">
+                        {categories.map((category) => (
+                            <div 
+                                key={category.id} 
+                                className="flex gap-3 bg-white group hover:bg-gray-50 hover:cursor-pointer p-3 rounded-md transition-all duration-200" 
+                                onClick={() => handleClick(category.name)}
+                            >
+                                <img 
+                                    src={category.photo || defaultImage} 
+                                    alt={category.name} 
+                                    className="w-12 h-12 object-cover rounded-md" 
+                                />
+                                <p className="hover:text-primary my-auto font-medium">{category.name}</p>
+                            </div>
+                        ))}
+                    </div>
+                    
+                    <div className="h-auto w-0.5 bg-gray-200 mx-6"></div>
+                    
+                    <div className="flex flex-col p-4 overflow-y-auto max-h-[90vh]">
+                        {childrenCat.map((child) => (
+                            <Link 
+                                to={`/categoryDetails/${child.id}`}
+                                onClick={() => { 
+                                    setSelectedCategoryId(child.id)
+                                    setIsOpen(false)
+                                }}
+                                key={child.id}
+                            >
+                                <div className="hover:bg-gray-50 p-3 rounded-md transition-all duration-200">
+                                    <p className="text-gray-700 hover:text-primary">
+                                        {child.name}
+                                    </p>
                                 </div>
-                            ))}
-                        </div>
-                        <div className="h-50px w-0.5 opacity-40 bg-black mx-4 border-l-2"></div>
-                        <div className="flex flex-col">
-                            {childrenCat.map((child) => (
-                                <Link 
-                                    to={`/categoryDetails/${child.id}`}
-                                    onClick={() => { 
-                                        setSelectedCategoryId(child.id)
-                                        setIsOpen(false)
-                                    }}
-                                    key={child.id}
-                                >
-                                    <div className="flex bg-white group hover:cursor-pointer w-60 z-50">
-                                        <p className="text-black group-hover:text-primary my-2">
-                                            {child.name}
-                                        </p>
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
-                        <div className={`w-60 h-60 mt-2 ${
-                            language === "ar" ? "absolute left-0 ml-48" : "absolute right-0 mr-48"
-                        }`}>
-                            <img src={image} alt="Selected category" />
-                        </div>
+                            </Link>
+                        ))}
+                    </div>
+
+                    <div className={`w-72 h-72 mt-4 p-4 ${
+                        language === "ar" ? "absolute left-11 " : "absolute right-11 "
+                    }`}>
+                        <img src={image} alt="Selected category" className="w-full h-full object-cover rounded-lg shadow-lg" />
                     </div>
                 </div>
+            </div>
             </div>
         </>
     )

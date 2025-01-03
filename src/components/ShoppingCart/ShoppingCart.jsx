@@ -76,20 +76,20 @@ export default function ShoppingCart() {
             </button>
           </div>
 
-          {cart.length > 0 && productsData ? (
+          {cart?.length > 0 && productsData ? (
             <div className="space-y-4 h-72 overflow-auto">
-              {productsData.map((productData, index) => {
-                const product = productData.data.products;
+              {productsData?.map((productData, index) => {
+                const product = productData?.data.products;
                 const cartItem = cart.find((item) => item.id === product.id);
 
                 return (
                   <div
-                    key={product.id}
+                    key={index}
                     className="flex gap-4 items-center border p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300"
                   >
                     <div className="w-20 h-20 flex-shrink-0">
                       <img
-                        src={product.photos[0].url || defaultImage}
+                        src={product?.photos[0]?.url || defaultImage}
                         alt={product.name}
                         className="w-full h-full object-cover rounded-md"
                       />

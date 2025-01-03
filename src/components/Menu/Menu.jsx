@@ -38,7 +38,6 @@ function Menu() {
     
     let isStockHere=settings_domain?.data?.multi_stocks_management
     let phone=settings_domain?.data.whatsapp.phone_number
-    console.log(phone);
     
     return (
         <div className="hidden lg:flex bg-Neutral h-[95%] fixed z-50 top-4 flex-col items-center mr-4 ml-3">

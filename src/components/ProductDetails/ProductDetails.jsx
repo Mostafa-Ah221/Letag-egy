@@ -130,7 +130,7 @@ console.log(dataReview);
     <div className="flex flex-col items-center mt-5 mb-11">
       {product ? (
         <>
-          <div className="grid grid-cols-12 gap-6 mb-16">
+          <div className="grid grid-cols-12 gap-6 mb-40">
 
            {/* Product Image Section */}
           <div className="col-span-12 md:col-span-4 w-full h-80 mb-28 md:mb-0">
@@ -140,14 +140,14 @@ console.log(dataReview);
               alt={product.title}
             />
             <div
-              className={`flex rounded-md mt-2 border-2 border-primary md:mx-0 ml-5 w-fit ${
+              className={`flex rounded-md mt-4 gap-2 md:mx-0 ml-5 w-fit ${
                 language === 'ar' ? 'mr-auto' : 'ml-auto'
               }`}
             >
               {product.photos.map((photo, index) => (
                 <img
                   key={index}
-                  className="w-[4.5rem] h-[4.5rem] object-cover m-1 cursor-pointer"
+                  className="w-[4.5rem] h-[4.5rem] border-2 border-primary rounded-md object-contain m-1 cursor-pointer"
                   src={photo.url}
                   alt={product.title}
                   onClick={() => setSelectedImage(photo.url)}
@@ -288,7 +288,7 @@ console.log(dataReview);
       ) : (
         <p>المنتج غير موجود.</p>
       )}
-      <div className=' flex md:flex-row justify-evenly gap-7 flex-col mb-7'>
+      <div className=' flex md:flex-row justify-evenly gap-7 flex-col mb-7 '>
         <div className='w-64 flex flex-col'>
           <button
             onClick={() => openModal('reviewForm')}
