@@ -26,7 +26,7 @@ async function fetchProducts(filters, language) {
 }
 
 async function subCategories(language) {
-  const response = await axios.get(`https://tarshulah.com/api/categories`, {
+  const response = await axios.get(`https://demo.leetag.com/api/categories`, {
     headers: { lang: language },
   });
   return response.data;
@@ -65,7 +65,7 @@ async function getOffers(language) {
 
 async function getProdDetails(id, language) {
   const response = await axios.get(
-    `https://tarshulah.com/api/product/show/${id}`,
+    `https://demo.leetag.com/api/product/show/${id}`,
     {
       headers: { lang: language },
     }
@@ -94,7 +94,7 @@ async function getSlider(language) {
 }
 
 async function getCurrency(language) {
-  const response = await axios.get(`https://tarshulah.com/api/domain/settings`, {
+  const response = await axios.get(`https://demo.leetag.com/api/domain/settings`, {
     headers: { lang: language },
   });
 
@@ -192,13 +192,13 @@ export default function DataContextProvider({ children }) {
       throw new Error(error.response?.data?.message || "Failed to delete address");
     }
   }
-async function getApiHome(language) {
-  const response = await axios.get(`https://tarshulah.com/api/home`, {
-    params: { city_id: selectedTownId }, 
-    headers: { lang: language }, 
-  });
-  return response.data;
-}
+  async function getApiHome(language) {
+    const response = await axios.get(`https://demo.leetag.com/api/home`, {
+      params: { city_id: selectedTownId },
+      headers: { lang: language },
+    });
+    return response.data;
+  }
 
 
   useEffect(() => {
