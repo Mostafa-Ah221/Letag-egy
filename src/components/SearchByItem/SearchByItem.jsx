@@ -78,7 +78,7 @@ const handleAddToCart = (product) => {
   return (
     <div className='px-3'>
       {searchData && <h1 className="mx-2 my-2 text-2xl font-semibold text-primary">{language === "ar" ? "الفئات" : "Categories"}</h1>}
-      <p><span className='font-semibold'>{searchData?.length}</span> تم العثور على نتائج البحث</p>
+      <p><span className='font-semibold mb-1'>{searchData?.length}</span> تم العثور على نتائج البحث</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {searchData?.map((category) => (
           <Link to={`/categoryDetails/${category.id}`} key={category.id} className='group'>
@@ -105,7 +105,7 @@ const handleAddToCart = (product) => {
       <hr />
 
       {searchData2 && <h1 className="mx-2 my-2 text-2xl font-semibold text-primary">{language === "ar" ? "المنتجات" : "Products"}</h1>}
-      <p className='text-sm'><span className='font-semibold'>{searchData2?.length}</span> تم العثور على نتائج البحث</p>
+      <p className='text-sm mb-1'><span className='font-semibold'>{searchData2?.length}</span> تم العثور على نتائج البحث</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {searchData2?.map((product) => (
           <ProductCard
