@@ -80,8 +80,8 @@ function Orders() {
               </th>
               <th className="px-6 py-3 md:hidden">
               </th>
-              <th className="px-6 py-3 md:hidden">
-              </th>
+              {/* <th className="px-6 py-3 md:hidden">
+              </th> */}
             </tr>
           </thead>
           <tbody>
