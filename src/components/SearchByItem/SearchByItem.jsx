@@ -76,10 +76,10 @@ const handleAddToCart = (product) => {
   const defaultImage = "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg";
 
   return (
-    <>
+    <div className='px-3'>
       {searchData && <h1 className="mx-2 my-2 text-2xl font-semibold text-primary">{language === "ar" ? "الفئات" : "Categories"}</h1>}
       <p><span className='font-semibold'>{searchData?.length}</span> تم العثور على نتائج البحث</p>
-      <div className="grid grid-cols-4 gap-4 mx-2 my-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {searchData?.map((category) => (
           <Link to={`/categoryDetails/${category.id}`} key={category.id} className='group'>
             <div className="  group-hover:translate-y-[-0.5rem]  transform transition-transform duration-300 rounded-lg  h-full flex flex-col">
@@ -106,7 +106,7 @@ const handleAddToCart = (product) => {
 
       {searchData2 && <h1 className="mx-2 my-2 text-2xl font-semibold text-primary">{language === "ar" ? "المنتجات" : "Products"}</h1>}
       <p className='text-sm'><span className='font-semibold'>{searchData2?.length}</span> تم العثور على نتائج البحث</p>
-      <div className="grid grid-cols-4 gap-4 mx-2 my-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {searchData2?.map((product) => (
           <ProductCard
             key={product.id}
@@ -133,7 +133,7 @@ const handleAddToCart = (product) => {
                quantity={quantity}
             />
             )}
-    </>
+    </div>
   );
 }
 

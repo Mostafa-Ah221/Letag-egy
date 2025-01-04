@@ -101,7 +101,7 @@ async function getCurrency(language) {
   return response.data;
 }
 async function getMenuPage() {
-  const response = await axios.get(`https://tarshulah.com/api/menu`);
+  const response = await axios.get(`https://demo.leetag.com/api/menu`);
 
   return response.data;
 }
