@@ -6,6 +6,7 @@ import SubCatigory from "./SubCatigory";
 import { useLanguage } from "../../context/LanguageContextPro";
 import SecondMenu from "../SecondMenu/SecondMenu";
 import Navbar from "../Navbar/Navbar";
+import Videos from "./Videos";
 
 export default function Home() {
   const { language } = useLanguage();
@@ -19,8 +20,9 @@ export default function Home() {
 
   return (
     <div className="bg-Neutral">
-                
+
       <SliderHome />
+      <Videos />
       <SubCatigory />
       <Brands />
       {/* تم تمرير sectionName بناءً على اللغة */}

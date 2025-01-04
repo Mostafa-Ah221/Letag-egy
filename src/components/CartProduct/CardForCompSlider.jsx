@@ -26,7 +26,7 @@ const CardForCompSlider = ({
         className=" bg-white group-hover:translate-y-[-0.5rem] group-hover:shadow-lg transform transition-transform duration-300 rounded-lg shadow-md h-full flex flex-col"
       >
         <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded-t-lg ">
-          {product.photo && (
+        
             <div className="group h-48 overflow-hidden">
               <img
                 src={imageSrc}
@@ -69,7 +69,7 @@ const CardForCompSlider = ({
                 </div>
               </div>
             </div>
-          )}
+          
         </div>
         <h3 className="font-semibold text-sm mt-3 mb-2 px-2 text-primary">
           {product?.category[0]?.name}
