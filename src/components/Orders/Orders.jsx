@@ -74,6 +74,14 @@ function Orders() {
               <th className="px-1 md:px-6 py-3">
                 {language === "ar" ? "الإجمالي" : "Total"}
               </th>
+              <th className="px-6 py-3">
+              </th>
+              <th className="px-6 py-3">
+              </th>
+              <th className="px-6 py-3 md:hidden">
+              </th>
+              <th className="px-6 py-3 md:hidden">
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -83,8 +91,8 @@ function Orders() {
                 <td className="px-1 md:px-6 py-4">{order?.order_status || "N/A"}</td>
                 <td className="px-1 md:px-6 py-4">{order?.payment_method || "N/A"}</td>
                 <td className="px-1 md:px-6 py-4">{order?.total}</td>
-                <td className="px-1 md:px-6 py-4"><Link to={`/ShowOrder/${order.id}`} className="bg-primary rounded-md flex items-center justify-center py-3 px-2 hover:shadow-md ">
-                  <p className="text-white text-center font-bold text-xs sm:text-base">{language === "ar" ? "تفاصيل الطلب" : "Order Details"}</p>
+                <td className="  md:px-6 py-4"><Link to={`/ShowOrder/${order.id}`} className="bg-primary rounded-md flex items-center justify-center py-3 hover:shadow-md ">
+                  <p className="text-white text-center font-bold text-xs min-w-[3rem] max-w-[6rem] px-1">{language === "ar" ? "تفاصيل الطلب" : "Order Details"}</p>
                 </Link></td>
 
              

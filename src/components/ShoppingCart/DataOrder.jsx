@@ -152,15 +152,15 @@ useEffect(() => {
       {showModal && (
         <>
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
+            className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center "
             onClick={() => setShowModal(false)} // هنا يجب أن تكون دالة
           >
-            <div className="bg-white w-[40%] flex justify-center items-center pb-5 relative" 
+            <div className="bg-white px-5 py-2 w-[80%] h-[90vh] lg:h-fit md:w-[40%] mb-11 lg:mb-0 flex justify-center items-center pb-5 relative overflow-auto" 
             onClick={(e) => e.stopPropagation()}>
-              <AddAddress showAddress={false}/>
+              <AddAddress showAddress={false} />
                <button
                onClick={() => setShowModal(false)}
-              className={`absolute -top-3 ${language === 'ar' ? '-left-2' : 'right-2'} text-xl font-bold text-white bg-primary rounded-full w-8 h-8`} >
+              className={`absolute -top-0 ${language === 'ar' ? '-left-0' : 'right-0'} text-xl font-bold text-white bg-primary rounded-full w-8 h-8`} >
                ✕
               </button>
             </div>

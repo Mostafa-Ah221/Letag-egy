@@ -83,7 +83,7 @@ export default function CartLayout() {
       const shippingPrice = parseFloat(formData.shipping_price || 0);
       const totalWithShipping = totalWithTax + shippingPrice;
 
-      setTotalBeforeDiscount(totalWithShipping);
+      setTotalBeforeDiscount(totalWithShipping.toFixed(2));
 
       const finalTotal = (totalWithShipping * (1 - appliedDiscount / 100)).toFixed(2);
       return finalTotal;
