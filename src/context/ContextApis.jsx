@@ -193,7 +193,7 @@ export default function DataContextProvider({ children }) {
     }
   }
   async function getApiHome(language) {
-    const response = await axios.get(`https://demo.leetag.com/api/home`, {
+    const response = await axios.get(`https://tarshulah.com/api/home`, {
       params: { city_id: selectedTownId },
       headers: { lang: language },
     });

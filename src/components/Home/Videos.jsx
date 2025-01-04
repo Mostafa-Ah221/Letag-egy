@@ -85,7 +85,7 @@ function Videos() {
                     </div>
                 </>
             ) : (
-                <div>No videos available</div>
+                ""
             )}
         </>
     );
