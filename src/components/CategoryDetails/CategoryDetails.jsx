@@ -8,6 +8,7 @@ import { useCart } from '../../context/CartContext';
 import Modal from '../Modal/Modal';
 import ProductCard from '../CartProduct/CardProduct';
 import LoadingIndicator from '../Loading/LoadingIndicator';
+import FilterProducts from '../FilterProducts/FilterProducts';
 
 export default function CategoryDetails() {
   const { getProductCategory,currencyData } = useContext(ContextData);
@@ -23,7 +24,6 @@ export default function CategoryDetails() {
   const [page, setPage] = useState(0);
   const pageSize = 30;
   const { language } = useLanguage(); 
-  const [progress, setProgress] = useState(0); 
 
   const { data, isError, isLoading } = useQuery({
     queryKey: ['categoryDetails', id, language], 
@@ -58,18 +58,28 @@ export default function CategoryDetails() {
   return (
     <div className='px-2 my-5'>
       <h2 className=" my-7 font-semibold text-2xl">{data?.data?.category?.name}</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-         {displayedProducts.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            handleAddToCart={handleAddToCart}
-            handleProductClick={handleProductClick}
-            handleAddToWish={handleAddToWish}
-            wishList={wishList}
-            currencyData={currencyData}
-          />
-        ))}
+     <div className="grid grid-cols-12 gap-11">
+  {/* قسم الفلتر */}
+  <div className="col-span-12 md:col-span-3 order-2 md:order-1">
+    <FilterProducts />
+  </div>
+
+  {/* قسم المنتجات */}
+  <div className="col-span-12 md:col-span-9 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5 order-1 md:order-2">
+    {displayedProducts.map((product) => (
+      <ProductCard
+        key={product.id}
+        product={product}
+        handleAddToCart={handleAddToCart}
+        handleProductClick={handleProductClick}
+        handleAddToWish={handleAddToWish}
+        wishList={wishList}
+        currencyData={currencyData}
+      />
+    ))}
+  </div>
+</div>
+
         {showModal && (
         <Modal
         isOpen={showModal}
@@ -84,7 +94,7 @@ export default function CategoryDetails() {
          quantity={quantity}
       />
       )}
-      </div>
+      
 
       {/* أرقام الصفحات */}
       <div className="flex justify-center mt-6">

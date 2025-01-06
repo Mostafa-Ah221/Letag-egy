@@ -14,14 +14,15 @@ const ProductCard = ({
   wishList,
   currencyData,
 }) => {
-  const isInWishList = wishList.some(
+  // تأكد من وجود wishList قبل استخدام some
+  const isInWishList = wishList && wishList.some(
     (wishItem) => wishItem && wishItem.id === product.id
   );
   const { language } = useLanguage();
   const defaultImage = "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg";
 
   // التأكد من وجود الصورة أو استخدام الصورة الافتراضية
-  const imageSrc = product?.photo ? product?.photo : defaultImage;
+  const imageSrc = product?.photo || defaultImage;
 
   return (
     <div key={product.id} className="group ">

@@ -53,21 +53,20 @@ export default function SliderHome() {
         return /^https?:\/\//.test(url);
     };
 
-    // التعامل مع حالات التحميل والخطأ
     if (isLoading) return <LoadingIndicator />;
     if (isError) return <p>Error occurred while fetching data.</p>;
 
     return (
         <div>
-            <div className="relative">
+            <div className="relative z-0">
                 <Slider {...settings}>
                     {data?.data?.sliders.map((item) => (
                         <div key={item.id} className="relative">
                             {isExternalLink(item.link) ? (
                                 <a
                                     href={item.link}
-                                    target="_blank" // يفتح الرابط في نافذة جديدة
-                                    rel="noopener noreferrer" // لأمان إضافي
+                                    target="_blank" 
+                                    rel="noopener noreferrer" 
                                 >
                                     <img
                                         src={item.photo}

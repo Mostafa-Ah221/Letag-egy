@@ -93,7 +93,7 @@ export default function CartPage() {
                       </td>
 
                       <td className="border border-gray-300 p-1 sm:p-3">
-                        <div className="flex border max-w-[80px] sm:max-w-[120px] mx-auto">
+                        <div className="flex border max-w-[80px] sm:max-w-[108px] mx-auto">
                           <button
                             onClick={() => {
                               if (cartItem.quantity > 1) {
@@ -104,7 +104,7 @@ export default function CartPage() {
                           >
                             -
                           </button>
-                          <span className="px-2 sm:px-6 text-xs sm:text-base">
+                          <span className="px-6 text-[1rem]">
                             {cartItem.quantity}
                           </span>
                           <button

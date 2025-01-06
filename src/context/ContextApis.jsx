@@ -11,11 +11,21 @@ console.log(baseDomain);
 
 async function fetchProducts(filters, language) {
   const formData = new FormData();
-  for (const [key, value] of Object.entries(filters)) {
-    formData.append(key, value);
-  }
+
+  // تمرير الفلاتر المختلفة إلى الـ formData
+  Object.entries(filters).forEach(([key, value]) => {
+    // إذا كان الفلتر يحتوي على مصفوفة، نقوم بإضافتها على شكل عدة مدخلات بنفس المفتاح
+    if (Array.isArray(value)) {
+      value.forEach(item => {
+        formData.append(`${key}[]`, item); // إضافة الفلتر مع تخصيص الكود للمصفوفات
+      });
+    } else {
+      formData.append(key, value); // إضافة الفلتر العادي
+    }
+  });
+
   try {
-    const response = await axios.post(`https://tarshulah.com/api/products`, formData, {
+    const response = await axios.post('https://tarshulah.com/api/products', formData, {
       headers: { lang: language },
     });
     return response.data;
@@ -25,10 +35,12 @@ async function fetchProducts(filters, language) {
   }
 }
 
+
 async function subCategories(language) {
   const response = await axios.get(`https://tarshulah.com/api/categories`, {
     headers: { lang: language },
   });
+  
   return response.data;
 }
 
@@ -153,6 +165,7 @@ async function getProductCategory(idCategory, page, pageSize, language) {
 
 export default function DataContextProvider({ children }) {
   const { language } = useLanguage();
+    const [productsData, setProductsData] = useState([]);
   const { showToast } = useCart();
   const [userToken, setUserToken] = useState(() => {
     return localStorage.getItem("userToken") || null;
@@ -323,7 +336,9 @@ export default function DataContextProvider({ children }) {
         getAddressList,
         setAddresses,
         addresses,
-        isLanguage
+        isLanguage,
+        setProductsData,
+        productsData,
       }}
     >
       {children}
