@@ -27,7 +27,7 @@ const CustomArrow = ({ direction, onClick }) => (
 export default function DataHome({ sectionName }) {
   const { getApiHome, currencyData } = useContext(ContextData);
   const { language } = useLanguage();
-  const { addToCart, handleAddToWish, wishList } = useCart();
+  const { addToCart, handleAddToWish, wishList, cart, updateQuantity } = useCart();
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -54,10 +54,12 @@ export default function DataHome({ sectionName }) {
     cacheTime: 1000 * 60 * 30,
   });
 
-   const handleProductClick = (item) => {
-    setSelectedProduct(item);
-    setShowModal(true);
-  };
+   const handleProductClick = (product) => {
+        const cartItem = cart.find((item) => item.id === product.id); 
+        setSelectedProduct({ ...product, cartItem });
+        setQuantity(cartItem?.quantity || 1); // Ensure quantity is set correctly
+        setShowModal(true);
+    };
 
 
 
@@ -101,16 +103,20 @@ const trendingSection = homeData && homeData.data && homeData.data.sections
       <div className="relative">
         <Slider {...settings}>
           {trendingSection ? (
-            trendingSection?.childreen.map((item, index) => {
+            trendingSection?.childreen.map((product, index) => {
+              const cartItem = cart.find((item) => item.id === product.id);     
               return (
                 <div key={index} className="product-item px-2">
                   <CardForCompSlider
-                    product={item}
+                    product={product}
                     handleAddToCart={handleAddToCart}
                     handleProductClick={handleProductClick}
                     handleAddToWish={handleAddToWish}
                     wishList={wishList}
+                     updateQuantity={updateQuantity}
                     currencyData={currencyData}
+                    cartItem={cartItem} 
+                    isInCart={!!cartItem}
                   />
                 </div>
               );

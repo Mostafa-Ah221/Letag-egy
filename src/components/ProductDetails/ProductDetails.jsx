@@ -26,7 +26,7 @@ export default function ProductDetails() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [dataReview, setDataReview] = useState();
   const { language } = useLanguage();
-  const { addToCart, handleAddToWish, wishList } = useCart();
+  const { addToCart, handleAddToWish, wishList,cart, updateQuantity  } = useCart();
   const { id } = useParams();
    const queryClient = useQueryClient();
   const { data, isError, isLoading } = useQuery({
@@ -65,10 +65,12 @@ console.log(dataReview);
     addToCart(product, quantity);
   };
 
-  const handleProductClick = (item) => {
-    setSelectedProduct(item);
-    setShowModal(true);
-  };
+  const handleProductClick = (product) => {
+        const cartItem = cart.find((item) => item.id === product.id); 
+        setSelectedProduct({ ...product, cartItem });
+        setQuantity(cartItem?.quantity || 1); // Ensure quantity is set correctly
+        setShowModal(true);
+    };
 
 
   const openModal = (modalName) => setActiveModal(modalName);
@@ -400,24 +402,28 @@ console.log(dataReview);
       )} */}
       {/* Related Products Section */}
       <div className="w-full mt-8">
-        <h3 className=" text-2xl font-semibold mb-4 px-4"> {language === 'ar' ? 'منتجات ذات صلة' : 'Related Products'}</h3>
+        <h3 className=" text-2xl font-semibold mb-4 px-4"> {language === 'ar' ? 'منتجات ذات صلة' : 'Related Products '}</h3>
         
         <Slider {...settings}>
-          {related?.map((relatedProduct) => (
-            <>
-            <div className="mx-3">
+          {related?.map((product) => {
+             const cartItem = cart.find((item) => item.id === product.id);  
+             return(   
+            <div className="" key={product.id}>
              <CardForCompSlider
-            key={relatedProduct.id}
-            product={relatedProduct}
+            product={product}
             handleAddToCart={handleAddToCart}
             handleProductClick={handleProductClick}
             handleAddToWish={handleAddToWish}
             wishList={wishList}
+            updateQuantity={updateQuantity}
             currencyData={currencyData}
+            cartItem={cartItem} 
+            isInCart={!!cartItem}
           />
+          
           </div>
-            </>
-          ))}
+             )
+})}
         </Slider>
       </div>
       {showModal && (

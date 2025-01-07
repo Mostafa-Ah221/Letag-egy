@@ -69,7 +69,11 @@ export const CartContextProvider = ({ children }) => {
   const getTotalPrice = () => {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0);
   };
-
+` `
+ useEffect(() => {
+    const totalPrice = getTotalPrice().toFixed(2);
+    showToast(language === 'ar' ? <p>إجمالي السلة: <span className="text-red-700">{totalPrice}</span></p> : `Total Cart: ${totalPrice}`);
+  }, [cart, language]);
   // Part of Wish List
   const addToWishList = (product) => {
     const updatedWishList = [...wishList];

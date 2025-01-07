@@ -2,11 +2,10 @@ import { useState, useContext } from "react";
 import { ContextData } from "../../context/ContextApis";
 import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "../../context/LanguageContextPro";
-import { FaPlus, FaMinus } from "react-icons/fa";
-import { HiOutlinePlusSmall } from "react-icons/hi2";
-import { HiMinus } from "react-icons/hi2";
-export default function FilterProducts() {
-  let { subCategories, getBrands } = useContext(ContextData);
+import { HiOutlinePlusSmall, HiMinus } from "react-icons/hi2";
+
+export default function FilterProducts({ onFilterChange }) {
+  const { subCategories, getBrands } = useContext(ContextData);
   const { language } = useLanguage();
 
   const [openSections, setOpenSections] = useState({
@@ -15,20 +14,10 @@ export default function FilterProducts() {
   });
 
   const [openSubCategories, setOpenSubCategories] = useState({});
-
-  const toggleSection = (section) => {
-    setOpenSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
-  };
-
-  const toggleSubCategory = (categoryId) => {
-    setOpenSubCategories((prev) => ({
-      ...prev,
-      [categoryId]: !prev[categoryId],
-    }));
-  };
+  const [selectedFilters, setSelectedFilters] = useState({
+    brands_id: [],
+    categories_id: [],
+  });
 
   const { data: Categories } = useQuery({
     queryKey: ['subCategory', language],
@@ -42,49 +31,122 @@ export default function FilterProducts() {
     queryFn: () => getBrands(language),
   });
 
+  const handleFilterChange = (type, id) => {
+    const newFilters = {
+      ...selectedFilters,
+      [type]: selectedFilters[type].includes(id)
+        ? selectedFilters[type].filter(item => item !== id)
+        : [...selectedFilters[type], id]
+    };
+    setSelectedFilters(newFilters);
+    onFilterChange(newFilters);
+  };
+
+  const toggleSection = (section) => {
+    setOpenSections(prev => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
+
+  const toggleSubCategory = (categoryId) => {
+    setOpenSubCategories(prev => ({
+      ...prev,
+      [categoryId]: !prev[categoryId],
+    }));
+  };
+  const defaultImage = "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg";
+
   return (
     <div className="p-4 bg-white shadow rounded">
-      <h2 className="text-lg font-semibold mb-4">تصفية</h2>
+      <h2 className="text-lg font-semibold mb-4">{language === "ar"? "تصفية":"Filters"}</h2>
       
-      {/* العلامات التجارية */}
-      <div className="mb-4">
-        <h3 className="flex justify-between items-center cursor-pointer text-md font-medium" onClick={() => toggleSection('brands')}>
-          <span>العلامات التجارية</span>
-          {openSections.brands ? <HiMinus className="text-gray-600  text-2xl" /> : <HiOutlinePlusSmall className="text-gray-600  text-2xl" />}
-        </h3>
-        {openSections.brands && Brands?.data.brands.map((brand) => (
-          <div key={brand.id} className="flex items-center mt-2 ml-4">
-            <input type="checkbox" id={`brand-${brand.id}`} value={brand.id} className="mr-2" />
-            <label htmlFor={`brand-${brand.id}`} className="text-sm text-gray-700">{brand.name}</label>
-          </div>
-        ))}
-      </div>
-
-      {/* التصنيف */}
       <div>
-        <h3 className="flex justify-between items-center cursor-pointer text-md font-medium" onClick={() => toggleSection('categories')}>
-          <span>التصنيف</span>
-          {openSections.categories ? <HiMinus className="text-gray-600 text-2xl" /> : <HiOutlinePlusSmall className="text-gray-600 text-2xl" />}
+        <h3 className="flex justify-between items-center cursor-pointer text-md font-medium" 
+            onClick={() => toggleSection('categories')}>
+          <span>{language ==="ar"? "الفئات":"Categories"}</span>
+          {openSections.categories ? 
+            <HiMinus className="text-gray-600 text-2xl" /> : 
+            <HiOutlinePlusSmall className="text-gray-600 text-2xl" />}
         </h3>
-        {openSections.categories && Categories?.data.categories.map((category) => (
-          <div key={category.id} className="mt-2">
-            <div className="flex justify-between items-center cursor-pointer ml-4" onClick={() => toggleSubCategory(category.id)}>
-              <div className="flex items-center">
-                <input type="checkbox" id={`category-${category.id}`} value={category.id} className="mr-2" />
-                <label htmlFor={`category-${category.id}`} className="text-sm text-gray-700">{category.name}</label>
-              </div>
-              {category.childrenCategories && (
-                <span>{openSubCategories[category.id] ? <HiMinus className="text-gray-600  text-2xl" /> : <HiOutlinePlusSmall className="text-gray-600  text-2xl" />}</span>
-              )}
-            </div>
-            {openSubCategories[category.id] && category.childrenCategories?.map((child) => (
-              <div key={child.id} className="flex items-center mt-2 ml-8">
-                <input type="checkbox" id={`child-category-${child.id}`} value={child.id} className="mr-2" />
-                <label htmlFor={`child-category-${child.id}`} className="text-sm text-gray-700">{child.name}</label>
+        {openSections.categories && (
+          <div className="max-h-96 overflow-y-auto">
+            {Categories?.data.categories.map((category) => (
+              <div key={category.id} className="mt-2">
+                <div className="flex justify-between items-center cursor-pointer ">
+                  <div className="flex items-center gap-1">
+                    <input 
+                      type="checkbox" 
+                      id={`category-${category.id}`} 
+                      value={category.id}
+                      checked={selectedFilters.categories_id.includes(category.id)}
+                      onChange={() => handleFilterChange('categories_id', category.id)}
+                      className="mr-2" 
+                    />
+                    <label htmlFor={`category-${category.id}`} className="text-sm text-gray-700">
+                      {category.name}
+                    </label>
+                  </div>
+                  {category.childrenCategories && (
+                    <span onClick={() => toggleSubCategory(category.id)}>
+                      {openSubCategories[category.id] ? 
+                        <HiMinus className="text-gray-600 text-2xl" /> : 
+                        <HiOutlinePlusSmall className="text-gray-600 text-2xl" />}
+                    </span>
+                  )}
+                </div>
+                {openSubCategories[category.id] && (
+                  <div className={`${language === 'ar'? "mr-2": "ml-2"}  `}>
+                    {category.childrenCategories.map((child) => (
+                      <div key={child.id} className="flex items-center mt-2 gap-1">
+                        <input 
+                          type="checkbox" 
+                          id={`child-category-${child.id}`} 
+                          value={child.id}
+                          checked={selectedFilters.categories_id.includes(child.id)}
+                          onChange={() => handleFilterChange('categories_id', child.id)}
+                          className="mr-2" 
+                        />
+                        <label htmlFor={`child-category-${child.id}`} className="text-sm text-gray-700">
+                          {child.name}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>
-        ))}
+        )}
+      </div>
+        <div className="mb-4">
+        <h3 className="flex justify-between items-center cursor-pointer text-md font-medium" 
+            onClick={() => toggleSection('brands')}>
+          <span>{language ==="ar"? "العلامات التجارية":"Brandes"}</span>
+          {openSections.brands ? 
+            <HiMinus className="text-gray-600 text-2xl" /> : 
+            <HiOutlinePlusSmall className="text-gray-600 text-2xl" />}
+        </h3>
+        {openSections.brands && (
+          <div className="max-h-80 overflow-y-auto">
+            {Brands?.data.brands.map((brand) => (
+              <div key={brand.id} className="flex items-center gap-1 mt-2 ml-4">
+                <input 
+                  type="checkbox" 
+                  id={`brand-${brand.id}`} 
+                  value={brand.id}
+                  checked={selectedFilters.brands_id.includes(brand.id)}
+                  onChange={() => handleFilterChange('brands_id', brand.id)}
+                  className="mr-2" 
+                />
+                <label htmlFor={`brand-${brand.id}`} className="text-sm text-gray-700">
+                  {language  === "ar"?`${brand.name}`: `${brand.slug}`}
+                 
+                </label>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,21 +1,22 @@
 import { CiHeart } from "react-icons/ci";
 import { IoIosHeart } from "react-icons/io";
+import { useCart } from "../../context/CartContext";
 
 export default function Modal({
   isOpen,
   onClose,
   product,
-  setQuantity,
-  quantity,
   handleAddToCart,
   handleAddToWish,
   wishList,
   language,
   currency,
 }) {
+  const {  cart  } = useCart();
   if (!isOpen || !product) return null;
+  
   const defaultImage = "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg";
-
+              const cartItem = cart.find((item) => item.id === product.id);                   
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center"
@@ -73,7 +74,7 @@ export default function Modal({
                 </button>
 
                 {/* كمية المنتج */}
-                <div className="flex border">
+                {/* <div className="flex border">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     className="bg-gray-200 px-2  text-lg font-bold  hover:bg-gray-300"
@@ -89,15 +90,19 @@ export default function Modal({
                   >
                     +
                   </button>
-                </div>
+                </div> */}
+                
+                
               </div>
-
-              <button
+                  {!!cartItem === true ? <span  className="text-sm text-primary">{language === "ar" ? "هذا المنتج مضاف الي السله":"This product is added to the cart."}</span>:<button
                 onClick={() => handleAddToCart(product)}
-                className="px-2 w-full md:mt-10 py-2 bg-primary text-white hover:bg-primary/90 transition-colors"
+                className=" w-full  py-2 bg-primary text-white hover:bg-primary/90 transition-colors"
               >
                 {language === "ar" ? "إضافة إلى السلة" : "Add To Cart"}
-              </button>
+              </button>}
+              {/* <div>
+                {!!cartItem === true ? <span  className="text-sm text-primary">{language === "ar" ? "هذا المنتج مضاف الي السله":"This product is added to the cart."}</span>:""}
+              </div> */}
             </div>
           </div>
         </div>

@@ -5,6 +5,8 @@ import { CiHeart } from "react-icons/ci";
 import { GiBeachBag } from "react-icons/gi";
 import { FaStar } from "react-icons/fa";
 import { useLanguage } from "../../context/LanguageContextPro";
+import { HiOutlinePlusSmall, HiMinus } from "react-icons/hi2";
+import { useState, useEffect, useRef } from "react";
 
 const ProductCard = ({
   product,
@@ -13,41 +15,90 @@ const ProductCard = ({
   handleAddToWish,
   wishList,
   currencyData,
+  updateQuantity,
+  cartItem,
+  isInCart,
 }) => {
-  // تأكد من وجود wishList قبل استخدام some
-  const isInWishList = wishList && wishList.some(
-    (wishItem) => wishItem && wishItem.id === product.id
-  );
+  const [showQuantity, setShowQuantity] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const timerRef = useRef(null);
+  const quantityRef = useRef(null);
+  const isInWishList = wishList && wishList.some((wishItem) => wishItem && wishItem.id === product.id);
   const { language } = useLanguage();
   const defaultImage = "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg";
-
-  // التأكد من وجود الصورة أو استخدام الصورة الافتراضية
   const imageSrc = product?.photo || defaultImage;
 
+  const startTimer = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    timerRef.current = setTimeout(() => {
+      setIsVisible(false);
+      setTimeout(() => {
+        setShowQuantity(false);
+      }, 300); // Wait for fade out animation to complete
+    }, 3000);
+  };
+
+  const clearTimer = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    return () => clearTimer();
+  }, []);
+
+  const handleCartClick = (e) => {
+    e.preventDefault();
+    handleAddToCart(product);
+    setShowQuantity(true);
+    setTimeout(() => {
+      setIsVisible(true);
+    }, 50); // Small delay to ensure transition works
+    startTimer();
+  };
+
+  const handleQuantityChange = (change, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const newQuantity = cartItem?.quantity + change;
+    
+    if (newQuantity >= 1) {
+      updateQuantity(product.id, newQuantity);
+    }
+    clearTimer();
+  };
+
+  const handleQuantityMouseEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    clearTimer();
+  };
+
+  const handleQuantityMouseLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    startTimer();
+  };
+
   return (
-    <div key={product.id} className="group ">
+    <div key={product.id} className="group relative">
       <Link
         to={`/productDetails/${product.id}`}
-        className="bg-white group-hover:translate-y-[-0.5rem] group-hover:shadow-lg transform transition-transform duration-300 rounded-lg shadow-md h-full flex flex-col"
+        className="bg-white group-hover:translate-y-[-0.5rem] group-hover:shadow-lg transform transition-transform duration-300 rounded-lg shadow-md flex flex-col"
       >
         <div className="aspect-w-1 aspect-h-1 relative overflow-hidden rounded-t-lg">
           <div className="group h-48 overflow-hidden">
             <img
-              src={imageSrc} // هنا استخدمنا الصورة الفعلية أو الافتراضية
+              src={imageSrc}
               alt={product.name}
               className="w-full h-full object-contain transform transition-transform duration-300"
             />
             <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <button
-                className="z-20"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleAddToCart(product);
-                }}
-              >
-                <GiBeachBag className="text-white bg-primary p-2 rounded-full text-[2.4rem]" />
-              </button>
-              <button
+               <button
                 className="z-20"
                 onClick={(e) => {
                   e.preventDefault();
@@ -65,18 +116,67 @@ const ProductCard = ({
                   className="z-20"
                 >
                   {isInWishList ? (
-                    <IoIosHeart className="text-primary text-[2.2rem]" />
+                    <IoIosHeart className="text-primary text-[2.7rem] mt-2" />
                   ) : (
-                    <CiHeart className="text-primary text-5xl" />
+                    <CiHeart className="text-primary text-[3.1rem] mt-2" />
                   )}
                 </button>
               </div>
             </div>
           </div>
         </div>
-        <h3 className="font-semibold text-sm mt-3 mb-2 px-2 text-primary">
-          {product?.category[0]?.name}
-        </h3>
+        <div className="flex justify-between items-center mt-2">
+          <h3 className="font-semibold text-sm mb-2 px-2 text-primary">
+            {product?.category[0]?.name}
+          </h3>
+          <div className="relative h-10 flex items-center"> 
+            <div className={`absolute -right-[4.3rem] transition-all duration-300 ease-in-out ${
+              showQuantity 
+                ? 'opacity-100 translate-y-0' 
+                : 'opacity-0 -translate-y-full pointer-events-none'
+            }`}>
+              {showQuantity && (
+                <div
+                  ref={quantityRef}
+                  className={`flex shadow-2xl border border-primary mx-2 bg-white rounded-full transform transition-all duration-300 ${
+                    isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
+                  }`}
+                  onMouseEnter={handleQuantityMouseEnter}
+                  onMouseLeave={handleQuantityMouseLeave}
+                  onClick={(e) => e.preventDefault()}
+                >
+                  <button
+                    onClick={(e) => handleQuantityChange(-1, e)}
+                    className="bg-gray-200 p-2 text-lg font-bold border-l border-primary hover:bg-gray-300 rounded-full"
+                  >
+                    <HiMinus />
+                  </button>
+                  <p className="px-3 text-[1rem] flex items-center">{cartItem?.quantity || 0}</p>
+                  <button
+                    onClick={(e) => handleQuantityChange(1, e)}
+                    className="bg-gray-200 p-2 text-lg font-bold border-r border-primary hover:bg-gray-300 rounded-full"
+                  >
+                    <HiOutlinePlusSmall />
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className={`transition-all duration-300 ease-in-out ${
+              showQuantity 
+                ? 'opacity-0 translate-y-full pointer-events-none' 
+                : 'opacity-100 translate-y-0'
+            }`}>
+              <button
+                className="z-20 mx-3"
+                onClick={handleCartClick}
+              >
+                {isInCart === true ?  <HiOutlinePlusSmall className="text-white bg-primary p-[0.3rem] rounded-full text-[2rem]" />
+                :
+                 <GiBeachBag className="text-white bg-primary p-[0.3rem] rounded-full text-[2rem]" />}
+              </button>
+            </div>
+          </div>
+        </div>
         <div className="flex flex-col flex-grow px-2 mb-2">
           <h2 className="text-lg font-medium duration-300 line-clamp-1 pb-2 group-hover:text-primary">
             {product.title.length > 20
@@ -85,10 +185,21 @@ const ProductCard = ({
           </h2>
           <hr />
         </div>
-        <div className="flex items-center flex-row-reverse justify-between px-5 pb-3">
+       <div className="flex items-center flex-row-reverse justify-between px-5 pb-3">
           <div className="flex">
-            <p className="text-xl">{product.price}</p>
-            <p className="text-xl">{currencyData}</p>
+            {/* عرض السعر العادي مع خط عليه في حالة وجود السعر الخاص */}
+            {product.special_price ? (
+              <>
+                <p className="text-xl mx-1 line-through text-gray-500">
+                  {product.price} {currencyData}
+                </p>
+                <p className="text-xl mx-1 font-bold text-primary ">
+                  {product.special_price} {currencyData}
+                </p>
+              </>
+            ) : (
+              <p className="text-xl">{product.price} {currencyData}</p>
+            )}
           </div>
           <p className="text-gray-700">
             {product.reviews_count ? product.reviews_count : 0}
