@@ -130,7 +130,7 @@ const ProductCard = ({
             {product?.category[0]?.name}
           </h3>
           <div className="relative h-10 flex items-center"> 
-            <div className={`absolute -right-[4.3rem] transition-all duration-300 ease-in-out ${
+            <div className={`absolute  ${language === "ar"? "-right-[4.3rem]":"-left-[4.3rem]"} transition-all duration-300 ease-in-out ${
               showQuantity 
                 ? 'opacity-100 translate-y-0' 
                 : 'opacity-0 -translate-y-full pointer-events-none'
@@ -147,14 +147,14 @@ const ProductCard = ({
                 >
                   <button
                     onClick={(e) => handleQuantityChange(-1, e)}
-                    className="bg-gray-200 p-2 text-lg font-bold border-l border-primary hover:bg-gray-300 rounded-full"
+                    className={`bg-gray-200 p-2 text-lg font-bold ${language === "ar"?" border-l " :" border-r "}border-primary hover:bg-gray-300 rounded-full`}
                   >
                     <HiMinus />
                   </button>
                   <p className="px-3 text-[1rem] flex items-center">{cartItem?.quantity || 0}</p>
                   <button
                     onClick={(e) => handleQuantityChange(1, e)}
-                    className="bg-gray-200 p-2 text-lg font-bold border-r border-primary hover:bg-gray-300 rounded-full"
+                    className={`bg-gray-200 p-2 text-lg font-bold ${language === "ar"?" border-r " :" border-l "} border-primary hover:bg-gray-300 rounded-full`}
                   >
                     <HiOutlinePlusSmall />
                   </button>

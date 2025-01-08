@@ -58,7 +58,7 @@ export default function FilterProducts({ onFilterChange }) {
   const defaultImage = "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg";
 
   return (
-    <div className="p-4 bg-white shadow rounded">
+    <div className="p-4 bg-white shadow rounded max-h-[90vh] overflow-y-auto">
       <h2 className="text-lg font-semibold mb-4">{language === "ar"? "تصفية":"Filters"}</h2>
       
       <div>
@@ -70,7 +70,7 @@ export default function FilterProducts({ onFilterChange }) {
             <HiOutlinePlusSmall className="text-gray-600 text-2xl" />}
         </h3>
         {openSections.categories && (
-          <div className="max-h-96 overflow-y-auto">
+          <div className=" ">
             {Categories?.data.categories.map((category) => (
               <div key={category.id} className="mt-2">
                 <div className="flex justify-between items-center cursor-pointer ">
@@ -128,7 +128,7 @@ export default function FilterProducts({ onFilterChange }) {
             <HiOutlinePlusSmall className="text-gray-600 text-2xl" />}
         </h3>
         {openSections.brands && (
-          <div className="max-h-80 overflow-y-auto">
+          <div className="">
             {Brands?.data.brands.map((brand) => (
               <div key={brand.id} className="flex items-center gap-1 mt-2 ml-4">
                 <input 

@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function ShoppingCart() {
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const { cart, removeFromCart, updateQuantity, getTotalPrice } = useCart();
+  const { cart, removeFromCart, updateQuantity, getTotalPrice,clearCart } = useCart();
   const { currencyData, getProdDetails } = useContext(ContextData);
   const [disableTransition, setDisableTransition] = useState(false);
   const { language } = useLanguage();
@@ -147,13 +147,13 @@ export default function ShoppingCart() {
             <div className="flex justify-between items-center gap-2 my-5">
               <h3>{language === "ar" ? " الاجمالي الفرعي" : "Subtotal"}:</h3>
               <span>
-                {getTotalPrice().toFixed(2)} {currencyData}
+                {getTotalPrice} {currencyData}
               </span>
             </div>
             <div className="flex justify-between items-center gap-2">
               <h3>{language === "ar" ? " الاجمالي " : "Total"}:</h3>
               <span>
-                {getTotalPrice().toFixed(2)} {currencyData}
+                {getTotalPrice} {currencyData}
               </span>
             </div>
           </div>
@@ -177,6 +177,14 @@ export default function ShoppingCart() {
               >
                 {language === "ar" ? " متابعة الدفع" : " Payment Tracking"}
               </Link>
+              <button
+                onClick={() => {
+                  clearCart();
+                }}
+                className=" text-center mt-6 py-2 text-white bg-primary rounded-md w-full shadow"
+              >
+                {language === "ar" ? "  مسح السلة" : " Clean Cart"}
+              </button>
             </>
           )}
         </div>

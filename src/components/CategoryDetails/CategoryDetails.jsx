@@ -181,7 +181,7 @@ export default function CategoryDetails() {
     <div className='px-2 my-5'>
       <div className='flex justify-between items-center'>
         <h2 className="my-7 font-semibold text-2xl">{language ==="ar"? "تفاصيل الفئة":"Category Details"} </h2>
-        <div className={`w-64 ${language === "ar" ? "ml-32":"mr-32"}`}>
+        <div className={`md:w-64 ${language === "ar" ? "md:ml-32 ml-5":"md:mr-32 mr-5"}`}>
           <select 
             name="sort" 
             id="sort" 

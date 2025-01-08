@@ -1,6 +1,8 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import toast from 'react-hot-toast';
 import { useLanguage } from "./LanguageContextPro";
+import { GiBeachBag } from "react-icons/gi";
+
 
 const CartContext = createContext();
 
@@ -30,6 +32,7 @@ export const CartContextProvider = ({ children }) => {
     return savedCart ? JSON.parse(savedCart) : [];
   });
   const { language } = useLanguage();
+  const previousTotalPrice = useRef(null);
 
   const [wishList, setWishList] = useState(() => {
     const savedWishList = localStorage.getItem("wishList");
@@ -37,19 +40,20 @@ export const CartContextProvider = ({ children }) => {
   });
 
   const addToCart = (product, quantity = 1) => {
-    const updatedCart = [...cart];
-    const existingProduct = updatedCart.find((item) => item.id === product.id);
+  const updatedCart = [...cart];
+  const existingProduct = updatedCart.find((item) => item.id === product.id);
 
-    if (existingProduct) {
-      existingProduct.quantity += quantity;
-    } else {
-      updatedCart.push({ ...product, quantity });
-    }
-    setCart(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  if (existingProduct) {
+    existingProduct.quantity += quantity;
+  } else {
+    updatedCart.push({ ...product, quantity });
     showToast(language === 'ar' ? 'تم إضافة المنتج إلى السلة!' : 'Product added to cart!');
-
   }
+
+  setCart(updatedCart);
+  localStorage.setItem("cart", JSON.stringify(updatedCart));
+};
+
 
   const removeFromCart = (productId) => {
     const updatedCart = cart.filter((item) => item.id!== productId);
@@ -66,14 +70,22 @@ export const CartContextProvider = ({ children }) => {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
-  const getTotalPrice = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
-  };
-` `
- useEffect(() => {
-    const totalPrice = getTotalPrice().toFixed(2);
-    showToast(language === 'ar' ? <p>إجمالي السلة: <span className="text-red-700">{totalPrice}</span></p> : `Total Cart: ${totalPrice}`);
-  }, [cart, language]);
+  const getTotalPrice =  useMemo(() => {
+    return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+  }, [cart]);
+
+useEffect(() => {
+  const parsedPreviousTotal = parseFloat(previousTotalPrice.current);
+  const parsedCurrentTotal = parseFloat(getTotalPrice);
+  
+  if (previousTotalPrice.current !== null && parsedPreviousTotal !== parsedCurrentTotal) {
+    showToast(language === 'ar' ? (
+      <p className="flex justify-center items-center gap-3"><span>إجمالي السلة: </span> <span className="text-red-700 border border-primary rounded-full w-10 h-10 flex justify-center items-center">{getTotalPrice}</span><GiBeachBag className="text-primary text-4xl" /></p>
+    ) :<p className="flex justify-center items-center gap-3"><span>Total Cart:</span> <span className="text-red-700 border border-primary rounded-full w-10 h-10 flex justify-center items-center">{getTotalPrice}</span><GiBeachBag className="text-primary text-4xl"/></p> );
+  }
+  previousTotalPrice.current = getTotalPrice;
+}, [getTotalPrice, language]);
+
   // Part of Wish List
   const addToWishList = (product) => {
     const updatedWishList = [...wishList];

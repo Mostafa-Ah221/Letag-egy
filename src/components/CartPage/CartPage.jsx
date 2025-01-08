@@ -148,7 +148,7 @@ export default function CartPage() {
             <div className="flex justify-between mb-2 sm:mb-3 text-xs sm:text-base">
               <span>{language === "ar" ? "المجموع الفرعي" : "Subtotal"}:</span>
               <span>
-                {getTotalPrice().toFixed(2)} {currencyData}
+                {getTotalPrice} {currencyData}
               </span>
             </div>
             <div className="flex justify-between mb-2 sm:mb-3 text-xs sm:text-base">
@@ -161,7 +161,7 @@ export default function CartPage() {
             <div className="flex justify-between text-sm sm:text-lg font-bold">
               <span>{language === "ar" ? "الإجمالي" : "Total"}:</span>
               <span>
-                {getTotalPrice().toFixed(2)} {currencyData}
+                {getTotalPrice} {currencyData}
               </span>
             </div>
 
