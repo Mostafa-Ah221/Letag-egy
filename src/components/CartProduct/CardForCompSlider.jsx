@@ -158,7 +158,7 @@ const CardForCompSlider = ({
                 :
                   <button
                   onClick={(e) => handleQuantityChange(-1, e)}
-                  className={`bg-gray-200 p-2 text-lg font-bold ${language === "ar"?" border-l " :" border-r "}border-primary hover:bg-gray-300 rounded-full`}
+                  className={`bg-gray-200 p-2 text-lg font-bold ${language === "ar"?" border-r " :" border-l "}border-primary hover:bg-gray-300 rounded-full`}
                 >
                   <HiMinus />
                 </button>
