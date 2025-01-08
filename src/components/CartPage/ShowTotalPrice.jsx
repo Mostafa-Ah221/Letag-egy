@@ -48,9 +48,9 @@ export default function ShowTotalPrice() {
         }
       `}
     >
-        {language === "ar"? <p className="flex justify-between items-center gap-5"><span>إجمالي السلة: </span> <span className=" border border-primary rounded-full w-10 h-10 flex justify-between items-center">{getTotalPrice}</span><GiBeachBag className="text-primary text-4xl" /></p>
+        {language === "ar"? <p className="flex justify-between items-center gap-5"><span>إجمالي السلة: </span> <span className=" border border-primary rounded-xl w-10 h-10 flex justify-between items-center">{getTotalPrice}</span><GiBeachBag className="text-primary text-4xl" /></p>
         :
-         <p className="flex justify-center items-center gap-3"><span>Total Cart:</span> <span className=" border border-primary rounded-full w-10 h-10 flex justify-center items-center">{getTotalPrice}</span><GiBeachBag className="text-primary text-4xl"/></p> 
+         <p className="flex justify-center items-center gap-3"><span>Total Cart:</span> <span className=" border border-primary rounded-xl w-10 h-10 flex justify-center items-center">{getTotalPrice}</span><GiBeachBag className="text-primary text-4xl"/></p> 
         }
       {/* <p className="text-white text-lg font-semibold">
         {getTotalPrice}
