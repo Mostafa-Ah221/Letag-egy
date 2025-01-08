@@ -202,25 +202,25 @@ const CardForCompSlider = ({
           <hr />
         </div>
       <div className="flex items-center flex-row-reverse justify-between px-5 pb-3">
-          <div className="flex">
-            {/* عرض السعر العادي مع خط عليه في حالة وجود السعر الخاص */}
-            {product.special_price ? (
-              <>
-                <p className="text-xl mx-1 line-through text-gray-500">
-                  {product.price} {currencyData}
-                </p>
-                <p className="text-xl mx-1 font-bold text-primary ">
-                  {product.special_price} {currencyData}
-                </p>
-              </>
-            ) : (
-              <p className="text-xl">{product.price} {currencyData}</p>
-            )}
-          </div>
-          <p className="text-gray-700">
+        <p className="text-gray-700">
             {product.reviews_count ? product.reviews_count : 0}
             <FaStar className="text-orange-500 inline-block" />
           </p>
+          <div className="flex ">
+            {product.special_price ? (
+              <>
+                <p className=" mx-1 line-through text-gray-500 flex gap-1">
+                  <span>{currencyData}</span> <span>{product.price}</span> 
+                </p>
+                <p className="text-xl mx-1 font-bold text-primary flex gap-1">
+                 <span>{currencyData}</span> <span>{product.special_price}</span>
+                </p>
+              </>
+            ) : (
+              <p className="text-xl flex gap-1"><span>{currencyData}</span> <span>{product.price}</span> </p>
+            )}
+          </div>
+          
         </div>
 
       </Link>
