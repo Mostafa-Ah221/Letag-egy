@@ -11,7 +11,7 @@ import LoadingIndicator from "../Loading/LoadingIndicator";
 
 export default function CategoryFilter() {
   const { fetchProducts } = useContext(ContextData);
-  const { addToCart, handleAddToWish,wishList  } = useCart(); 
+  const { addToCart, handleAddToWish,wishList,removeFromCart ,cart,updateQuantity } = useCart(); 
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(1); 
@@ -55,17 +55,25 @@ const brandProduct=data?.data?.products
         </div>
          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mx-3 my-5">
         {brandProduct ? 
-         brandProduct.map((prods)=>(
+         brandProduct.map((product)=>{
+           const cartItem = cart.find((item) => item.id === product.id);     
+          return(
              <ProductCard
-            key={prods.id}
-            product={prods}
+            key={product.id}
+            product={product}
             handleAddToCart={handleAddToCart}
             handleProductClick={handleProductClick}
             handleAddToWish={handleAddToWish}
-            wishList={wishList}
+           wishList={wishList}
+            updateQuantity={updateQuantity}
             currencyData={currencyData}
+            cartItem={cartItem} 
+            isInCart={!!cartItem}
+              deleteProduct={removeFromCart}
+
           />
-         ))
+          )
+})
         :
         ""
         }

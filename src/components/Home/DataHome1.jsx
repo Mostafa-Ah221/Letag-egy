@@ -27,7 +27,7 @@ const CustomArrow = ({ direction, onClick }) => (
 export default function DataHome({ sectionName }) {
   const { getApiHome, currencyData } = useContext(ContextData);
   const { language } = useLanguage();
-  const { addToCart, handleAddToWish, wishList, cart, updateQuantity } = useCart();
+  const { addToCart, handleAddToWish, wishList, cart, updateQuantity,removeFromCart } = useCart();
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -117,6 +117,7 @@ const trendingSection = homeData && homeData.data && homeData.data.sections
                     currencyData={currencyData}
                     cartItem={cartItem} 
                     isInCart={!!cartItem}
+                    deleteProduct={removeFromCart}
                   />
                 </div>
               );
@@ -139,6 +140,7 @@ const trendingSection = homeData && homeData.data && homeData.data.sections
           wishList={wishList}
           setQuantity={setQuantity}
           quantity={quantity}
+
         />
       )}
 

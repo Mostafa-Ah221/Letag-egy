@@ -18,6 +18,7 @@ import CardForCompSlider from '../CartProduct/CardForCompSlider';
 import LoadingIndicator from '../Loading/LoadingIndicator';
 import { HiMinus, HiOutlinePlusSmall } from 'react-icons/hi2';
 import { GiBeachBag } from 'react-icons/gi';
+import { MdDelete } from 'react-icons/md';
 
 
 export default function ProductDetails() {
@@ -32,7 +33,7 @@ export default function ProductDetails() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [dataReview, setDataReview] = useState();
   const { language } = useLanguage();
-  const { addToCart, handleAddToWish, wishList,cart, updateQuantity  } = useCart();
+  const { addToCart, handleAddToWish, wishList,cart, updateQuantity ,removeFromCart } = useCart();
   const { id } = useParams();
    const queryClient = useQueryClient();
   const { data, isError, isLoading } = useQuery({
@@ -261,12 +262,20 @@ console.log(dataReview);
                                 onMouseLeave={handleQuantityMouseLeave}
                                 onClick={(e) => e.preventDefault()}
                               >
-                                <button
+                               {cartItem?.quantity === 1 ? <button
+                                  onClick={() => removeFromCart(product.id)}
+                                  className={`bg-gray-200 p-2 text-lg font-bold ${language === "ar"?" border-l " :" border-r "}border-primary hover:bg-gray-300 rounded-full`}
+                                >
+                                  <MdDelete />
+                                </button>
+                                :
+                                  <button
                                   onClick={(e) => handleQuantityChange(-1, e)}
                                   className={`bg-gray-200 p-2 text-lg font-bold ${language === "ar"?" border-l " :" border-r "}border-primary hover:bg-gray-300 rounded-full`}
                                 >
                                   <HiMinus />
                                 </button>
+                                }
                                 <p className="px-3 text-[1rem] flex items-center">{cartItem?.quantity || 0}</p>
                                 <button
                                   onClick={(e) => handleQuantityChange(1, e)}
@@ -495,6 +504,7 @@ console.log(dataReview);
             currencyData={currencyData}
             cartItem={cartItem} 
             isInCart={!!cartItem}
+            deleteProduct={removeFromCart}
           />
           
           </div>

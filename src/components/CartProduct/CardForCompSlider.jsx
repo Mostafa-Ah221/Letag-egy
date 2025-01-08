@@ -7,6 +7,7 @@ import { FaStar } from "react-icons/fa";
 import { useLanguage } from "../../context/LanguageContextPro";
 import { HiOutlinePlusSmall, HiMinus } from "react-icons/hi2";
 import { useState, useEffect, useRef } from "react";
+import { MdDelete } from "react-icons/md";
 
 const CardForCompSlider = ({
   product,
@@ -18,6 +19,7 @@ const CardForCompSlider = ({
   updateQuantity,
   cartItem,
   isInCart,
+  deleteProduct
 }) => {
  const [showQuantity, setShowQuantity] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -146,12 +148,20 @@ const CardForCompSlider = ({
                   onMouseLeave={handleQuantityMouseLeave}
                   onClick={(e) => e.preventDefault()}
                 >
+                 {cartItem?.quantity === 1 ? <button
+                  onClick={() => deleteProduct(product.id)}
+                  className={`bg-gray-200 p-2 text-lg font-bold ${language === "ar"?" border-l " :" border-r "}border-primary hover:bg-gray-300 rounded-full`}
+                >
+                  <MdDelete />
+                </button>
+                :
                   <button
-                    onClick={(e) => handleQuantityChange(-1, e)}
-                    className="bg-gray-200 p-2 text-lg font-bold border-r border-primary hover:bg-gray-300 rounded-full"
-                  >
-                    <HiMinus />
-                  </button>
+                  onClick={(e) => handleQuantityChange(-1, e)}
+                  className={`bg-gray-200 p-2 text-lg font-bold ${language === "ar"?" border-l " :" border-r "}border-primary hover:bg-gray-300 rounded-full`}
+                >
+                  <HiMinus />
+                </button>
+                }
                   <p className="px-3 text-[1rem] flex items-center">{cartItem?.quantity || 0}</p>
                   <button
                     onClick={(e) => handleQuantityChange(1, e)}

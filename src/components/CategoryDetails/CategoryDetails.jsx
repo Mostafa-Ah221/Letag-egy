@@ -29,7 +29,7 @@ export default function CategoryDetails() {
     nextPage: null
   });
   const [isLoading, setIsLoading] = useState(false);
-  const { addToCart, handleAddToWish, wishList, cart, updateQuantity  } = useCart();
+  const { addToCart, handleAddToWish, wishList, cart, updateQuantity,removeFromCart  } = useCart();
   const { id } = useParams();
   const { language } = useLanguage();
 
@@ -229,6 +229,7 @@ export default function CategoryDetails() {
                 currencyData={currencyData}
                 cartItem={cartItem} 
                 isInCart={!!cartItem}
+                deleteProduct={removeFromCart}
               />
                )
 })

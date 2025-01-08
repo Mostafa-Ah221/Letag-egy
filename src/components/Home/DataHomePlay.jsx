@@ -10,7 +10,7 @@ import ProductCard from '../CartProduct/CardProduct';
 
 export default function DataHomePlay() {
     const [quantity, setQuantity] = useState(1); 
-    const { addToCart, handleAddToWish, wishList, cart, updateQuantity } = useCart(); 
+    const { addToCart, handleAddToWish, wishList, cart, updateQuantity,removeFromCart } = useCart(); 
     const { getApiHome, currencyData } = useContext(ContextData);
     const { language } = useLanguage();
   
@@ -59,6 +59,7 @@ export default function DataHomePlay() {
                                 currencyData={currencyData}
                                 cartItem={cartItem} 
                                 isInCart={!!cartItem}
+                                deleteProduct={removeFromCart}
                             />
                         );
                     })
