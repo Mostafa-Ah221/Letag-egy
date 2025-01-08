@@ -19,6 +19,7 @@ import LoadingIndicator from '../Loading/LoadingIndicator';
 import { HiMinus, HiOutlinePlusSmall } from 'react-icons/hi2';
 import { GiBeachBag } from 'react-icons/gi';
 import { MdDelete } from 'react-icons/md';
+import { BiCart, BiCartAdd } from 'react-icons/bi';
 
 
 export default function ProductDetails() {
@@ -292,12 +293,12 @@ console.log(dataReview);
                               : 'opacity-100 translate-y-0'
                           }`}>
                             <button
-                              className="z-20 mx-3"
+                              className="z-20 mx-3 relative"
                               onClick={handleCartClick}
                             >
-                              {!!cartItem === true ?  <HiOutlinePlusSmall className="text-white bg-primary p-[0.3rem] rounded-full text-[2rem]" />
+                              {!!cartItem === true ?<div><span className="absolute text-white text-sm bottom-[1rem] left-4 ">{cartItem?.quantity}</span><BiCart className="bg-primary h-[1.95rem] w-[1.95rem] text-white rounded-lg shadow-2xl  p-1" /></div>
                               :
-                               <GiBeachBag className="text-white bg-primary p-[0.3rem] rounded-full text-[2rem]" />}
+                                <BiCartAdd className="border border-primary h-[1.8rem] w-[1.8rem] text-slate-600 rounded-lg shadow-2xl  p-1" />}
                             </button>
                           </div>
                   </div>

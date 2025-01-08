@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import { IoEyeSharp } from "react-icons/io5";
 import { IoIosHeart } from "react-icons/io";
 import { CiHeart } from "react-icons/ci";
-import { GiBeachBag } from "react-icons/gi";
 import { FaStar } from "react-icons/fa";
 import { useLanguage } from "../../context/LanguageContextPro";
 import { HiOutlinePlusSmall, HiMinus } from "react-icons/hi2";
 import { useState, useEffect, useRef } from "react";
 import { MdDelete } from "react-icons/md";
+import { BiCartAdd } from "react-icons/bi";
+import { BiCart } from "react-icons/bi";
 
 const ProductCard = ({
   product,
@@ -179,12 +180,12 @@ const ProductCard = ({
                 : 'opacity-100 translate-y-0'
             }`}>
               <button
-                className="z-20 mx-3"
+                className="z-20 mx-3 relative"
                 onClick={handleCartClick}
               >
-                {isInCart === true ?  <HiOutlinePlusSmall className="text-white bg-primary p-[0.3rem] rounded-full text-[2rem]" />
+                {isInCart === true ?<div><span className="absolute text-white text-sm bottom-[1rem] left-4 ">{cartItem?.quantity}</span>  <BiCart className="bg-primary h-[1.95rem] w-[1.95rem] text-white rounded-lg shadow-2xl  p-1" /></div>
                 :
-                 <GiBeachBag className="text-white bg-primary p-[0.3rem] rounded-full text-[2rem]" />}
+                 <BiCartAdd className="border border-primary h-[1.8rem] w-[1.8rem] text-slate-600 rounded-lg shadow-2xl  p-1" />}
               </button>
             </div>
           </div>
