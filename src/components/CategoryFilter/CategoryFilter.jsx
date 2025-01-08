@@ -23,7 +23,7 @@ export default function CategoryFilter() {
     "brands_id[0]":id ,
   };
 
-const { data, isLoading, isError } = useQuery({
+const { data, isLoading } = useQuery({
     queryKey: ["fetchProducts", filters,language],
     queryFn: () => fetchProducts(filters),
     staleTime: 1000 * 60 * 30,

@@ -20,14 +20,12 @@ const LoadingIndicator = () => {
   }, []);
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="relative">
-        {/* دائرة التقدم */}
+    <div className="flex justify-center items-center my-[10rem]">
+      <div className="relative w-[150px] h-[150px]" >
         <CircularProgressbar
           value={progress}
           text={`${progress}%`}
           styles={buildStyles({
-            // تخصيص ألوان التقدم
             pathColor: 'primary',
             textColor: '#000',
             trailColor: '#e5e7eb',
