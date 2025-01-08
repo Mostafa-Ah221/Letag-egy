@@ -1,7 +1,6 @@
-import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import toast from 'react-hot-toast';
 import { useLanguage } from "./LanguageContextPro";
-import { GiBeachBag } from "react-icons/gi";
 
 
 const CartContext = createContext();
@@ -32,7 +31,6 @@ export const CartContextProvider = ({ children }) => {
     return savedCart ? JSON.parse(savedCart) : [];
   });
   const { language } = useLanguage();
-  const previousTotalPrice = useRef(null);
 
   const [wishList, setWishList] = useState(() => {
     const savedWishList = localStorage.getItem("wishList");
@@ -74,17 +72,7 @@ export const CartContextProvider = ({ children }) => {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
   }, [cart]);
 
-useEffect(() => {
-  const parsedPreviousTotal = parseFloat(previousTotalPrice.current);
-  const parsedCurrentTotal = parseFloat(getTotalPrice);
-  
-  if (previousTotalPrice.current !== null && parsedPreviousTotal !== parsedCurrentTotal) {
-    showToast(language === 'ar' ? (
-      <p className="flex justify-center items-center gap-3"><span>إجمالي السلة: </span> <span className="text-red-700 border border-primary rounded-full w-10 h-10 flex justify-center items-center">{getTotalPrice}</span><GiBeachBag className="text-primary text-4xl" /></p>
-    ) :<p className="flex justify-center items-center gap-3"><span>Total Cart:</span> <span className="text-red-700 border border-primary rounded-full w-10 h-10 flex justify-center items-center">{getTotalPrice}</span><GiBeachBag className="text-primary text-4xl"/></p> );
-  }
-  previousTotalPrice.current = getTotalPrice;
-}, [getTotalPrice, language]);
+// /
 
   // Part of Wish List
   const addToWishList = (product) => {

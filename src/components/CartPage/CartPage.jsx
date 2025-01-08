@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { useCart } from "../../context/CartContext";
 import { ContextData } from "../../context/ContextApis";
 import { useQuery } from "@tanstack/react-query";
@@ -10,7 +10,7 @@ export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, getTotalPrice } = useCart();
   const { currencyData, getProdDetails } = useContext(ContextData);
   const { language } = useLanguage();
-  const [quantity, setQuantity] = useState(1);
+  // const [quantity, setQuantity] = useState(1);
 
   const ids = cart.map((item) => item.id);
 

@@ -91,7 +91,6 @@ const startTimer = (productId) => {
     }
   }));
   
-  // بدء المؤقت للمنتج المحدد
   startTimer(currentProduct.id);
 };
 
