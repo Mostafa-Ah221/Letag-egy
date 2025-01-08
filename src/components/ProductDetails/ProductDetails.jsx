@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { ContextData } from '../../context/ContextApis';
 import { useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -16,11 +16,17 @@ import ReviewForm from './ReviewForm';
 import ReviewList from './ReviewList';
 import CardForCompSlider from '../CartProduct/CardForCompSlider';
 import LoadingIndicator from '../Loading/LoadingIndicator';
+import { HiMinus, HiOutlinePlusSmall } from 'react-icons/hi2';
+import { GiBeachBag } from 'react-icons/gi';
 
 
 export default function ProductDetails() {
   const { getProdDetails, currencyData, userData, getReviews } = useContext(ContextData);
   const [quantity, setQuantity] = useState(1);
+   const [showQuantity, setShowQuantity] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
+    const timerRef = useRef(null);
+    const quantityRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
   const [activeModal, setActiveModal] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -39,8 +45,51 @@ export default function ProductDetails() {
     queryFn: () => getReviews(id),
     enabled: !!id,
   });
-console.log(reviews);
+                      const cartItem = cart.find((item) => item.id === data?.data?.products.id); 
+                       const startTimer = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    timerRef.current = setTimeout(() => {
+      setIsVisible(false);
+      setTimeout(() => {
+        setShowQuantity(false);
+      }, 300); // Wait for fade out animation to complete
+    }, 3000);
+  };
 
+  const clearTimer = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    return () => clearTimer();
+  }, []);
+      const handleQuantityChange = (change, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const newQuantity = cartItem?.quantity + change;
+    
+    if (newQuantity >= 1) {
+      updateQuantity(product.id, newQuantity);
+    }
+    clearTimer();
+  };
+
+  const handleQuantityMouseEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    clearTimer();
+  };
+
+  const handleQuantityMouseLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    startTimer();
+  };                       
  useEffect(() => {
   if (reviews?.data?.reviews) {
     setDataReview(reviews?.data.reviews);
@@ -51,7 +100,9 @@ console.log(dataReview);
   const product = data?.data?.products;
   const related = data?.data?.related;
   const [selectedImage, setSelectedImage] = useState(null);
-
+ const handleAddToCart = (product) => {
+        addToCart(product, quantity); 
+    };
   useEffect(() => {
     if (product && product.photos.length > 0) {
       setSelectedImage(product.photos[0].url);
@@ -61,10 +112,15 @@ console.log(dataReview);
       .map((item) => Number(item.rating))
       .reduce((acc, item) => acc + item, 0) / dataReview.length : 0;
 
-  const handleAddToCart = (product) => {
-    addToCart(product, quantity);
+ const handleCartClick = (e) => {
+    e.preventDefault();
+    handleAddToCart(product);
+    setShowQuantity(true);
+    setTimeout(() => {
+      setIsVisible(true);
+    }, 50); // Small delay to ensure transition works
+    startTimer();
   };
-
   const handleProductClick = (product) => {
         const cartItem = cart.find((item) => item.id === product.id); 
         setSelectedProduct({ ...product, cartItem });
@@ -159,17 +215,17 @@ console.log(dataReview);
           </div>
 
   {/* Product Details Section */}
-          <div className="p-4 col-span-12 md:col-span-8">
+          <div className="p-4 col-span-12 md:col-span-7">
             <h2 className="text-xl md:text-3xl font-bold mb-2">{product.title}</h2>
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-2xl font-bold text-primary">
+              <span className="text-2xl font-bold text-primary mb-4 inline-block">
                 {product.price} {currencyData}
               </span>
-              <span className="text-gray-400">
+            <div className="flex items-center justify-between  mb-5 gap-20">
+               <span className="text-gray-400">
                 {language === 'ar' ? 'الكمية' : 'Quantity'}: {product.stock_qty}
               </span>
-            </div>
-            <div className="flex items-center justify-around mb-5 gap-2">
+              <div className='flex gap-20'>
+
               <button
                 onClick={(e) => {
                   e.preventDefault();
@@ -188,26 +244,54 @@ console.log(dataReview);
                   <CiHeart className="text-primary text-5xl" />
                 )}
               </button>
-              <button
-                onClick={() => handleAddToCart(product)}
-                className="px-4 bg-primary w-36 text-white font-bold py-2 rounded "
-              >
-                {language === 'ar' ? 'أضف إلى العربة' : 'Add To Cart'}
-              </button>
-              <div className="flex border">
-                <button
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="bg-gray-200 px-2 text-lg font-bold hover:bg-gray-300"
-                >
-                  -
-                </button>
-                <span className="px-6 text-[1rem] ">{quantity}</span>
-                <button
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="bg-gray-200 px-2 text-lg font-bold hover:bg-gray-300"
-                >
-                  +
-                </button>
+             
+               <div className="relative h-10 flex items-center"> 
+                          <div className={`absolute  ${language === "ar"? "-right-[4.3rem]":"-left-[4.3rem]"} transition-all duration-300 ease-in-out ${
+                            showQuantity 
+                              ? 'opacity-100 translate-y-0' 
+                              : 'opacity-0 -translate-y-full pointer-events-none'
+                          }`}>
+                            {showQuantity && (
+                              <div
+                                ref={quantityRef}
+                                className={`flex shadow-2xl border border-primary mx-2 bg-white rounded-full transform transition-all duration-300 ${
+                                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
+                                }`}
+                                onMouseEnter={handleQuantityMouseEnter}
+                                onMouseLeave={handleQuantityMouseLeave}
+                                onClick={(e) => e.preventDefault()}
+                              >
+                                <button
+                                  onClick={(e) => handleQuantityChange(-1, e)}
+                                  className={`bg-gray-200 p-2 text-lg font-bold ${language === "ar"?" border-l " :" border-r "}border-primary hover:bg-gray-300 rounded-full`}
+                                >
+                                  <HiMinus />
+                                </button>
+                                <p className="px-3 text-[1rem] flex items-center">{cartItem?.quantity || 0}</p>
+                                <button
+                                  onClick={(e) => handleQuantityChange(1, e)}
+                                  className={`bg-gray-200 p-2 text-lg font-bold ${language === "ar"?" border-r " :" border-l "} border-primary hover:bg-gray-300 rounded-full`}
+                                >
+                                  <HiOutlinePlusSmall />
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                          <div className={`transition-all duration-300 ease-in-out ${
+                            showQuantity 
+                              ? 'opacity-0 translate-y-full pointer-events-none' 
+                              : 'opacity-100 translate-y-0'
+                          }`}>
+                            <button
+                              className="z-20 mx-3"
+                              onClick={handleCartClick}
+                            >
+                              {!!cartItem === true ?  <HiOutlinePlusSmall className="text-white bg-primary p-[0.3rem] rounded-full text-[2rem]" />
+                              :
+                               <GiBeachBag className="text-white bg-primary p-[0.3rem] rounded-full text-[2rem]" />}
+                            </button>
+                          </div>
+                  </div>
               </div>
             </div>
             <hr />
@@ -300,15 +384,7 @@ console.log(dataReview);
           </button>
           <span className="inline-block w-full h-[1px]  bg-primary"></span>
         </div>
-        {/* <div className='w-64 flex flex-col'>
-          <button
-            onClick={() => openModal('reviewList')}
-            className="px-4 py-2 rounded hover:bg-primary hover:text-white duration-200"
-          >
-            {language === 'ar' ? 'عرض التقييمات' : 'View Reviews'}
-          </button>
-          <span className="inline-block w-full h-[1px] bg-primary"></span>
-        </div> */}
+       
         <div className='w-64 flex flex-col'>
           <button
             onClick={() => openModal('Description')}
