@@ -31,6 +31,7 @@ const ProductCard = ({
   const defaultImage = "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg";
   const imageSrc = product?.photo || defaultImage;
 
+  
   const startTimer = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -39,28 +40,30 @@ const ProductCard = ({
       setIsVisible(false);
       setTimeout(() => {
         setShowQuantity(false);
-      }, 300); // Wait for fade out animation to complete
+      }, 300);
     }, 3000);
   };
 
-  const clearTimer = () => {
+  const resetTimer = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
-      timerRef.current = null;
     }
+    startTimer();
   };
 
   useEffect(() => {
-    return () => clearTimer();
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
   }, []);
 
   const handleCartClick = (e) => {
     e.preventDefault();
     handleAddToCart(product);
     setShowQuantity(true);
-    setTimeout(() => {
-      setIsVisible(true);
-    }, 50); // Small delay to ensure transition works
+    setIsVisible(true);
     startTimer();
   };
 
@@ -71,20 +74,8 @@ const ProductCard = ({
     
     if (newQuantity >= 1) {
       updateQuantity(product.id, newQuantity);
+      resetTimer(); // إعادة تشغيل التايمر عند كل تفاعل
     }
-    clearTimer();
-  };
-
-  const handleQuantityMouseEnter = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    clearTimer();
-  };
-
-  const handleQuantityMouseLeave = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    startTimer();
   };
 
   return (
@@ -144,9 +135,13 @@ const ProductCard = ({
                   className={`flex shadow-2xl border border-primary mx-2 bg-white rounded-full transform transition-all duration-300 ${
                     isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'
                   }`}
-                  onMouseEnter={handleQuantityMouseEnter}
-                  onMouseLeave={handleQuantityMouseLeave}
-                  onClick={(e) => e.preventDefault()}
+                  // onMouseEnter={handleQuantityMouseEnter}
+                  // onMouseLeave={handleQuantityMouseLeave}
+                   onClick={(e) => {
+            e.preventDefault();
+            resetTimer(); // إعادة تشغيل التايمر عند أي نقرة
+          }}
+                  
                 >
                   {cartItem?.quantity === 1 ? <button
                     onClick={() => deleteProduct(product.id)}
