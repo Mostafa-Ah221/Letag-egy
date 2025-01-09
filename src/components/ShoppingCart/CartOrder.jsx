@@ -14,7 +14,7 @@ export default function CartOrder() {
   const { language } = useLanguage();
 
   useEffect(() => {
-    const calculatedTotal = getTotalPrice().toFixed(2);
+    const calculatedTotal = getTotalPrice;
     setTotal(calculatedTotal);
   }, [getTotalPrice, cart]);
 

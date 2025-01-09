@@ -11,8 +11,8 @@ export default function CartLayout() {
   
   const tax = settings_domain?.data.tax;
 
-  const [updatedTotal, setUpdatedTotal] = useState(getTotalPrice().toFixed(2));
-  const [baseTotal, setBaseTotal] = useState(getTotalPrice().toFixed(2));
+  const [updatedTotal, setUpdatedTotal] = useState(getTotalPrice);
+  const [baseTotal, setBaseTotal] = useState(getTotalPrice);
   const [appliedDiscount, setAppliedDiscount] = useState(0);
 
   const [formData, setFormData] = useState({
@@ -38,7 +38,7 @@ export default function CartLayout() {
   const [totalBeforeDiscount, setTotalBeforeDiscount] = useState();
 
   // Memoize total price
-  const totalPrice = useMemo(() => getTotalPrice().toFixed(2), [cart]);
+  const totalPrice = useMemo(() => getTotalPrice, [cart]);
 
   useEffect(() => {
     setBaseTotal(totalPrice);
