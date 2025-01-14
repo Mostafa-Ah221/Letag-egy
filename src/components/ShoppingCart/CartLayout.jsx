@@ -6,7 +6,7 @@ import { useLanguage } from '../../context/LanguageContextPro';
 
 export default function CartLayout() {
   const { cart, getTotalPrice, showToast } = useCart();
-  const { userToken, userData, settings_domain } = useContext(ContextData);
+  const { userToken, userData, settings_domain,api_key } = useContext(ContextData);
     const { language } = useLanguage();
   
   const tax = settings_domain?.data.tax;
@@ -128,6 +128,7 @@ export default function CartLayout() {
         headers: {
           'Content-Type': 'application/json',
           Authorization: userToken,
+          APP_KEY:api_key
         },
         body: JSON.stringify(formData),
       });
@@ -157,6 +158,7 @@ console.log(responseData);
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          APP_KEY:api_key
         },
         body: JSON.stringify({
           code: formData.coupon_discount,
@@ -195,6 +197,7 @@ console.log(responseData);
         headers: {
           'Content-Type': 'application/json',
           Authorization: userToken,
+          APP_KEY:api_key
         },
         body: JSON.stringify({
           total_cart: formData.total,

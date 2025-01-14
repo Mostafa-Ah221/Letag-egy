@@ -1,15 +1,17 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import * as Yup from 'yup';
 import { useCart } from "../../context/CartContext";
+import { ContextData } from "../../context/ContextApis";
 
 export default function SignUp() {
   const [loading, setLoading] = useState(false);
   const [errorMas, setErrorMas] = useState("");
     const { showToast } = useCart();
+    const { api_key } = useContext(ContextData);
   
   let navigate = useNavigate();
 
@@ -24,7 +26,9 @@ export default function SignUp() {
 
   function handleRegister(values) {
     setLoading(true);
-    axios.post(`https://demo.leetag.com/api/customer/register`, values)
+    axios.post(`https://demo.leetag.com/api/customer/register`, values,{
+      headers: {APP_KEY:api_key}
+    })
       .then((apiResponse) => {
         setLoading(false);
         navigate('/login');

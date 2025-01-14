@@ -23,7 +23,7 @@ import { BiCart, BiCartAdd } from 'react-icons/bi';
 
 
 export default function ProductDetails() {
-  const { getProdDetails, currencyData, userData, getReviews } = useContext(ContextData);
+  const { getProdDetails, currencyData, userData, getReviews ,api_key} = useContext(ContextData);
   const [quantity, setQuantity] = useState(1);
    const [showQuantity, setShowQuantity] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
@@ -136,7 +136,9 @@ console.log(dataReview);
 
   const handleAddReview = async (reviewData) => {
     try {
-      const response = await axios.post(`https://tarshulah.com/api/review/store/${id}`, reviewData);
+      const response = await axios.post(`https://tarshulah.com/api/review/store/${id}`, reviewData,{
+        headers: { APP_KEY:api_key}
+      });
       if (response.data.message.includes("successfully added")) {
         toast.success(language === "ar" ? "تم إرسال التقييم بنجاح" : "Review submitted successfully");
          queryClient.invalidateQueries(['getReviews', id, language]);

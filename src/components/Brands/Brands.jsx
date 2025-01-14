@@ -45,7 +45,7 @@ export default function Brands() {
   );
   useEffect(() => {
     if (data?.data?.brands) {
-      setBrands(data.data.brands); // عرض جميع البيانات بدون تصفية
+      setBrands(data.data.brands); 
     }
   }, [data]);
 

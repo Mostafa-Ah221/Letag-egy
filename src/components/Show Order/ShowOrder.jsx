@@ -12,7 +12,7 @@ import { useLocation } from 'react-router-dom';
 function ShowOrder() {
     const { id } = useParams();
     const { language } = useLanguage();
-    const { userToken, currencyDataEnglish, currencyData } = useContext(ContextData);
+    const { userToken, currencyDataEnglish, currencyData,api_key } = useContext(ContextData);
     const [orderData, setOrderData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
 
@@ -25,7 +25,8 @@ function ShowOrder() {
                     {
                         headers: {
                             "Authorization": userToken,
-                            "lang": language
+                            "lang": language,
+                            APP_KEY:api_key
                         },
                     }
                 );

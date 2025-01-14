@@ -6,8 +6,9 @@ import { useCart } from "./CartContext";
 
 export const ContextData = createContext();
 
-const baseDomain = window.location.protocol + "//" + window.location.hostname;
-console.log(baseDomain);
+// const baseDomain = window.location.protocol + "//" + window.location.hostname;
+// console.log(baseDomain);
+let api_key="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9"
 
 async function fetchProducts(filters, language) {
   const formData = new FormData();
@@ -16,7 +17,7 @@ async function fetchProducts(filters, language) {
   }
   try {
     const response = await axios.post(`https://tarshulah.com/api/products`, formData, {
-      headers: { lang: language },
+      headers: { lang: language , APP_KEY:api_key},
     });
     return response.data;
   } catch (error) {
@@ -27,7 +28,7 @@ async function fetchProducts(filters, language) {
 
 async function subCategories(language) {
   const response = await axios.get(`https://tarshulah.com/api/categories`, {
-    headers: { lang: language },
+    headers: { lang: language, APP_KEY:api_key },
   });
   // console.log(response?.data);
   
@@ -37,20 +38,20 @@ async function subCategories(language) {
 async function getCategoriesDetails(id, language) {
   const response = await axios.get(`https://tarshulah.com/api/categories`, {
     params: { id: id },
-    headers: { lang: language },
+    headers: { lang: language , APP_KEY:api_key},
   });
   return response.data;
 }
 async function getReviews(id, language) {
   const response = await axios.get(`https://tarshulah.com/api/reviews/${id}`, {
-    headers: { lang: language },
+    headers: { lang: language, APP_KEY:api_key },
   });
   return response.data;
 }
 
 async function getBrands(language) {
   const response = await axios.get(`https://tarshulah.com/api/brands`, {
-    headers: { lang: language },
+    headers: { lang: language , APP_KEY:api_key},
   });
   return response.data;
 }
@@ -58,7 +59,7 @@ async function getBrands(language) {
 
 async function getOffers(language) {
   const response = await axios.get(`https://tarshulah.com/api/offers`, {
-    headers: { lang: language },
+    headers: { lang: language , APP_KEY:api_key},
   });
   // console.log(response.data);
 
@@ -69,7 +70,7 @@ async function getProdDetails(id, language) {
   const response = await axios.get(
     `https://tarshulah.com/api/product/show/${id}`,
     {
-      headers: { lang: language },
+      headers: { lang: language , APP_KEY:api_key},
     }
   );
   return response.data;
@@ -81,7 +82,8 @@ async function getOrderDetails(id, language, token) {
     {
       headers: {
         Authorization: token,
-        lang: language
+        lang: language,
+       APP_KEY:api_key
       },
     }
   );
@@ -90,21 +92,22 @@ async function getOrderDetails(id, language, token) {
 
 async function getSlider(language) {
   const response = await axios.get(`https://tarshulah.com/api/sliders`, {
-    headers: { lang: language },
+    headers: { lang: language, APP_KEY:api_key},
   });
   return response.data;
 }
 
 async function getCurrency(language) {
   const response = await axios.get(`https://tarshulah.com/api/domain/settings`, {
-    headers: { lang: language },
+    headers: { lang: language , APP_KEY:api_key},
   });
 
   return response.data;
 }
 async function getMenuPage() {
-  const response = await axios.get(`https://demo.leetag.com/api/menu`);
-
+  const response = await axios.get(`https://demo.leetag.com/api/menu`,{
+    headers: { APP_KEY:api_key},
+  });
   return response.data;
 }
 //todo ================================================================(getAddressList)=============//
@@ -118,6 +121,7 @@ const getAddressList = async (userToken, language) => {
         'Accept': 'application/json',
         'Authorization': token,
         lang: language
+        , APP_KEY:api_key
       },
     });
 
@@ -141,7 +145,7 @@ async function getProductCategory(idCategory, page, pageSize, language) {
       `https://tarshulah.com/api/category/products/${idCategory}`,
       {
         params: { page, pageSize },
-        headers: { lang: language },
+        headers: { lang: language , APP_KEY:api_key},
       }
     );
     return response.data;
@@ -180,6 +184,7 @@ export default function DataContextProvider({ children }) {
           headers: {
             lang: language,
             Authorization: userToken,
+             APP_KEY:api_key
           },
         }
       );
@@ -197,7 +202,7 @@ export default function DataContextProvider({ children }) {
   async function getApiHome(language) {
     const response = await axios.get(`https://tarshulah.com/api/home`, {
       params: { city_id: selectedTownId },
-      headers: { lang: language },
+      headers: { lang: language , APP_KEY:api_key},
     });
     return response.data;
   }
@@ -241,7 +246,7 @@ export default function DataContextProvider({ children }) {
     if (!userToken) return;
     axios
       .get(`https://demo.leetag.com/api/customer/profile`, {
-        headers: { Authorization: `${userToken}` },
+        headers: { Authorization: `${userToken}`, APP_KEY:api_key },
       })
       .then((response) => {
         const user = {
@@ -325,7 +330,8 @@ export default function DataContextProvider({ children }) {
         getAddressList,
         setAddresses,
         addresses,
-        isLanguage
+        isLanguage,
+        api_key
       }}
     >
       {children}

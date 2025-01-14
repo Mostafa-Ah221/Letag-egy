@@ -6,7 +6,7 @@ import Address from '../Address/Address';
 import { useCart } from '../../context/CartContext';
 
 function AddAddress({ showAddress = true }) {
-    const { settings_domain, userToken,getAddressList,setAddresses } = useContext(ContextData);
+    const { settings_domain, userToken,getAddressList,setAddresses,api_key  } = useContext(ContextData);
     const { showToast } = useCart();
     const { language } = useLanguage();
     const towns = settings_domain?.data?.locations || [];
@@ -72,7 +72,7 @@ function AddAddress({ showAddress = true }) {
 
         try {
             const res = await axios.post("https://tarshulah.com/api/customer/address/store", formData, {
-                headers: { "Authorization": token },
+                headers: { "Authorization": token,APP_KEY:api_key },
             });
            
             showToast(language === 'ar' ? 'تم إضافة العنوان بنجاح' : 'Address added successfully');

@@ -81,7 +81,7 @@ export default function FilterProducts({ onFilterChange }) {
                       value={category.id}
                       checked={selectedFilters.categories_id.includes(category.id)}
                       onChange={() => handleFilterChange('categories_id', category.id)}
-                      className="mr-2" 
+                      className="mr-2 accent-primary" 
                     />
                     <label htmlFor={`category-${category.id}`} className="text-sm text-gray-700">
                       {category.name}
@@ -105,7 +105,7 @@ export default function FilterProducts({ onFilterChange }) {
                           value={child.id}
                           checked={selectedFilters.categories_id.includes(child.id)}
                           onChange={() => handleFilterChange('categories_id', child.id)}
-                          className="mr-2" 
+                          className="mr-2 accent-primary" 
                         />
                         <label htmlFor={`child-category-${child.id}`} className="text-sm text-gray-700">
                           {child.name}
@@ -137,7 +137,7 @@ export default function FilterProducts({ onFilterChange }) {
                   value={brand.id}
                   checked={selectedFilters.brands_id.includes(brand.id)}
                   onChange={() => handleFilterChange('brands_id', brand.id)}
-                  className="mr-2" 
+                  className="mr-2 accent-primary" 
                 />
                 <label htmlFor={`brand-${brand.id}`} className="text-sm text-gray-700">
                   {language  === "ar"?`${brand.name}`: `${brand.slug}`}

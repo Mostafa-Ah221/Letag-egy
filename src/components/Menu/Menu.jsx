@@ -11,14 +11,16 @@ import { useCart } from '../../context/CartContext';
 import { CgShutterstock } from "react-icons/cg";
 
 function Menu() {
-    let { userToken ,isLanguage,settings_domain} = useContext(ContextData);
+    let { userToken ,isLanguage,settings_domain,api_key} = useContext(ContextData);
     const { language, toggleLanguage } = useLanguage();
     const { wishList } = useCart();
     const [isStock, setIsStock] = useState(false);
     useEffect(() => {
         const fetchdata = async () => {
             try {
-                const res = await fetch("https://tarshulah.com/api/domain/settings");
+                const res = await fetch("https://tarshulah.com/api/domain/settings",{
+                    headers: {APP_KEY:api_key}
+                });
                 const resJson = await res.json();
                 const data = await resJson.data;
                 const stock = await data.multi_stocks_management;

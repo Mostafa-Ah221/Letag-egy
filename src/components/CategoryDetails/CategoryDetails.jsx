@@ -10,7 +10,7 @@ import FilterProducts from '../FilterProducts/FilterProducts';
 import axios from 'axios';
 
 export default function CategoryDetails() {
-  const { currencyData } = useContext(ContextData);
+  const { currencyData,api_key } = useContext(ContextData);
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -70,7 +70,8 @@ export default function CategoryDetails() {
         {
           headers: { 
             lang: language,
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            APP_KEY:api_key
           }
         }
       );
@@ -233,9 +234,11 @@ export default function CategoryDetails() {
               />
                )
 })
+
           ) : (
             <div className="col-span-full text-center">لا توجد منتجات</div>
           )}
+          
         </div>
       </div>
 

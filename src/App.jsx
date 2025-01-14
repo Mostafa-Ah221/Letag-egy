@@ -35,11 +35,13 @@ import Loader from "./components/Loader/Loader";
 
 function App() {
   const [isStock, setIsStock] = useState(false);
-
+let api_key="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9"
   useEffect(() => {
     const fetchdata = async () => {
       try {
-        const res = await fetch("https://tarshulah.com/api/domain/settings");
+        const res = await fetch("https://tarshulah.com/api/domain/settings",{
+          headers: {APP_KEY:api_key},
+        });
         const resJson = await res.json();
         const data = await resJson.data;
         const stock = await data.multi_stocks_management;

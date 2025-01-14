@@ -20,7 +20,7 @@ export default function Navbar() {
   const [openSubMenus, setOpenSubMenus] = useState({});
   const [ca2, setCa2] = useState({});
   const [catChildren2, setCatChildren2] = useState([]);
-  const { subCategories, userData, settings_domain, selectedTownId ,isLanguage} = useContext(ContextData);
+  const { subCategories, userData, settings_domain, selectedTownId ,isLanguage,api_key} = useContext(ContextData);
   const [isStock, setIsStock] = useState(false);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
   const [searchData, setSearchData] = useState(null);
@@ -65,7 +65,9 @@ const handleOpenMenu = () => {
   useEffect(() => {
     const fetchdata = async () => {
       try {
-        const res = await fetch("https://tarshulah.com/api/domain/settings");
+        const res = await fetch("https://tarshulah.com/api/domain/settings",{
+          headers: {APP_KEY:api_key}
+        });
         const resJson = await res.json();
         const data = await resJson.data;
         setIsStock(data.multi_stocks_management === 1);
@@ -99,7 +101,7 @@ const handleOpenMenu = () => {
 
   try {
     const response = await axios.post(`https://tarshulah.com/api/products`, formData, {
-      headers: { lang: language },
+      headers: { lang: language ,APP_KEY:api_key},
     });
     const resdata = response.data?.data?.products || [];
     setSearchData2(resdata);

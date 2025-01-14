@@ -13,7 +13,7 @@ export default function UpdateProfile() {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({});
-  const { userData, userToken } = useContext(ContextData);
+  const { userData, userToken,api_key } = useContext(ContextData);
   const { language } = useLanguage();
   const { showToast } = useCart();
 
@@ -55,6 +55,7 @@ export default function UpdateProfile() {
           headers: {
             'Authorization': userToken,
             'lang': language,
+            APP_KEY:api_key
           },
         });
 

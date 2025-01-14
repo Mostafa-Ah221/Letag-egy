@@ -14,7 +14,7 @@ import Modal from '../Modal/Modal';
 
 function SearchByItem() {
   const { id } = useParams();
-  const { subCategories, userData,currencyData } = useContext(ContextData);
+  const { subCategories, userData,currencyData,api_key } = useContext(ContextData);
   const [searchData, setSearchData] = useState(null);
   const [searchData2, setSearchData2] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -61,7 +61,7 @@ const handleAddToCart = (product) => {
 
       try {
         const response = await axios.post(`https://tarshulah.com/api/products`, formData, {
-          headers: { lang: language },
+          headers: { lang: language ,APP_KEY:api_key},
         });
         const products = response.data?.data?.products || [];
         setSearchData2(products.length ? products : null);

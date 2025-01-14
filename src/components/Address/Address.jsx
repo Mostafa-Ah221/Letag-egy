@@ -11,7 +11,7 @@ export default function Address({ address = true}) {
   const { language } = useLanguage();
   const queryClient = useQueryClient()
       const { showToast } = useCart();
-  const {  userToken, deleteAddress, settings_domain,getAddressList ,addresses,setAddresses} = useContext(ContextData);
+  const {  userToken, deleteAddress, settings_domain,getAddressList ,addresses,setAddresses,api_key} = useContext(ContextData);
 
   const towns = settings_domain?.data?.locations || [];
   const [isShown, setIsShown] = useState(false);
@@ -125,7 +125,8 @@ export default function Address({ address = true}) {
         {
           headers: {
             "Accept": "application/json",
-            'Authorization': userToken
+            'Authorization': userToken,
+            APP_KEY:api_key
           }
         }
       );

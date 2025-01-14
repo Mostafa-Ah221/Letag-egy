@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 function Orders() {
   const [orders, setOrders] = useState([]);
   const { language } = useLanguage(); // الحصول على اللغة من السياق
-  const { userToken } = useContext(ContextData);
+  const { userToken,api_key } = useContext(ContextData);
   const [isPointsSystem, setIsPointsSystem] = useState(false);
   const handleClick =
     useEffect(() => {
@@ -20,6 +20,7 @@ function Orders() {
           const ordersRes = await fetch("https://tarshulah.com/api/customer/orders", {
             headers: {
               "Authorization": userToken,
+              APP_KEY:api_key
             },
           });
 
@@ -34,7 +35,9 @@ function Orders() {
           console.error("Error fetching data:", error);
         }
         try {
-          const res = await fetch("https://tarshulah.com/api/domain/settings");
+          const res = await fetch("https://tarshulah.com/api/domain/settings",{
+            headers: {APP_KEY:api_key}
+          });
           const resJson = await res.json();
           const isPoints = await resJson.data.points_system;
           if (isPoints == 1) {

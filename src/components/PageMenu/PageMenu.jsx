@@ -2,13 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import LoadingIndicator from "../Loading/LoadingIndicator";
+import { useContext } from "react";
+import { ContextData } from "../../context/ContextApis";
 
 export default function PageMenu() {
   const { id } = useParams();
+  const { api_key } = useContext(ContextData);
 
   // الدالة لجلب بيانات الصفحة
   const getPageDetails = async (id) => {
-    const response = await axios.get(`https://demo.leetag.com/api/page/${id}`);
+    const response = await axios.get(`https://demo.leetag.com/api/page/${id}`,{
+      headers:{APP_KEY:api_key}
+    });
     return response.data;
   };
 

@@ -1,14 +1,16 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useLanguage } from "../../context/LanguageContextPro";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useFormik } from "formik";
 import { useCart } from "../../context/CartContext";
+import { ContextData } from "../../context/ContextApis";
 
 export default function ForgetPassword() {
   const [loading, setLoading] = useState(false);
   const [errorMas, setErrorMas] = useState("");
   const [openSection, setOpenSection] = useState("email"); 
+   const {api_key } = useContext(ContextData);
   const { language } = useLanguage();
       const { showToast } = useCart();
   
@@ -25,6 +27,7 @@ export default function ForgetPassword() {
           headers: {
             "Accept": "application/json",
             "lang": language === "ar" ? "ar" : "en",
+            APP_KEY:api_key
           },
         }
       );
@@ -64,6 +67,7 @@ export default function ForgetPassword() {
             "Accept": "application/json",
             "lang": language === "ar" ? "ar" : "en",
             "Content-Type": "multipart/form-data",
+            APP_KEY:api_key
           },
         }
       );
