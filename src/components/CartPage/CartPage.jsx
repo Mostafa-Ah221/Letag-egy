@@ -8,9 +8,11 @@ import LoadingIndicator from "../Loading/LoadingIndicator";
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, getTotalPrice } = useCart();
-  const { currencyData, getProdDetails } = useContext(ContextData);
+  const { currencyData, getProdDetails, settings_domain  } = useContext(ContextData);
+
   const { language } = useLanguage();
   // const [quantity, setQuantity] = useState(1);
+  const defaultImage = "https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg";
 
   const ids = cart.map((item) => item.id);
 
@@ -81,7 +83,7 @@ export default function CartPage() {
                       <td className="border border-gray-300 p-1 sm:p-3">
                         <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-4">
                           <img
-                            src={product.photos[0].url}
+                            src={product.photos[0]?.url || defaultImage}
                             alt={product.title}
                             className="w-12 h-12 sm:w-20 sm:h-20 object-cover rounded-md"
                           />
@@ -117,12 +119,12 @@ export default function CartPage() {
                       </td>
 
                       <td className="border border-gray-300 p-1 sm:p-3 text-[10px] sm:text-base">
-                        {product.price} {currencyData}
+                        { product.special_price > 0 ? product.special_price: product.price} {currencyData}
                       </td>
 
-                      <td className="border border-gray-300 p-1 sm:p-3 font-semibold text-[10px] sm:text-base">
-                        {(product.price * cartItem.quantity).toFixed(2)} {currencyData}
-                      </td>
+                   <td className="border border-gray-300 p-1 sm:p-3 font-semibold text-[10px] sm:text-base">
+                      {((product.special_price > 0 ? product.special_price : product.price) * cartItem.quantity).toFixed(2)} {currencyData}
+                    </td>
 
                       <td className="border border-gray-300 p-1 sm:p-3">
                         <button
@@ -154,7 +156,7 @@ export default function CartPage() {
             <div className="flex justify-between mb-2 sm:mb-3 text-xs sm:text-base">
               <span>{language === "ar" ? "الضرائب" : "Taxes"}:</span>
               <span>
-                0.00 {currencyData}
+                 % {settings_domain?.data.tax} 
               </span>
             </div>
             <hr className="my-2 sm:my-3 border-gray-500" />

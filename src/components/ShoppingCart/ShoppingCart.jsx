@@ -97,7 +97,7 @@ export default function ShoppingCart() {
                     <div className="flex flex-col flex-grow overflow-hidden">
                       <h3 className="text-lg font-medium truncate">{product.title}</h3>
                       <span className="text-primary text-lg font-semibold">
-                        {product.price} {currencyData}
+                        { product.special_price > 0 ? product.special_price: product.price} {currencyData}
                       </span>
                       <div className="flex items-center mt-2 gap-2 ">
                         <div className="flex border">

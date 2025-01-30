@@ -68,10 +68,17 @@ export const CartContextProvider = ({ children }) => {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
-  const getTotalPrice =  useMemo(() => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
-  }, [cart]);
+ 
+  const getTotalPrice = useMemo(() => {
+  return cart.reduce((total, item) => {
+    const itemPrice =
+      item.special_price && parseFloat(item.special_price) > 0
+        ? parseFloat(item.special_price)
+        : parseFloat(item.price);
 
+    return total + itemPrice * item.quantity;
+  }, 0).toFixed(2);
+}, [cart]);
 // /
 
   // Part of Wish List

@@ -7,7 +7,7 @@ import { HiPlusSm } from "react-icons/hi";
 import AddAddress from "../AddAddress/AddAddress";
 
 export default function DataOrder() {
-  const { updateData, handleReviewSubmit, formData ,handleCouponButton,handlePointsButton,required} = useOutletContext();
+  const { updateData, handleReviewSubmit, formData ,handleCouponButton,handlePointsButton,required,handleCancelPoints} = useOutletContext();
   const { userData, userToken, settings_domain,addresses } = useContext(ContextData);
   const { language } = useLanguage();
 
@@ -389,6 +389,12 @@ useEffect(() => {
         className="border p-2 bg-primary text-white"
       >
         {language === "ar" ? "الدفع بالنقاط" : "Pay with points"}
+      </button>
+      <button
+        onClick={handleCancelPoints}
+        className="border p-2 bg-primary text-white"
+      >
+        {language === "ar" ? "إلغاء الدفع" : "Cancel Payment"}
       </button>
     </div>
   )}
