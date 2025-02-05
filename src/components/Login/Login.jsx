@@ -28,7 +28,7 @@ export default function Login() {
   setLoading(true);
   // console.log("Login Attempt:", values); // تتبع البيانات المرسلة
 
-  axios.post(`https://demo.leetag.com/api/customer/login`, {
+  axios.post(`https://tarshulah.comapi/customer/login`, {
     email: values.email,
     password: values.password
   }, {

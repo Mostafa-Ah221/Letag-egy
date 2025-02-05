@@ -105,7 +105,7 @@ async function getCurrency(language) {
   return response.data;
 }
 async function getMenuPage() {
-  const response = await axios.get(`https://demo.leetag.com/api/menu`,{
+  const response = await axios.get(`https://tarshulah.comapi/menu`,{
     headers: { APP_KEY:api_key},
   });
   return response.data;
@@ -245,7 +245,7 @@ export default function DataContextProvider({ children }) {
   function fetchUserData() {
     if (!userToken) return;
     axios
-      .get(`https://demo.leetag.com/api/customer/profile`, {
+      .get(`https://tarshulah.comapi/customer/profile`, {
         headers: { Authorization: `${userToken}`, APP_KEY:api_key },
       })
       .then((response) => {

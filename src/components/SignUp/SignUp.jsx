@@ -26,7 +26,7 @@ export default function SignUp() {
 
   function handleRegister(values) {
     setLoading(true);
-    axios.post(`https://demo.leetag.com/api/customer/register`, values,{
+    axios.post(`https://tarshulah.comapi/customer/register`, values,{
       headers: {APP_KEY:api_key}
     })
       .then((apiResponse) => {

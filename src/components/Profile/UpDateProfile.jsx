@@ -51,7 +51,7 @@ export default function UpdateProfile() {
       formData.append("password_confirmation", confirmPassword);
 
       try {
-        const res = await axios.post("https://demo.leetag.com/api/customer/profile/update", formData, {
+        const res = await axios.post("https://tarshulah.comapi/customer/profile/update", formData, {
           headers: {
             'Authorization': userToken,
             'lang': language,

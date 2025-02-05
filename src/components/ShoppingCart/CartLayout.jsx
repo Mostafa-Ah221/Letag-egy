@@ -125,45 +125,51 @@ console.log(payPoint);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleReviewSubmit = async () => {
-    if (!validateFields()) return;
+ const handleReviewSubmit = async () => {
+  if (!validateFields()) return;
 
-    // نطبع القيم قبل الإرسال للتأكد
-    console.log('formData.total:', formData.total);
-    console.log('updatedTotal:', updatedTotal);
+  console.log('formData.total:', formData.total);
+  console.log('updatedTotal:', updatedTotal);
 
-    const finalData = {
-      ...formData,
-      total: baseTotal, // نرسل القيمة الأصلية بدون خصومات
-    };
-
-    console.log('Final data being sent:', finalData);
-
-    try {
-      const response = await fetch('https://demo.leetag.com/api/order/save', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: userToken,
-          APP_KEY: api_key,
-        },
-        body: JSON.stringify(finalData), // نرسل finalData بدلاً من formData
-      });
-
-      const responseData = await response.json();
-      console.log(responseData);
-      console.log(formData);
-
-      if (response.ok) {
-        showToast(language === 'ar' ? 'تم إرسال الطلب بنجاح' : 'Order submitted successfully');
-      } else {
-        showToast(responseData.message || 'تعذر إرسال الطلب.');
-      }
-    } catch (networkError) {
-      console.error('Network Error:', networkError);
-      showToast('خطأ في الشبكة. يرجى المحاولة مرة أخرى.');
-    }
+  const finalData = {
+    ...formData,
+    total: baseTotal,
   };
+
+  console.log('Final data being sent:', finalData);
+
+  try {
+    const response = await fetch('https://tarshulah.com/api/web/order/save', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: userToken,
+        APP_KEY: api_key,
+      },
+      body: JSON.stringify(finalData),
+    });
+
+    const responseData = await response.json();
+    console.log(responseData);
+    console.log(formData);
+
+    if (response.ok) {
+      showToast(language === 'ar' ? 'تم إرسال الطلب بنجاح' : 'Order submitted successfully');
+      
+      if (responseData.invoiceURL) {
+        window.open(responseData.invoiceURL, '_blank');
+    }
+
+      
+    } else {
+      showToast(responseData.message || 'تعذر إرسال الطلب.');
+    }
+  } catch (networkError) {
+    console.error('Network Error:', networkError);
+    showToast('خطأ في الشبكة. يرجى المحاولة مرة أخرى.');
+  }
+};
+
 
   const handleCouponButton = async () => {
     if (!formData.coupon_discount) {
@@ -172,7 +178,7 @@ console.log(payPoint);
     }
 
     try {
-      const response = await fetch('https://demo.leetag.com/api/coupon/apply', {
+      const response = await fetch('https://tarshulah.com/api/coupon/apply', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -210,7 +216,7 @@ const handlePointsButton = async () => {
     }
 
     try {
-      const response = await fetch('https://demo.leetag.com/api/customer/points/apply', {
+      const response = await fetch('https://tarshulah.com/api/customer/points/apply', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

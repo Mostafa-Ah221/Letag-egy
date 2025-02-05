@@ -11,7 +11,7 @@ export default function PageMenu() {
 
   // الدالة لجلب بيانات الصفحة
   const getPageDetails = async (id) => {
-    const response = await axios.get(`https://demo.leetag.com/api/page/${id}`,{
+    const response = await axios.get(`https://tarshulah.comapi/page/${id}`,{
       headers:{APP_KEY:api_key}
     });
     return response.data;
