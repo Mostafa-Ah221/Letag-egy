@@ -1,10 +1,10 @@
-import React, { useState, useContext } from 'react';
+import  { useState, useContext } from 'react';
 import { ContextData } from "../../context/ContextApis";
 import ReactPlayer from 'react-player';
 import Slider from 'react-slick';
 import { useQuery } from '@tanstack/react-query';
 
-function Videos() {
+function Banners() {
     const settings = {
         dots: true,
         infinite: true,
@@ -34,7 +34,7 @@ function Videos() {
         ],
     };
 
-    const [selectedVideo, setSelectedVideo] = useState(0);
+    const [selectedBanner, setSelectedBanner] = useState(0);
     const { getApiHome } = useContext(ContextData);
 
     const { data, isLoading, isError } = useQuery({
@@ -48,12 +48,12 @@ function Videos() {
 
     return (
         <>
-            {data?.data?.videos?.length > 0 ? (
+            {data?.data?.banners?.length > 0 ? (
                 <>
                     <div className='flex justify-center items-center'>
                         <ReactPlayer
                             controls={true}
-                            url={data.data.videos[selectedVideo]?.link || ""}
+                            url={data.data.banners[selectedBanner]?.link || ""}
                             width="200"
                             height="150"
                         />
@@ -61,15 +61,15 @@ function Videos() {
                     <br />
                     <div>
                         <Slider {...settings}>
-                            {data.data.videos.map((v, index) => (
+                            {data.data.banners.map((banner, index) => (
                                 <div
                                     className=''
-                                    key={v.id || index}
-                                    onClick={() => setSelectedVideo(index)}
+                                    key={banner.id || index}
+                                    onClick={() => setSelectedBanner(index)}
                                 >
                                     <ReactPlayer
                                         controls={true}
-                                        url={v.link || ""}
+                                        url={banner.link || ""}
                                         width="80"
                                         height="50"
                                     />
@@ -85,4 +85,4 @@ function Videos() {
     );
 }
 
-export default Videos;
+export default Banners;

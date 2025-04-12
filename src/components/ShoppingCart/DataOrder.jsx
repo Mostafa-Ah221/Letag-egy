@@ -7,8 +7,8 @@ import { HiPlusSm } from "react-icons/hi";
 import AddAddress from "../AddAddress/AddAddress";
 
 export default function DataOrder() {
-  const { updateData, handleReviewSubmit, formData ,handleCouponButton,handlePointsButton,required,handleCancelPoints} = useOutletContext();
-  const { userData, userToken, settings_domain,addresses } = useContext(ContextData);
+  const { updateData, handleReviewSubmit, formData ,handleCouponButton,handlePointsButton,required,handleCancelPoints, setPayMethod} = useOutletContext();
+  const { userData, userToken, settings_domain,addresses,points_system } = useContext(ContextData);
   const { language } = useLanguage();
 
   // const [openAddress, setOpenAddress] = useState(false);
@@ -68,6 +68,8 @@ useEffect(() => {
     shipping_id: selectedRegionId,
     shipping_price: shiping,
   });
+    console.log(updateData.shipping_price);
+
 }, [selectedTownId, selectedRegionId, shiping]);
 
   const handleChange = (e) => {
@@ -85,7 +87,8 @@ useEffect(() => {
     floor_number: selectedAddress.floor_number,
     shipping_price: selectedAddress.shipping_price,
     address_id: addressId,
-  });
+  });  
+  
 };
 
 
@@ -316,7 +319,7 @@ useEffect(() => {
                 id={`payment-${getway.id}`}
                 name="payment_method"
                 value={getway.payment_method}
-                onChange={handleChange}
+                onChange={(e)=>{handleChange(e);setPayMethod(getway.name);}}
                 />
               <label htmlFor={`payment-${getway.id}`} className="ml-2">
                 {getway.name}
@@ -373,31 +376,31 @@ useEffect(() => {
 
 
   {/* الدفع بالنقاط */}
-  <p className="my-2">
-    {language === "ar" ? "الدفع بالنقاط" : "Pay with points"}
-    <span
-      onClick={() => setOpenSection(openSection === "points" ? null : "points")}
-      className="text-primary cursor-pointer"
-    >
-      {language === "ar" ? " إضغط هنا " : "Click here"}
-    </span>
-  </p>
-  {openSection === "points" && (
-    <div className="items-center justify-start flex">
-      <button
-        onClick={handlePointsButton}
-        className="border p-2 bg-primary text-white"
+ {points_system !== "0" ? (
+  <>
+    <p className="my-2">
+      {language === "ar" ? "الدفع بالنقاط" : "Pay with points"}
+      <span
+        onClick={() => setOpenSection(openSection === "points" ? null : "points")}
+        className="text-primary cursor-pointer"
       >
-        {language === "ar" ? "الدفع بالنقاط" : "Pay with points"}
-      </button>
-      <button
-        onClick={handleCancelPoints}
-        className="border p-2 bg-primary text-white"
-      >
-        {language === "ar" ? "إلغاء الدفع" : "Cancel Payment"}
-      </button>
-    </div>
-  )}
+        {language === "ar" ? " إضغط هنا " : "Click here"}
+      </span>
+    </p>
+
+    {openSection === "points" && (
+      <div className="items-center justify-start flex">
+        <button
+          onClick={handlePointsButton}
+          className="border p-2 bg-primary text-white"
+        >
+          {language === "ar" ? "الدفع بالنقاط" : "Pay with points"}
+        </button>
+      </div>
+    )}
+  </>
+) : null}
+
 </div>
 
           

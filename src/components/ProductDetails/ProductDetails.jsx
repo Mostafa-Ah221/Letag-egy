@@ -222,7 +222,7 @@ console.log(dataReview);
           <div className="p-4 col-span-12 md:col-span-7">
             <h2 className="text-xl md:text-3xl font-bold mb-2">{product.title}</h2>
               <span className="text-2xl font-bold text-primary mb-4 inline-block">
-                {product.price} {currencyData}
+                {product.price} {language === 'ar' ? currencyData?.currency_icon:currencyData?.currency_name}
               </span>
             <div className="flex items-center justify-between  mb-5 gap-20">
                <span className="text-gray-400">
@@ -504,7 +504,8 @@ console.log(dataReview);
             handleAddToWish={handleAddToWish}
             wishList={wishList}
             updateQuantity={updateQuantity}
-            currencyData={currencyData}
+            currencyData={currencyData?.currency_icon}
+            currencyEN={currencyData?.currency_name}
             cartItem={cartItem} 
             isInCart={!!cartItem}
             deleteProduct={removeFromCart}
@@ -522,7 +523,8 @@ console.log(dataReview);
           product={selectedProduct}
           handleAddToCart={handleAddToCart}
           language={language}
-          currency={currencyData}
+          currency={currencyData?.currency_icon}
+          currencyEN={currencyData?.currency_name}
           handleAddToWish={handleAddToWish}
           wishList={wishList}
           setQuantity={setQuantity}

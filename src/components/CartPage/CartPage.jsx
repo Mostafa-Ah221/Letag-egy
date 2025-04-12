@@ -7,8 +7,8 @@ import { Link } from "react-router-dom";
 import LoadingIndicator from "../Loading/LoadingIndicator";
 
 export default function CartPage() {
-  const { cart, removeFromCart, updateQuantity, getTotalPrice } = useCart();
-  const { currencyData, getProdDetails, settings_domain  } = useContext(ContextData);
+  const { cart, removeFromCart, updateQuantity, getTotalPrice ,showToast} = useCart();
+  const { currencyData, getProdDetails, settings_domain,min_order  } = useContext(ContextData);
 
   const { language } = useLanguage();
   // const [quantity, setQuantity] = useState(1);
@@ -119,11 +119,11 @@ export default function CartPage() {
                       </td>
 
                       <td className="border border-gray-300 p-1 sm:p-3 text-[10px] sm:text-base">
-                        { product.special_price > 0 ? product.special_price: product.price} {currencyData}
+                        { product.special_price > 0 ? product.special_price: product.price} {language === 'ar' ? currencyData?.currency_icon:currencyData?.currency_name}
                       </td>
 
                    <td className="border border-gray-300 p-1 sm:p-3 font-semibold text-[10px] sm:text-base">
-                      {((product.special_price > 0 ? product.special_price : product.price) * cartItem.quantity).toFixed(2)} {currencyData}
+                      {((product.special_price > 0 ? product.special_price : product.price) * cartItem.quantity).toFixed(2)} {language === 'ar' ? currencyData?.currency_icon:currencyData?.currency_name}
                     </td>
 
                       <td className="border border-gray-300 p-1 sm:p-3">
@@ -150,7 +150,7 @@ export default function CartPage() {
             <div className="flex justify-between mb-2 sm:mb-3 text-xs sm:text-base">
               <span>{language === "ar" ? "المجموع الفرعي" : "Subtotal"}:</span>
               <span>
-                {getTotalPrice} {currencyData}
+                {getTotalPrice} {language === 'ar' ? currencyData?.currency_icon:currencyData?.currency_name}
               </span>
             </div>
             <div className="flex justify-between mb-2 sm:mb-3 text-xs sm:text-base">
@@ -163,16 +163,22 @@ export default function CartPage() {
             <div className="flex justify-between text-sm sm:text-lg font-bold">
               <span>{language === "ar" ? "الإجمالي" : "Total"}:</span>
               <span>
-                {getTotalPrice} {currencyData}
+                {getTotalPrice} {language === 'ar' ? currencyData?.currency_icon:currencyData?.currency_name}
               </span>
             </div>
 
             <Link
-              to={"/CartLayout"}
-              className="w-full bg-primary text-white py-1.5 sm:py-2 rounded-md mt-3 sm:mt-5 hover:bg-primary-dark block text-center text-xs sm:text-base"
-            >
-              {language === "ar" ? "الإنتقال لعملية الدفع" : "Proceed to Checkout"}
-            </Link>
+                to={getTotalPrice >= min_order ? "/CartLayout" : "#"}
+                onClick={(e) => {
+                  if (getTotalPrice < min_order) {
+                    e.preventDefault();
+                    showToast("الطلب الكلي يجب أن يكون أكبر من " + min_order + " دولار.");
+                  } 
+                }}
+                className="block text-center mt-6 py-2 text-white bg-primary rounded-md shadow hover:bg-primary/90 transition-colors"
+              >
+                {language === "ar" ? "متابعة الدفع" : "Payment Tracking"}
+              </Link>
           </div>
         </div>
       </div>

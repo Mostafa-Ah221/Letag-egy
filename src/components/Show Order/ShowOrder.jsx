@@ -1,18 +1,14 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useEffect, useContext, useState } from 'react';
+import {  useParams } from 'react-router-dom';
 import { ContextData } from "../../context/ContextApis";
 import { useLanguage } from "../../context/LanguageContextPro";
 import axios from "axios";
-import { IoEyeSharp } from 'react-icons/io5';
-import { IoIosHeart } from 'react-icons/io';
-import { CiHeart } from 'react-icons/ci';
-import { useCart } from '../../context/CartContext';
-import { useLocation } from 'react-router-dom';
+
 
 function ShowOrder() {
     const { id } = useParams();
     const { language } = useLanguage();
-    const { userToken, currencyDataEnglish, currencyData,api_key } = useContext(ContextData);
+    const { userToken, currencyData,api_key } = useContext(ContextData);
     const [orderData, setOrderData] = useState({});
     const [isLoading, setIsLoading] = useState(true);
 
@@ -167,14 +163,13 @@ function ShowOrder() {
                                             {language === "ar" ? orderItem?.term?.title_ar : orderItem?.term?.title_en}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                            {language === "ar" 
-                                                ? `${orderItem.amount} ${currencyData} x ${orderItem.qty}` 
-                                                : `${orderItem.amount} ${currencyDataEnglish} x ${orderItem.qty}`
-                                            }
+                                            
+                                                {orderItem.amount} {language === 'ar' ? currencyData?.currency_icon:currencyData?.currency_name} x {orderItem.qty} 
+                                            
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                             {String(Number(orderItem.amount) * Number(orderItem.qty))} {' '}
-                                            {language === "ar" ? currencyData : currencyDataEnglish}
+                                            {language === 'ar' ? currencyData?.currency_icon:currencyData?.currency_name}
                                         </td>
                                     </tr>
                                 ))}
@@ -190,7 +185,7 @@ function ShowOrder() {
                             {language === "ar" ? "الإجمالي:" : "Total:"} {' '}
                         </span>
                         <span className="text-xl font-bold text-yellow-600">
-                            {orderData?.total} {language === "ar" ? currencyData : currencyDataEnglish}
+                            {orderData?.total} {language === 'ar' ? currencyData?.currency_icon:currencyData?.currency_name}
                         </span>
                     </div>
                 </div>

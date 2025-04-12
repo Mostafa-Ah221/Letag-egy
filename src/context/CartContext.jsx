@@ -68,7 +68,6 @@ export const CartContextProvider = ({ children }) => {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
- 
   const getTotalPrice = useMemo(() => {
   return cart.reduce((total, item) => {
     const itemPrice =
@@ -79,6 +78,7 @@ export const CartContextProvider = ({ children }) => {
     return total + itemPrice * item.quantity;
   }, 0).toFixed(2);
 }, [cart]);
+
 // /
 
   // Part of Wish List

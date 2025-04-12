@@ -3,14 +3,13 @@ import Home from "./components/Home/Home";
 import Layout from "./components/Layout/Layout";
 import About from "./components/About/About";
 import Contact from "./components/Contact-us/Contact";
-import Login from "./components/Login/Login";
-import SignUp from "./components/SignUp/SignUp";
+// import Login from "./components/Login/Login";
+// import SignUp from "./components/SignUp/SignUp";
 import DataContextProveder from "./context/ContextApis";
 import PageBrands from "./components/Brands/pageBrands";
 import CategoryDetails from "./components/CategoryDetails/CategoryDetails";
 import ProductDetails from "./components/ProductDetails/ProductDetails";
 import CartLayout from "./components/ShoppingCart/CartLayout";
-// import PayPage from "./components/ShoppingCart/PayPage";
 import { CartContextProvider } from "./context/CartContext";
 import { useEffect, useState } from "react";
 import Stock from "./components/Stock/Stock";
@@ -30,7 +29,15 @@ import User from "./components/User/User";
 import DataOrder from "./components/ShoppingCart/DataOrder";
 import ShowOrder from "./components/Show Order/ShowOrder";
 import Loader from "./components/Loader/Loader";
+import Paid from "./components/Paid/Paid";
+import MobileAuthentication from "./components/Login/MobileAuthentication";
+import MobileSignup from "./components/SignUp/MobileSignup";
+// import MapComponent from "./components/Stock/LocationPickerMap";
+import GoogleMapComponent from "./components/Stock/LocationPickerMap";
+import CheckRegister from "./components/check-auth/CheckRegister";
+import CheckLogin from "./components/check-auth/CheckLogin";
 
+import { requestForToken,initializeNotifications  } from "./components/fcm";
 
 
 function App() {
@@ -53,24 +60,45 @@ let api_key="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI
         }
         // console.log(isStock);
       } catch (error) {
-        // console.log(error)
+        console.log(error)
       }
     };
     fetchdata();
   }, []);
 
+  useEffect(() => {
+    const setupNotifications = async () => {
+      try {
+        const token = await initializeNotifications();
+        if (token) {
+          console.log('تم تهيئة نظام الإشعارات بنجاح');
+        }
+      } catch (error) {
+        console.error('حدث خطأ أثناء تهيئة نظام الإشعارات:', error);
+      }
+    };
+    
+    setupNotifications();
+     requestForToken();
+  }, []);
   let router = createBrowserRouter([
     {
       path: "/",
       element: <Layout />,
       children: [
-        { path: "/", element: isStock ? <Stock /> : <Home /> },
+        { path: "/", element: isStock ? <GoogleMapComponent /> : <Home /> },
         { path: "home", element: isStock ? <Home /> : <Navigate replace to={"/"} /> },
         { path: "about", element: <About /> },
+        { path: "stock", element: <Stock /> },
         { path: "Loader", element: <Loader /> },
         { path: "contactUs", element: <Contact /> },
-        { path: "login", element: <Login /> },
-        { path: "register", element: <SignUp /> },
+        { path: "login", element: <CheckLogin /> },
+        { path: "register", element: <CheckRegister /> },
+        { path: "GoogleMapComponent", element: <GoogleMapComponent /> },
+        // 
+        { path: "loginMobile", element: <MobileAuthentication /> },
+        { path: "registerMobile", element: <MobileSignup /> },
+        // 
         { path: "forgetpassword", element: <ForgetPassword /> },
         { path: "pageBrand", element: <PageBrands /> },
         { path: "wishlist", element: <WishList /> },
@@ -80,6 +108,7 @@ let api_key="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI
         { path: "productDetails/:id", element: <ProductDetails /> },
         { path: "categoryFilter/:id", element: <CategoryFilter /> },
         { path: "pagemenu/:id", element: <PageMenu /> },
+        { path: "payment/status", element: <Paid /> },
         { path: "cartpage", element: <CartPage /> },
         { path: "AddAddress", element: <AddAddress /> },
         {
@@ -109,7 +138,6 @@ let api_key="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI
       <CartContextProvider>
         <DataContextProveder>
           <RouterProvider router={router} />
-
           <Toaster />
         </DataContextProveder>
       </CartContextProvider>

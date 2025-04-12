@@ -17,6 +17,7 @@ const CardForCompSlider = ({
   handleAddToWish,
   wishList,
   currencyData,
+  currencyEN,
   updateQuantity,
   cartItem,
   isInCart,
@@ -202,14 +203,14 @@ const CardForCompSlider = ({
             {product.special_price ? (
               <>
                 <p className=" mx-1 line-through text-gray-500 flex gap-1">
-                  <span>{currencyData}</span> <span>{product.price}</span> 
+                  <span>{language === "ar" ? currencyData:currencyEN} </span> <span>{product.price}</span> 
                 </p>
                 <p className="text-xl mx-1 font-bold text-primary flex gap-1">
-                 <span>{currencyData}</span> <span>{product.special_price}</span>
+                 <span>{language === "ar" ? currencyData:currencyEN}</span> <span>{product.special_price}</span>
                 </p>
               </>
             ) : (
-              <p className="text-xl flex gap-1"><span>{currencyData}</span> <span>{product.price}</span> </p>
+              <p className="text-xl flex gap-1"><span>{language === "ar" ? currencyData:currencyEN}</span> <span>{product.price}</span> </p>
             )}
           </div>
           

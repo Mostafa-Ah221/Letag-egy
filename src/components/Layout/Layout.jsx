@@ -14,7 +14,6 @@ export default function Layout() {
   return (
     <div className="min-h-screen flex flex-col ">
        <ScrollToTop />
-       
       <div className="grid grid-cols-12 relative">
        <ShowTotalPrice/>
         <div className="col-span-1 hidden lg:block">

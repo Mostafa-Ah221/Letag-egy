@@ -262,14 +262,14 @@ if (isLoading) {
                           {product.special_price ? (
                             <>
                               <p className="text-xl mx-1 line-through text-gray-500">
-                                {product.price} {currencyData}
+                                {product.price} {language === 'ar' ? currencyData?.currency_icon:currencyData?.currency_name}
                               </p>
                               <p className="text-xl mx-1 font-bold text-primary ">
-                                {product.special_price} {currencyData}
+                                {product.special_price} {language === 'ar' ? currencyData?.currency_icon:currencyData?.currency_name}
                               </p>
                             </>
                           ) : (
-                            <p className="text-xl">{product.price} {currencyData}</p>
+                            <p className="text-xl">{product.price} {language === 'ar' ? currencyData?.currency_icon:currencyData?.currency_name}</p>
                           )}
                         </div>
                         <p className="text-gray-700">
@@ -291,7 +291,8 @@ if (isLoading) {
         product={selectedProduct} 
         handleAddToCart={handleAddToCart} 
         language={language}
-        currency={currencyData}
+        currency={currencyData?.currency_icon}
+        currencyEN={currencyData?.currency_name}
         handleAddToWish={handleAddToWish}
          wishList={wishList}
          setQuantity={setQuantity}

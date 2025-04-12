@@ -25,34 +25,34 @@ const CustomArrow = ({ direction, onClick }) => (
 );
 
 export default function DataHome({ sectionName }) {
-  const { getApiHome, currencyData } = useContext(ContextData);
-  const { language } = useLanguage();
-  const { addToCart, handleAddToWish, wishList, cart, updateQuantity,removeFromCart } = useCart();
-  const [showModal, setShowModal] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [quantity, setQuantity] = useState(1);
-  const { data: homeData, isLoading, isError } = useQuery({
-    queryKey: ['getApiHome', language],
-    queryFn: () => getApiHome(language),
-    staleTime: 1000 * 60 * 30,
-    cacheTime: 1000 * 60 * 40,
-  });
+const { getApiHome, currencyData, cityData } = useContext(ContextData);
+const { language } = useLanguage();
+const { addToCart, handleAddToWish, wishList, cart, updateQuantity, removeFromCart } = useCart();
+const [showModal, setShowModal] = useState(false);
+const [selectedProduct, setSelectedProduct] = useState(null);
+const [quantity, setQuantity] = useState(1);
 
+const { data: homeData, isLoading, isError } = useQuery({
+  queryKey: ['getApiHome', language, cityData], 
+  queryFn: () => getApiHome(language),
+  staleTime: 1000 * 60 * 30,
+  cacheTime: 1000 * 60 * 40,
+});
   const handleAddToCart = (product) => {
     addToCart(product, quantity);
   };
 
   useEffect(() => {}, [language, homeData]);
 
-  const { data: sliderData, isLoading: isSliderLoading } = useQuery({
-    queryKey: ['getSliderImages'],
-    queryFn: async () => {
-      const response = await fetch("https://tarshulah.com/api/sliders");
-      return response.json();
-    },
-    staleTime: 1000 * 60 * 15,
-    cacheTime: 1000 * 60 * 30,
-  });
+  // const { data: sliderData, isLoading: isSliderLoading } = useQuery({
+  //   queryKey: ['getSliderImages'],
+  //   queryFn: async () => {
+  //     const response = await fetch("https://tarshulah.com/api/sliders");
+  //     return response.json();
+  //   },
+  //   staleTime: 1000 * 60 * 15,
+  //   cacheTime: 1000 * 60 * 30,
+  // });
 
    const handleProductClick = (product) => {
         const cartItem = cart.find((item) => item.id === product.id); 
@@ -65,10 +65,10 @@ export default function DataHome({ sectionName }) {
 
 
 
-  const sections = {
-    trending: language === "ar" ? "المنتجات الرائجة" : "featured",
-    bestSelling: language === "ar" ? "أفضل المنتجات مبيعًا" : "best_sell",
-  };
+  // const sections = {
+  //   trending: language === "ar" ? "المنتجات الرائجة" : "featured",
+  //   bestSelling: language === "ar" ? "أفضل المنتجات مبيعًا" : "best_sell",
+  // };
 
   if (isLoading) {
     return (
@@ -80,6 +80,12 @@ export default function DataHome({ sectionName }) {
 const trendingSection = homeData && homeData.data && homeData.data.sections
   ? homeData.data.sections.find(section => section.name === sectionName)
   : null;
+  
+
+  const hasProducts = trendingSection && trendingSection.childreen && trendingSection.childreen.length > 0;
+
+  if (!hasProducts) return null;
+  
   const settings = {
     dots: false,
     infinite: true,
@@ -114,7 +120,8 @@ const trendingSection = homeData && homeData.data && homeData.data.sections
                     handleAddToWish={handleAddToWish}
                     wishList={wishList}
                      updateQuantity={updateQuantity}
-                    currencyData={currencyData}
+                    currencyData={currencyData?.currency_icon}
+                    currencyEN={currencyData?.currency_name}
                     cartItem={cartItem} 
                     isInCart={!!cartItem}
                     deleteProduct={removeFromCart}
@@ -135,7 +142,8 @@ const trendingSection = homeData && homeData.data && homeData.data.sections
           product={selectedProduct}
           handleAddToCart={handleAddToCart}
           language={language}
-          currency={currencyData}
+          currency={currencyData?.currency_icon}
+          currencyEN={currencyData?.currency_name}
           handleAddToWish={handleAddToWish}
           wishList={wishList}
           setQuantity={setQuantity}
@@ -144,7 +152,7 @@ const trendingSection = homeData && homeData.data && homeData.data.sections
         />
       )}
 
-      <div className="flex items-center justify-center my-4">
+      {/* <div className="flex items-center justify-center my-4">
         {sliderData && sectionName === sections.trending && homeData?.data?.sliders?.[1]?.photo ? (
           <img
             src={homeData.data.sliders[1]?.photo}
@@ -158,7 +166,7 @@ const trendingSection = homeData && homeData.data && homeData.data.sections
             alt="Slider Image"
           />
         ) : null}
-      </div>
+      </div> */}
 
 
     </div>

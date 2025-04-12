@@ -10,7 +10,7 @@ import FilterProducts from '../FilterProducts/FilterProducts';
 import axios from 'axios';
 
 export default function CategoryDetails() {
-  const { currencyData,api_key } = useContext(ContextData);
+  const { currencyData,selectedTownId,api_key,cityData } = useContext(ContextData);
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -33,83 +33,90 @@ export default function CategoryDetails() {
   const { id } = useParams();
   const { language } = useLanguage();
 
-  const fetchProducts = async (page = 1, filters = null, shouldResetPage = false) => {
-    setIsLoading(true);
-    const formData = new FormData();
-    
-    const currentFilters = filters || activeFilters;
+const fetchProducts = async (page = 1, filters = null, shouldResetPage = false) => {
+  setIsLoading(true);
+  const formData = new FormData();
+  
+  const currentFilters = filters || activeFilters;
 
-    // إضافة الفئات المحددة
-    if (currentFilters.categories_id && currentFilters.categories_id.length > 0) {
-      currentFilters.categories_id.forEach((catId, index) => {
-        formData.append(`categories_id[${index}]`, catId);
-      });
-    }
+ if (cityData?.city_id) {
+  formData.append("city_id", cityData.city_id);
+} else if (selectedTownId) {
+  formData.append("city_id", selectedTownId);
+}
 
-    // إضافة الماركات المحددة
-    if (currentFilters.brands_id && currentFilters.brands_id.length > 0) {
-      currentFilters.brands_id.forEach((brandId, index) => {
-        formData.append(`brands_id[${index}]`, brandId);
-      });
-    }
+  if (currentFilters.categories_id && currentFilters.categories_id.length > 0) {
+    currentFilters.categories_id.forEach((catId, index) => {
+      formData.append(`categories_id[${index}]`, catId);
+    });
+  }
 
-    // إضافة معايير الترتيب - مهم: نضيف الترتيب دائماً
-    if (currentFilters.order_by_date) {
-      formData.append('order_by_date', currentFilters.order_by_date);
-    }
+  // إضافة الماركات المحددة
+  if (currentFilters.brands_id && currentFilters.brands_id.length > 0) {
+    currentFilters.brands_id.forEach((brandId, index) => {
+      formData.append(`brands_id[${index}]`, brandId);
+    });
+  }
 
-    // إضافة معيار الأكثر مبيعاً
-    if (currentFilters.section === 'best_selling') {
-      formData.append('section', 'best_selling');
-    }
+  // إضافة معايير الترتيب
+  if (currentFilters.order_by_date) {
+    formData.append('order_by_date', currentFilters.order_by_date);
+  }
 
-    try {
-      const response = await axios.post(
-        `https://tarshulah.com/api/products?page=${shouldResetPage ? 1 : page}`,
-        formData,
-        {
-          headers: { 
-            lang: language,
-            'Accept': 'application/json',
-            APP_KEY:api_key
-          }
+  // إضافة معيار الأكثر مبيعاً
+  if (currentFilters.section === 'best_selling') {
+    formData.append('section', 'best_selling');
+  }
+
+  try {
+    // إرسال الطلب حسب ما إذا كان هناك city_id أو لا
+    const response = await axios.post(
+      `https://tarshulah.com/api/products?page=${shouldResetPage ? 1 : page}`,
+      formData,
+      {
+        headers: { 
+          lang: language,
+          'Accept': 'application/json',
+          APP_KEY: api_key
         }
-      );
-
-      const { data, meta } = response.data;
-
-      if (data && data.products) {
-        setProducts(data.products);
-        setPagination({
-          currentPage: meta.current_page,
-          lastPage: meta.last_page,
-          nextPage: meta.next_page
-        });
-        
-        if (shouldResetPage) {
-          setCurrentPage(1);
-        }
-      } else {
-        setProducts([]);
-        setPagination({
-          currentPage: 1,
-          lastPage: 1,
-          nextPage: null
-        });
       }
+    );
+
+    const { data, meta } = response.data;
+
+    if (data && data.products) {
+      setProducts(data.products);
+      setPagination({
+        currentPage: meta.current_page,
+        lastPage: meta.last_page,
+        nextPage: meta.next_page
+      });
       
-    } catch (error) {
-      console.error("خطأ في جلب المنتجات:", error);
+      if (shouldResetPage) {
+        setCurrentPage(1);
+      }
+    } else {
       setProducts([]);
       setPagination({
         currentPage: 1,
         lastPage: 1,
         nextPage: null
       });
-    } finally {
-      setIsLoading(false);
     }
-  };
+    
+  } catch (error) {
+    console.error("خطأ في جلب المنتجات:", error);
+    setProducts([]);
+    setPagination({
+      currentPage: 1,
+      lastPage: 1,
+      nextPage: null
+    });
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   useEffect(() => {
     if (id) {
@@ -117,7 +124,7 @@ export default function CategoryDetails() {
         categories_id: [id],
         brands_id: [],
         section: '',
-        order_by_date: 'desc' // نبدأ بالترتيب من الأحدث افتراضياً
+        order_by_date: 'desc' 
       };
       setActiveFilters(initialFilters);
       setSortOption('desc');
@@ -227,7 +234,8 @@ export default function CategoryDetails() {
                 handleAddToWish={handleAddToWish}
                 wishList={wishList}
                 updateQuantity={updateQuantity}
-                currencyData={currencyData}
+                currencyData={currencyData?.currency_icon}
+                  currencyEN={currencyData?.currency_name}
                 cartItem={cartItem} 
                 isInCart={!!cartItem}
                 deleteProduct={removeFromCart}
@@ -249,7 +257,8 @@ export default function CategoryDetails() {
           product={selectedProduct}
           handleAddToCart={handleAddToCart}
           language={language}
-          currency={currencyData}
+          currency={currencyData?.currency_icon}
+          currencyEN={currencyData?.currency_name}
           handleAddToWish={handleAddToWish}
           wishList={wishList}
           setQuantity={setQuantity}

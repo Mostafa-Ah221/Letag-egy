@@ -4,9 +4,8 @@ import DataHomePlay from "./DataHomePlay";
 import SliderHome from "./SliderHome";
 import SubCatigory from "./SubCatigory";
 import { useLanguage } from "../../context/LanguageContextPro";
-import SecondMenu from "../SecondMenu/SecondMenu";
-import Navbar from "../Navbar/Navbar";
 import Videos from "./Videos";
+import Banners from "./Banners";
 
 export default function Home() {
   const { language } = useLanguage();
@@ -29,6 +28,7 @@ export default function Home() {
       <DataHome sectionName={sections.trending} />
       <DataHome sectionName={sections.bestSelling} />
       <DataHomePlay />
+      <Banners />
     </div>
   );
 }

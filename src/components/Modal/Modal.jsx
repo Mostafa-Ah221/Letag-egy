@@ -11,6 +11,8 @@ export default function Modal({
   wishList,
   language,
   currency,
+  currencyEN,
+  
 }) {
   const {  cart  } = useCart();
   if (!isOpen || !product) return null;
@@ -47,7 +49,7 @@ export default function Modal({
           <div className="mt-6 md:pr-4">
             <h3 className="text-xl font-semibold">{product.title}</h3>
             <span className="text-primary text-xl font-bold mb-5 block">
-              {product.price} {currency} {/* عرض العملة */}
+              {product.price} {language === "ar" ? currency:currencyEN} {/* عرض العملة */}
             </span>
 
             <div className="flex md:block gap-3">

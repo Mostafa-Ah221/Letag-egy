@@ -28,7 +28,7 @@ export default function Login() {
   setLoading(true);
   // console.log("Login Attempt:", values); // تتبع البيانات المرسلة
 
-  axios.post(`https://demo.leetag.com/api/customer/login`, {
+  axios.post(`https://tarshulah.com/api/customer/login`, {
     email: values.email,
     password: values.password
   }, {
@@ -58,9 +58,9 @@ export default function Login() {
   })
   .catch((error) => {
     setLoading(false);
-    console.error("Complete Error Object:", error);
-    console.error("Error Response:", error.response);
-    console.error("Error Request:", error.request);
+    // console.error("Complete Error Object:", error);
+    // console.error("Error Response:", error.response);
+    // console.error("Error Request:", error.request);
 
     const errorMessage = 
       error.response?.data?.message || 
@@ -123,10 +123,11 @@ export default function Login() {
           {errorMas}
         </div>
       )}
-      <div className='grid grid-cols-12 gap-5'>
+      <div className="flex items-center justify-center min-h-screen">
+
         {/* Form Section for Login */}
       
-          <div className="md:col-span-6 order-1 col-span-12">
+          <div className="w-1/2">
             <form onSubmit={formik.handleSubmit}>
               <h2 className="text-2xl font-semibold text-center mb-7">{language === "ar" ? "تسجيل الدخول الآن" : "Login Now"}</h2>
               <div className='grid grid-cols-12 gap-3'>
@@ -183,38 +184,7 @@ export default function Login() {
             </form>
           </div>
 
-        {/* Forgot Password Section */}
-        {/* {openSection === "Forgot" && (
-          <div className="md:col-span-6 order-1 col-span-12">
-            <h2 className="text-2xl font-semibold text-center mb-7">{language === "ar" ? "إعادة تعيين كلمة السر" : "Reset Your Password"}</h2>
-            <form>
-              <div className="mb-5 col-span-12">
-                <label htmlFor="email" className="block mb-2 text-sm">{language === "ar" ? "الايمال" : "Email"}*</label>
-                <input
-                  onChange={formik.handleChange}
-                  value={formik.values.email}
-                  required
-                  type="email"
-                  id="email"
-                  className="border border-primary text-gray-900 text-sm rounded-md block w-full p-2.5 outline-none"
-                />
-              </div>
-              <button type="button" onClick={() => handleForgotPassword(formik.values)} className="bg-primary text-white py-2 px-4 rounded mt-5 m-auto">
-                {loading ? <ClipLoader color="#36d7b7" size={15} /> : (language === "ar" ? "إرسال رابط إعادة تعيين كلمة المرور" : "Send Reset Link")}
-              </button>
-              <div className="text-center mt-4">
-                <p onClick={() => setOpenSection(null)} className="text-primary font-semibold hover:underline cursor-pointer">
-                  {language === "ar" ? "العودة لتسجيل الدخول" : "Back to Login"}
-                </p>
-              </div>
-            </form>
-          </div>
-        )} */}
-        <div className="relative hidden md:block col-span-0 md:col-span-6 order-1 w-full h-96">
-          <div className="absolute top-0 right-0 w-full h-full bg-primary opacity-40"></div>
-          <img className="w-full h-full object-cover" src="https://khamato.com/themes/default/assets/images/login.png" alt="Login Illustration" />
-        </div>
       </div>
-    </div>
+      </div>
   );
 }

@@ -5,11 +5,12 @@ import { ContextData } from "../../context/ContextApis";
 import { useOutletContext } from "react-router-dom";
 
 export default function CartOrder() {
-  const { cart, getTotalPrice, currencyData } = useCart();
-  const { settings_domain } = useContext(ContextData);
+  const { cart, getTotalPrice } = useCart();
+  const { settings_domain,currencyData } = useContext(ContextData);
   const { updatedTotal, appliedDiscount, totalBeforeDiscount, payPoint,shippingPrice } = useOutletContext();
   const [total, setTotal] = useState(0);
   const { language } = useLanguage();
+console.log(currencyData);
 
   useEffect(() => {
     const calculatedTotal = getTotalPrice;
@@ -38,17 +39,38 @@ export default function CartOrder() {
           <tr>
             <th className="border px-4 py-2">{language === "ar" ? "المنتج" : "Product"}</th>
             <th className="border px-4 py-2">{language === "ar" ? "الكمية" : "Quantity"}</th>
-            <th className="border px-4 py-2">{language === "ar" ? "الاجمالي" : "Total"}</th>
+            <th colSpan={3} className="border px-4 py-2">{language === "ar" ? "الاجمالي" : "Total"}</th>
           </tr>
         </thead>
         <tbody>
           {cart.map((item) => (
             <tr key={item.id}>
-              <td className="border px-4 py-2 font-semibold">{item.title}</td>
+              <td className="border px-4 py-2 font-semibold w-full">{item.title}</td>
               <td className="border px-4 py-2 text-slate-500 text-center">{item.quantity}</td>
-              <td className="border px-4 py-2 text-slate-500 text-center">
-                {(item.quantity * item.price).toFixed(2)} {currencyData}
-              </td>
+          <td className="border px-4 py-2 text-slate-500 text-center">
+            {Number(item.special_price) > 0 ? (
+              <>
+                {/* السعر القديم مع خط عليه */}
+                <span className="line-through text-red-500 m-2">
+                  {(Number(item.quantity) || 0) * (Number(item.price) || 0).toFixed(2)}{"  "}
+                  {language === 'ar' ? currencyData?.currency_icon:currencyData?.currency_name}
+                </span>
+                
+                {/* السعر الجديد */}
+                <span className="text-green-500">
+                  {(Number(item.quantity) || 0) * (Number(item.special_price) || 0).toFixed(2)}{"  "}
+                  {language === 'ar' ? currencyData.currency_icon:currencyData?.currency_name || ""}
+                </span>
+              </>
+            ) : (
+              <>
+                {/* السعر العادي بدون خصم */}
+                {(Number(item.quantity) || 0) * (Number(item.price) || 0).toFixed(2)}{" "}
+                {language === 'ar' ? currencyData.currency_icon:currencyData?.currency_name || ""}
+              </>
+            )}
+          </td>
+
             </tr>
           ))}
           <tr>
@@ -73,12 +95,12 @@ export default function CartOrder() {
             </td>
             <td className="border px-4 py-2 font-semibold text-center">
               {(appliedDiscount > 0 || payPoint) && (
-                <span className="text-red-500 line-through mr-2">
-                  {totalBeforeDiscount} {currencyData}
+                <span className="text-red-500 text-[14px] line-through m-2 inline-block w-full">
+                  {totalBeforeDiscount} {language === 'ar' ? currencyData?.currency_icon:currencyData?.currency_name}
                 </span>
               )}
-              <span className={appliedDiscount > 0 || payPoint ? "text-green-500 font-bold" : "text-black"}>
-                {payPoint ? payPoint : updatedTotal} {currencyData}
+              <span className={appliedDiscount > 0 || payPoint ? "text-green-500 font-bold inline-block w-full" : "text-black"}>
+                {payPoint ? payPoint : updatedTotal} {language === 'ar' ? currencyData?.currency_icon:currencyData?.currency_name}
               </span>
             </td>
           </tr>

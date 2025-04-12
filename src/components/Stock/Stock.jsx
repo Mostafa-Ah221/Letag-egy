@@ -20,7 +20,8 @@ function Stock() {
     };
 
     return (
-        <div className='container mb-[9.3rem] px-7'>
+        <div className='container mb-[9.3rem] px-7
+        '>
 
             <h1 className='text-center font-bold text-2xl mt-10'>
                 {language === 'ar' ? 'يرجى اختيار المدينة الذي تريد التوصيل إليه' : 'Please select the city you want to deliver to'}

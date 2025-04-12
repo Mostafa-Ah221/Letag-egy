@@ -10,12 +10,11 @@ import ProductCard from "../CartProduct/CardProduct";
 import LoadingIndicator from "../Loading/LoadingIndicator";
 
 export default function CategoryFilter() {
-  const { fetchProducts } = useContext(ContextData);
+  const { fetchProducts,cityData,currencyData } = useContext(ContextData);
   const { addToCart, handleAddToWish,wishList,removeFromCart ,cart,updateQuantity } = useCart(); 
   const [showModal, setShowModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [quantity, setQuantity] = useState(1); 
-  const { currencyData } = useContext(ContextData);
    const { language } = useLanguage();
   
   const { id } = useParams();
@@ -24,8 +23,8 @@ export default function CategoryFilter() {
   };
 
 const { data, isLoading } = useQuery({
-    queryKey: ["fetchProducts", filters,language],
-    queryFn: () => fetchProducts(filters),
+    queryKey: ["fetchProducts", filters,language,cityData],
+    queryFn: () => fetchProducts(filters,cityData),
     staleTime: 1000 * 60 * 30,
     cacheTime: 1000 * 60 * 40,
   });
@@ -66,7 +65,8 @@ const brandProduct=data?.data?.products
             handleAddToWish={handleAddToWish}
            wishList={wishList}
             updateQuantity={updateQuantity}
-            currencyData={currencyData}
+            currencyData={currencyData?.currency_icon}
+            currencyEN={currencyData?.currency_name}
             cartItem={cartItem} 
             isInCart={!!cartItem}
               deleteProduct={removeFromCart}
@@ -85,7 +85,8 @@ const brandProduct=data?.data?.products
         product={selectedProduct} 
         handleAddToCart={handleAddToCart} 
         language={language}
-        currency={currencyData}
+        currency={currencyData?.currency_icon}
+          currencyEN={currencyData?.currency_name}
           handleAddToWish={handleAddToWish}
          wishList={wishList}
          setQuantity={setQuantity}

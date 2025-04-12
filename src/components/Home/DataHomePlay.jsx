@@ -11,15 +11,15 @@ import ProductCard from '../CartProduct/CardProduct';
 export default function DataHomePlay() {
     const [quantity, setQuantity] = useState(1); 
     const { addToCart, handleAddToWish, wishList, cart, updateQuantity,removeFromCart } = useCart(); 
-    const { getApiHome, currencyData } = useContext(ContextData);
+    const { getApiHome, currencyData ,cityData} = useContext(ContextData);
     const { language } = useLanguage();
   
     const { data: homeData, isLoading, isError } = useQuery({
-        queryKey: ['getApiHome', language], 
-        queryFn: () => getApiHome(language), 
-        staleTime: 1000 * 60 * 30,
-        cacheTime: 1000 * 60 * 40,
-    });
+  queryKey: ['getApiHome', language, cityData], 
+  queryFn: () => getApiHome(language),
+  staleTime: 1000 * 60 * 30,
+  cacheTime: 1000 * 60 * 40,
+});
 
     const trendingSection = homeData?.data?.sections.find(section => section.name === "new" || section.name === "منتجات وصلت حديثا");
     const [showModal, setShowModal] = useState(false);
@@ -27,6 +27,8 @@ export default function DataHomePlay() {
 
     if (isLoading) return <p>Loading...</p>;
     if (isError) return <p>Error occurred while fetching data.</p>;
+    
+    const hasProducts = trendingSection && trendingSection.childreen && trendingSection.childreen.length > 0;
 
     const handleAddToCart = (product) => {
         addToCart(product, quantity); 
@@ -38,6 +40,7 @@ export default function DataHomePlay() {
         setQuantity(cartItem?.quantity || 1); // Ensure quantity is set correctly
         setShowModal(true);
     };
+    if (!hasProducts) return null;
 
     return (
         <div className="container mx-auto px-4 my-11">
@@ -56,7 +59,8 @@ export default function DataHomePlay() {
                                 handleAddToWish={handleAddToWish}
                                 wishList={wishList}
                                 updateQuantity={updateQuantity}
-                                currencyData={currencyData}
+                                currencyData={currencyData?.currency_icon}
+                                currencyEN={currencyData?.currency_name}
                                 cartItem={cartItem} 
                                 isInCart={!!cartItem}
                                 deleteProduct={removeFromCart}
@@ -75,7 +79,8 @@ export default function DataHomePlay() {
                     product={selectedProduct} 
                     handleAddToCart={handleAddToCart} 
                     language={language}
-                    currency={currencyData}
+                    currency={currencyData?.currency_icon}
+                    currencyEN={currencyData?.currency_name}
                     handleAddToWish={handleAddToWish}
                     wishList={wishList}
                     setQuantity={setQuantity} // Pass setQuantity to Modal for updating the local state

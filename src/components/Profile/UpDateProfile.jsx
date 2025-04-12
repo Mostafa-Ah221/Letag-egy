@@ -51,7 +51,7 @@ export default function UpdateProfile() {
       formData.append("password_confirmation", confirmPassword);
 
       try {
-        const res = await axios.post("https://demo.leetag.com/api/customer/profile/update", formData, {
+        const res = await axios.post("https://tarshulah.com/api/customer/profile/update", formData, {
           headers: {
             'Authorization': userToken,
             'lang': language,
@@ -101,11 +101,12 @@ export default function UpdateProfile() {
               <label htmlFor="first-name" className="block mb-1 text-sm font-medium text-gray-700">
                 {language === "ar" ? "الاسم الأول" : "First Name"} <span className="text-red-500">*</span>
               </label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              {/* Assuming language is a prop or from context */}
+              <div className="relative w-[16rem] md:w-full">
+                <User className={`absolute top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 ${language === "ar" ? "right-3" : "left-3"}`} />
                 <input
                   id="first-name"
-                  className="w-[16rem] md:w-full  pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+                  className={`w-full ${language === "ar" ? "pr-10" : "pl-10"} py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm`}
                   placeholder={language === "ar" ? "أدخل الاسم الأول" : "Enter first name"}
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
@@ -119,11 +120,11 @@ export default function UpdateProfile() {
               <label htmlFor="last-name" className="block mb-1 text-sm font-medium text-gray-700">
                 {language === "ar" ? "الاسم الأخير" : "Last Name"} <span className="text-red-500">*</span>
               </label>
-              <div className="relative">
+              <div className="relative w-[16rem] md:w-full">
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   id="last-name"
-                  className="md:w-full w-[16rem] pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+                  className={`w-full ${language === "ar" ? "pr-10" : "pl-10"} py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm`}
                   placeholder={language === "ar" ? "أدخل الاسم الأخير" : "Enter last name"}
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
@@ -137,12 +138,12 @@ export default function UpdateProfile() {
               <label htmlFor="email" className="block mb-1 text-sm font-medium text-gray-700">
                 {language === "ar" ? "البريد الإلكتروني" : "Email"} <span className="text-red-500">*</span>
               </label>
-              <div className="relative">
+              <div className="relative w-[16rem] md:w-full">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   id="email"
                   type="email"
-                  className="md:w-full w-[16rem]  pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+                  className={`w-full ${language === "ar" ? "pr-10" : "pl-10"} py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm`}
                   placeholder={language === "ar" ? "أدخل البريد الإلكتروني" : "Enter email"}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -156,11 +157,11 @@ export default function UpdateProfile() {
               <label htmlFor="phone" className="block mb-1 text-sm font-medium text-gray-700">
                 {language === "ar" ? "الهاتف" : "Phone"} <span className="text-red-500">*</span>
               </label>
-              <div className="relative">
+              <div className="relative w-[16rem] md:w-full">
                 <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   id="phone"
-                  className="md:w-full w-[16rem]  pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+                  className={`w-full ${language === "ar" ? "pr-10" : "pl-10"} py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm`}
                   placeholder={language === "ar" ? "أدخل رقم الهاتف" : "Enter phone number"}
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -174,12 +175,12 @@ export default function UpdateProfile() {
               <label htmlFor="new-password" className="block mb-1 text-sm font-medium text-gray-700">
                 {language === "ar" ? "كلمة المرور الجديدة" : "New Password"}
               </label>
-              <div className="relative">
+              <div className="relative w-[16rem] md:w-full">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   id="new-password"
                   type="password"
-                  className="md:w-full w-[16rem]  pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+                  className={`w-full ${language === "ar" ? "pr-10" : "pl-10"} py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm`}
                   placeholder={language === "ar" ? "أدخل كلمة المرور الجديدة" : "Enter new password"}
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
@@ -193,12 +194,12 @@ export default function UpdateProfile() {
               <label htmlFor="confirm-password" className="block mb-1 text-sm font-medium text-gray-700">
                 {language === "ar" ? "تأكيد كلمة المرور" : "Confirm Password"}
               </label>
-              <div className="relative">
+              <div className="relative w-[16rem] md:w-full">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
                   id="confirm-password"
                   type="password"
-                  className="md:w-full w-[16rem]  pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+                  className={`w-full ${language === "ar" ? "pr-10" : "pl-10"} py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm`}
                   placeholder={language === "ar" ? "تأكيد كلمة المرور" : "Confirm password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}

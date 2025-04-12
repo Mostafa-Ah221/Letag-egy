@@ -9,8 +9,8 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function ShoppingCart() {
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const { cart, removeFromCart, updateQuantity, getTotalPrice,clearCart } = useCart();
-  const { currencyData, getProdDetails } = useContext(ContextData);
+  const { cart, removeFromCart, updateQuantity, getTotalPrice,clearCart,showToast } = useCart();
+  const { currencyData, getProdDetails,min_order } = useContext(ContextData);
   const [disableTransition, setDisableTransition] = useState(false);
   const { language } = useLanguage();
 
@@ -97,7 +97,7 @@ export default function ShoppingCart() {
                     <div className="flex flex-col flex-grow overflow-hidden">
                       <h3 className="text-lg font-medium truncate">{product.title}</h3>
                       <span className="text-primary text-lg font-semibold">
-                        { product.special_price > 0 ? product.special_price: product.price} {currencyData}
+                        { product.special_price > 0 ? product.special_price: product.price} {language === 'ar' ? currencyData?.currency_icon:currencyData?.currency_name}
                       </span>
                       <div className="flex items-center mt-2 gap-2 ">
                         <div className="flex border">
@@ -147,13 +147,13 @@ export default function ShoppingCart() {
             <div className="flex justify-between items-center gap-2 my-5">
               <h3>{language === "ar" ? " الاجمالي الفرعي" : "Subtotal"}:</h3>
               <span>
-                {getTotalPrice} {currencyData}
+                {getTotalPrice} {language === 'ar' ? currencyData?.currency_icon:currencyData?.currency_name}
               </span>
             </div>
             <div className="flex justify-between items-center gap-2">
               <h3>{language === "ar" ? " الاجمالي " : "Total"}:</h3>
               <span>
-                {getTotalPrice} {currencyData}
+                {getTotalPrice} {language === 'ar' ? currencyData?.currency_icon:currencyData?.currency_name}
               </span>
             </div>
           </div>
@@ -168,15 +168,21 @@ export default function ShoppingCart() {
               >
                 {language === "ar" ? " إلى السلة" : " To Cart"}
               </Link>
-              <Link
-                to={"/CartLayout"}
-                onClick={() => {
-                  toggleCart();
+             <Link
+                to={getTotalPrice >= min_order ? "/CartLayout" : "#"}
+                onClick={(e) => {
+                  if (getTotalPrice < min_order) {
+                    e.preventDefault();
+                    showToast("الطلب الكلي يجب أن يكون أكبر من " + min_order + " دولار.");
+                  } else {
+                    toggleCart();
+                  }
                 }}
                 className="block text-center mt-6 py-2 text-white bg-primary rounded-md shadow hover:bg-primary/90 transition-colors"
               >
-                {language === "ar" ? " متابعة الدفع" : " Payment Tracking"}
+                {language === "ar" ? "متابعة الدفع" : "Payment Tracking"}
               </Link>
+
               <button
                 onClick={() => {
                   clearCart();

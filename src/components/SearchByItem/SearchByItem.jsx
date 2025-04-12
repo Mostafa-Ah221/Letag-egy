@@ -115,7 +115,8 @@ const handleAddToCart = (product) => {
             handleProductClick={handleProductClick}
             handleAddToWish={handleAddToWish}
             wishList={wishList}
-            currencyData={currencyData}
+            currencyData={currencyData?.currency_icon}
+            currencyEN={currencyData?.currency_name}
           />
         ))}
       </div>
@@ -126,7 +127,8 @@ const handleAddToCart = (product) => {
               product={selectedProduct} 
               handleAddToCart={handleAddToCart} 
               language={language}
-              currency={currencyData}
+             currency={currencyData?.currency_icon}
+             currencyEN={currencyData?.currency_name}
                 handleAddToWish={handleAddToWish}
                wishList={wishList}
                setQuantity={setQuantity}

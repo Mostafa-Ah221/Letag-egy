@@ -5,7 +5,7 @@ import { useLanguage } from "../../context/LanguageContextPro";
 import { HiOutlinePlusSmall, HiMinus } from "react-icons/hi2";
 
 export default function FilterProducts({ onFilterChange }) {
-  const { subCategories, getBrands } = useContext(ContextData);
+  const { subCategories, getBrands,cityData } = useContext(ContextData);
   const { language } = useLanguage();
 
   const [openSections, setOpenSections] = useState({
@@ -20,7 +20,7 @@ export default function FilterProducts({ onFilterChange }) {
   });
 
   const { data: Categories } = useQuery({
-    queryKey: ['subCategory', language],
+    queryKey: ['subCategory', language,cityData],
     queryFn: () => subCategories(language),
     staleTime: 1000 * 60 * 30,
     cacheTime: 1000 * 60 * 40,
@@ -30,17 +30,26 @@ export default function FilterProducts({ onFilterChange }) {
     queryKey: ["getBrands", language],
     queryFn: () => getBrands(language),
   });
-
-  const handleFilterChange = (type, id) => {
-    const newFilters = {
-      ...selectedFilters,
-      [type]: selectedFilters[type].includes(id)
-        ? selectedFilters[type].filter(item => item !== id)
-        : [...selectedFilters[type], id]
-    };
-    setSelectedFilters(newFilters);
-    onFilterChange(newFilters);
+const handleFilterChange = (type, id) => {
+  const newFilters = {
+    ...selectedFilters,
+    [type]: selectedFilters[type].includes(id)
+      ? selectedFilters[type].filter(item => item !== id)
+      : [...selectedFilters[type], id]
   };
+  
+  setSelectedFilters(newFilters);
+  
+  // إضافة cityData إلى الفلاتر إذا كانت متاحة
+  if (cityData) {
+    onFilterChange({
+      ...newFilters,
+      city_id: cityData
+    });
+  } else {
+    onFilterChange(newFilters);
+  }
+};
 
   const toggleSection = (section) => {
     setOpenSections(prev => ({

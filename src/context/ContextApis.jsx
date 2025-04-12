@@ -6,19 +6,36 @@ import { useCart } from "./CartContext";
 
 export const ContextData = createContext();
 
-// const baseDomain = window.location.protocol + "//" + window.location.hostname;
-// console.log(baseDomain);
+
 let api_key="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9"
 
-async function fetchProducts(filters, language) {
-  const formData = new FormData();
-  for (const [key, value] of Object.entries(filters)) {
-    formData.append(key, value);
+async function fetchProducts(filters, language, selectedTownId, cityData) {
+  const body = {
+    ...filters,
+  };
+
+  // التأكد من إضافة city_id
+  if (cityData) {
+    body.city_id = cityData;
+  } else if (selectedTownId) {
+    body.city_id = selectedTownId;
   }
+
+  console.log("Request Body before sending:", body); // التأكد من بيانات الـ body قبل الإرسال
+
   try {
-    const response = await axios.post(`https://tarshulah.com/api/products`, formData, {
-      headers: { lang: language , APP_KEY:api_key},
+    // التأكد من إرسال الـ request
+    const response = await axios.post("https://tarshulah.com/api/products", body, {
+      headers: {
+        lang: language,
+        APP_KEY: api_key,
+        "Content-Type": "application/json",
+      },
     });
+    
+    // التأكد من رد الـ API
+    console.log("API Response:", response);
+
     return response.data;
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -26,8 +43,10 @@ async function fetchProducts(filters, language) {
   }
 }
 
-async function subCategories(language) {
+
+async function subCategories(language, selectedTownId, cityData) {
   const response = await axios.get(`https://tarshulah.com/api/categories`, {
+    params: {city_id: selectedTownId || cityData },
     headers: { lang: language, APP_KEY:api_key },
   });
   // console.log(response?.data);
@@ -35,9 +54,9 @@ async function subCategories(language) {
   return response.data;
 }
 
-async function getCategoriesDetails(id, language) {
+async function getCategoriesDetails(id, language, selectedTownId, cityData) {
   const response = await axios.get(`https://tarshulah.com/api/categories`, {
-    params: { id: id },
+    params: { id: id, city_id: selectedTownId || cityData },
     headers: { lang: language , APP_KEY:api_key},
   });
   return response.data;
@@ -105,7 +124,7 @@ async function getCurrency(language) {
   return response.data;
 }
 async function getMenuPage() {
-  const response = await axios.get(`https://demo.leetag.com/api/menu`,{
+  const response = await axios.get(`https://tarshulah.com/api/menu`,{
     headers: { APP_KEY:api_key},
   });
   return response.data;
@@ -144,6 +163,7 @@ async function getProductCategory(idCategory, page, pageSize, language) {
     const response = await axios.get(
       `https://tarshulah.com/api/category/products/${idCategory}`,
       {
+        
         params: { page, pageSize },
         headers: { lang: language , APP_KEY:api_key},
       }
@@ -169,6 +189,8 @@ export default function DataContextProvider({ children }) {
   const [data, setData] = useState(null);
   const [addresses, setAddresses] = useState();
   const [selectedTownId, setSelectedTownId] = useState(null); // TODO for Stock
+    const [cityData, setCityData] = useState(null);
+  
 
   const { data: settings } = useQuery({
     queryKey: ["getcurrency", language],
@@ -199,14 +221,21 @@ export default function DataContextProvider({ children }) {
       throw new Error(error.response?.data?.message || "Failed to delete address");
     }
   }
-  async function getApiHome(language) {
-    const response = await axios.get(`https://tarshulah.com/api/home`, {
-      params: { city_id: selectedTownId },
-      headers: { lang: language , APP_KEY:api_key},
-    });
-    return response.data;
+  async function getApiHome(language, selectedTownId, cityData) {
+  let requestConfig = {
+    headers: { lang: language, APP_KEY: api_key },
+    params: {}
+  };
+
+  if (cityData?.city_id !== undefined && cityData?.city_id !== null) {
+    requestConfig.params.city_id = cityData.city_id;
+  } else if (selectedTownId !== undefined && selectedTownId !== null) {
+    requestConfig.params.city_id = selectedTownId;
   }
 
+  const response = await axios.get(`https://tarshulah.com/api/home`, requestConfig);
+  return response.data;
+}
 
   useEffect(() => {
     if (userToken) {
@@ -224,15 +253,18 @@ export default function DataContextProvider({ children }) {
 
 
 
-  let currencyData = settings?.data?.currency.currency_icon;
-  let currencyDataEnglish = settings?.data?.currency.currency_name;
+  let currencyData = settings?.data?.currency;
+  // let currencyDataEnglish = settings?.data?.currency.currency_name;
   let settings_domain = settings;
   let colorWebSite = settings_domain?.data.theme_color;
   let nameWebSite = settings_domain?.data.shop_name;
   let isLanguage = settings_domain?.data?.languages.english;
-  // let logoWebSite = settings_domain?.data.logo;
-  // console.log(isLanguage.length);
-
+  let registr_system=settings_domain?.data?.registration_system
+  let map_key=settings_domain?.data?.google_map_key
+  let min_order=settings_domain?.data?.min_order
+  let shop_description=settings_domain?.data?.shop_description
+  let points_system=settings_domain?.data?.points_system
+  
   // =================================Web Site Color=======================================
   useEffect(() => {
     if (colorWebSite && nameWebSite) {
@@ -245,7 +277,7 @@ export default function DataContextProvider({ children }) {
   function fetchUserData() {
     if (!userToken) return;
     axios
-      .get(`https://demo.leetag.com/api/customer/profile`, {
+      .get(`https://tarshulah.com/api/customer/profile`, {
         headers: { Authorization: `${userToken}`, APP_KEY:api_key },
       })
       .then((response) => {
@@ -294,15 +326,16 @@ export default function DataContextProvider({ children }) {
     } else {
       localStorage.removeItem("userToken");
     }
+
     setUserToken(token);
   };
 
   return (
     <ContextData.Provider
       value={{
-        subCategories: () => subCategories(language),
+        subCategories: () => subCategories(language, selectedTownId, cityData),
         getBrands: () => getBrands(language),
-        getApiHome: () => getApiHome(language),
+        getApiHome: () => getApiHome(language, selectedTownId, cityData),
         getOffers: () => getOffers(language),
         getSlider: () => getSlider(language),
         getProdDetails: (id) => getProdDetails(id, language),
@@ -310,8 +343,8 @@ export default function DataContextProvider({ children }) {
         deleteAddress: (id) => deleteAddress(id, userToken, language),
         getCategoriesDetails: (id) => getCategoriesDetails(id, language),
         getProductCategory: (idCategory, page, pageSize) =>
-          getProductCategory(idCategory, page, pageSize, language),
-        fetchProducts: (filters) => fetchProducts(filters, language),
+        getProductCategory(idCategory, page, pageSize, language,cityData),
+        fetchProducts: (filters) => fetchProducts(filters, language, selectedTownId, cityData),
         getReviews: (id, language) => getReviews(id, language),
         getMenuPage,
         setUserToken: handleSetUserToken,
@@ -321,7 +354,6 @@ export default function DataContextProvider({ children }) {
         loading,
         data,
         currencyData,
-        currencyDataEnglish,
         settings_domain,
         setSelectedTownId,
         selectedTownId,
@@ -331,7 +363,14 @@ export default function DataContextProvider({ children }) {
         setAddresses,
         addresses,
         isLanguage,
-        api_key
+        api_key,
+        shop_description,
+        registr_system,
+        points_system,
+        map_key,
+        min_order,
+        cityData,
+        setCityData
       }}
     >
       {children}

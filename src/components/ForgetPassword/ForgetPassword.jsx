@@ -21,7 +21,7 @@ export default function ForgetPassword() {
 
     try {
       const response = await axios.post(
-        `https://demo.leetag.com/api/customer/forgot-password`,
+        `https://tarshulah.com/api/customer/forgot-password`,
         { email: values.email },
         {
           headers: {
@@ -60,7 +60,7 @@ export default function ForgetPassword() {
 
     try {
       const response = await axios.post(
-        `https://demo.leetag.com/api/customer/reset-password/${values.email}`,
+        `https://tarshulah.com/api/customer/reset-password/${values.email}`,
         formData,
         {
           headers: {
