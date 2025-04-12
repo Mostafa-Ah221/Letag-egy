@@ -47,8 +47,8 @@ export default function ProductDetails() {
     queryFn: () => getReviews(id),
     enabled: !!id,
   });
-                      const cartItem = cart.find((item) => item.id === data?.data?.products.id); 
-                       const startTimer = () => {
+     const cartItem = cart.find((item) => item.id === data?.data?.products.id); 
+      const startTimer = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }

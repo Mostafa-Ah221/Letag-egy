@@ -28,7 +28,11 @@ export default function Login() {
   setLoading(true);
   // console.log("Login Attempt:", values); // تتبع البيانات المرسلة
 
+<<<<<<< HEAD
   axios.post(`https://tarshulah.com/api/customer/login`, {
+=======
+  axios.post(`https://tarshulah.comapi/customer/login`, {
+>>>>>>> f6d5bffa363b703de435195315d532c6e471109b
     email: values.email,
     password: values.password
   }, {

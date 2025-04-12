@@ -51,25 +51,21 @@ const fetchProducts = async (page = 1, filters = null, shouldResetPage = false) 
     });
   }
 
-  // إضافة الماركات المحددة
   if (currentFilters.brands_id && currentFilters.brands_id.length > 0) {
     currentFilters.brands_id.forEach((brandId, index) => {
       formData.append(`brands_id[${index}]`, brandId);
     });
   }
 
-  // إضافة معايير الترتيب
   if (currentFilters.order_by_date) {
     formData.append('order_by_date', currentFilters.order_by_date);
   }
 
-  // إضافة معيار الأكثر مبيعاً
   if (currentFilters.section === 'best_selling') {
     formData.append('section', 'best_selling');
   }
 
   try {
-    // إرسال الطلب حسب ما إذا كان هناك city_id أو لا
     const response = await axios.post(
       `https://tarshulah.com/api/products?page=${shouldResetPage ? 1 : page}`,
       formData,

@@ -137,12 +137,11 @@ console.log(payPoint);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleReviewSubmit = async () => {
-    if (!validateFields()) return;
+ const handleReviewSubmit = async () => {
+  if (!validateFields()) return;
 
-    // نطبع القيم قبل الإرسال للتأكد
-    console.log('formData.total:', formData.total);
-    console.log('updatedTotal:', updatedTotal);
+  console.log('formData.total:', formData.total);
+  console.log('updatedTotal:', updatedTotal);
 
     const finalData = {
       ...formData,
